@@ -59,6 +59,7 @@ public class User implements Comparable<User> {
      * @return Логин пользователя.
      */
     public String getLogin() {
+        boolean flag = false;
         return login;
     }
 
