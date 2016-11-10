@@ -2,6 +2,13 @@ package ru.aimsproject.models;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import ru.aimsproject.exceptions.IncompatibleAimsDatesException;
+import ru.aimsproject.exceptions.IncompatibleSubAndSuperAimsFlagsException;
+import ru.aimsproject.exceptions.IncompatibleSubAndSuperEndDatesException;
+import ru.aimsproject.exceptions.IncompatibleSubAndSuperStartDatesException;
+import ru.aimsproject.exceptions.UnallowedAimFlagChangeException;
 
 /**
  * Created by Антон on 27.10.2016.
@@ -11,7 +18,12 @@ public abstract class Aim implements Comparable<Aim> {
     /**
      * Список подцелей.
      */
-    private ArrayList<Aim> subAims;
+    private List<Aim> subAims = new ArrayList<Aim>();
+
+    /**
+     * Надцель.
+     */
+    private Aim superAim;
 
     /**
      * Текст цели.
@@ -37,6 +49,16 @@ public abstract class Aim implements Comparable<Aim> {
      * Модификатор доступа к цели (0 - всем, 1 - группе лиц, 2 - друзьям, 3 - себе).
      */
     private int modif;
+
+    /**
+     * Список пользователей, имеющих доступ к просмотру цели.
+     */
+    private List<User> readingAllowedUsers = new ArrayList<User>();
+
+    /**
+     * Список пользователей, имеющих доступ к редактированию (и просмотру) цели.
+     */
+    private List<User> writingAllowedUsers = new ArrayList<User>();
 
     /**
      * Автор цели.
@@ -70,8 +92,15 @@ public abstract class Aim implements Comparable<Aim> {
      * @param date Дата публикации цели.
      * @param startDate Дата начала выполнения цели.
      * @param endDate Дата окончания выполнения цели.
+     * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
      */
-    public Aim(ArrayList<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate) {
+    public Aim(List<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate) throws IncompatibleAimsDatesException {
+        if(date.compareTo(startDate) > 0) {
+            throw new IncompatibleAimsDatesException("Start date of the aim should be later than publication date of the aim", this);
+        }
+        if(startDate.compareTo(endDate) > 0) {
+            throw new IncompatibleAimsDatesException("End date of the aim should be later than start date of the aim", this);
+        }
         this.subAims = subAims;
         this.text = text;
         this.header = header;
@@ -88,8 +117,16 @@ public abstract class Aim implements Comparable<Aim> {
      * Возвращает список поцелей.
      * @return Список подцелей.
      */
-    public ArrayList<Aim> getSubAims() {
+    public List<Aim> getSubAims() {
         return subAims;
+    }
+
+    /**
+     * Возвращает надцель.
+     * @return Надцель.
+     */
+    public Aim getSuperAim() {
+        return superAim;
     }
 
     /**
@@ -133,6 +170,30 @@ public abstract class Aim implements Comparable<Aim> {
     }
 
     /**
+     * Возвращает список пользователей, имеющих доступ к просмотру цели.
+     * @return Список пользователей, имеющих доступ к просмотру цели.
+     */
+    public List<User> getReadingAllowedUsers() {
+        return readingAllowedUsers;
+    }
+
+    /**
+     * Возвращает список пользователей, имеющих доступ к редактированию (и просмотру) цели.
+     * @return Список пользователей, имеющих доступ к редактированию (и просмотру) цели.
+     */
+    public List<User> getWritingAllowedUsers() {
+        return writingAllowedUsers;
+    }
+
+    /**
+     * Возвращает автора цели.
+     * @return Автор цели.
+     */
+    public User getAuthor() {
+        return author;
+    }
+
+    /**
      * Возвращает дату публикации цели.
      * @return Дата публикации цели.
      */
@@ -157,6 +218,58 @@ public abstract class Aim implements Comparable<Aim> {
     }
 
     /**
+     * Устанавливает надцель.
+     * @param superAim Надцель.
+     */
+    public void setSuperAim(Aim superAim) {
+        this.superAim = superAim;
+        modif = superAim.getModif();
+        if(modif == 1) {
+            readingAllowedUsers = superAim.getReadingAllowedUsers();
+        }
+    }
+
+    /**
+     * Устанавливает текст цели.
+     * @param text Текст цели.
+     */
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    /**
+     * Устанавливает название цели.
+     * @param header Название цели.
+     */
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    /**
+     * Устанавливает состояние выполнения цели.
+     * @param flag Состояние выполнения цели.
+     * @throws UnallowedAimFlagChangeException Возникает, если состояние цели меняется "назад" (например, с 1 на 0) или если меняется состояние завершённой/проваленной цели.
+     */
+    public void setFlag(int flag) throws UnallowedAimFlagChangeException {
+        if(this.flag == 1 && flag == 0) {
+            throw new UnallowedAimFlagChangeException("Aim's flag cannot be changed from started to not started", this);
+        }
+        if(this.flag == 2 || this.flag == 3) {
+            throw new UnallowedAimFlagChangeException("Aim's flag cannot be changed if it is failed or done.", this);
+        }
+        this.flag = flag;
+    }
+
+    /**
+     * Устанавливает модификатор доступа к цели таким же, как у надцели, если надцель установлена.
+     */
+    public void setModifAsInSuperAim() {
+        if(superAim != null) {
+            modif = superAim.getModif();
+        }
+    }
+
+    /**
      * Сравнивает цель с другой для сортировки по убыванию дат публикации целей.
      * @param other Другая цель.
      * @return Значение для метода сортировки по убыванию дат публикации целей.
@@ -164,5 +277,143 @@ public abstract class Aim implements Comparable<Aim> {
     @Override
     public int compareTo(Aim other) {
         return -date.compareTo(other.getDate());
+    }
+
+    /**
+     * Добавляет пользователя в список пользователей, имеющих доступ к просмотру цели, если его ещё нет в этом списке.
+     * @param user Добавляемый пользователь.
+     * @return true, если добавление пользователя успешно состоялось (пользователя ещё не было в этом списке), иначе false.
+     */
+    public boolean addReadingAllowedUser(User user) {
+        if(!readingAllowedUsers.contains(user)) {
+            readingAllowedUsers.add(user);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Удаляет пользователя из списка пользователей, имеющих доступ к просмотру цели, если он есть в этом списке.
+     * @param user Удаляемый пользователь.
+     * @return true, если удаление пользователя успешно состоялось (пользователь был в этом списке), иначе false.
+     */
+    public boolean removeReadingAllowedUser(User user) {
+        return readingAllowedUsers.remove(user);
+    }
+
+    /**
+     * Удаляет пользователя из списка пользователей, имеющих доступ к просмотру цели, по индексу, если индекс находится в пределах размера списка.
+     * @param index Индекс удаляемого пользователя.
+     * @return true, если удаление пользователя успешно состоялось (индекс находился в пределах размера списка), иначе false.
+     */
+    public boolean removeReadingAllowedUser(int index) {
+        try {
+            readingAllowedUsers.remove(index);
+            return true;
+        }
+        catch (IndexOutOfBoundsException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Добавляет пользователя в список пользователей, имеющих доступ к редактированию (и просмотру) цели, если его ещё нет в этом списке.
+     * @param user Добавляемый пользователь.
+     * @return true, если добавление пользователя успешно состоялось (пользователя ещё не было в этом списке), иначе false.
+     */
+    public boolean addWritingAllowedUser(User user) {
+        if(!writingAllowedUsers.contains(user)) {
+            writingAllowedUsers.add(user);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Удаляет пользователя из списка пользователей, имеющих доступ к редактированию (и просмотру) цели, если он есть в этом списке.
+     * @param user Удаляемый пользователь.
+     * @return true, если удаление пользователя успешно состоялось (пользователь был в этом списке), иначе false.
+     */
+    public boolean removeWritingAllowedUser(User user) {
+        return writingAllowedUsers.remove(user);
+    }
+
+    /**
+     * Удаляет пользователя из списка пользователей, имеющих доступ к редактированию (и просмотру) цели, по индексу, если индекс находится в пределах размера списка.
+     * @param index Индекс удаляемого пользователя.
+     * @return true, если удаление пользователя успешно состоялось (индекс находился в пределах размера списка), иначе false.
+     */
+    public boolean removeWritingAllowedUser(int index) {
+        try {
+            writingAllowedUsers.remove(index);
+            return true;
+        }
+        catch (IndexOutOfBoundsException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Добавляет подцель в список подцелей, если её ещё нет в этом списке.
+     * @param subAim Добавляемая подцель.
+     * @return true, если добавление подцели успешно состоялось (подцели ещё не было в этом списке), иначе false.
+     * @throws IncompatibleSubAndSuperAimsFlagsException Возникает, если надцель или подцель уже завершена/провалена.
+     * @throws IncompatibleSubAndSuperStartDatesException Возникает, если дата начала выполнения подцели раньше даты начала выполнения надцели.
+     * @throws IncompatibleSubAndSuperEndDatesException Возникает, если дата окончания выполнения подцели позже даты окончания выполнения надцели.
+     * @throws NullPointerException Возникает, если переданная подцель представляет собой null.
+     */
+    public boolean addSubAim(Aim subAim)
+            throws IncompatibleSubAndSuperAimsFlagsException, IncompatibleSubAndSuperStartDatesException, IncompatibleSubAndSuperEndDatesException, NullPointerException {
+        if(subAims.contains(subAim)) {
+            return false;
+        }
+        if(startDate.compareTo(subAim.getStartDate()) > 0) {
+            throw new IncompatibleSubAndSuperStartDatesException("Start date of subaim cannot be earlier than start date of superaim", subAim, this);
+        }
+        if(endDate.compareTo(subAim.getEndDate()) < 0) {
+            throw new IncompatibleSubAndSuperStartDatesException("End date of subaim cannot be later than end date of superaim", subAim, this);
+        }
+        if(flag == 2 || flag == 3 || subAim.getFlag() == 2 || subAim.getFlag() == 3) {
+            throw new IncompatibleSubAndSuperAimsFlagsException("Superaim or subaim cannot be failed or done", subAim, this);
+        }
+        subAims.add(subAim);
+        subAim.setSuperAim(this);
+        if(flag == 0 && subAim.getFlag() == 1) {
+            flag = 1;
+        }
+        subAim.setModifAsInSuperAim();
+        return true;
+    }
+
+    /**
+     * Удаляет подцель из списка подцелей, если она есть в этом списке.
+     * @param subAim Удаляемая подцель.
+     * @return true, если удаление подцели успешно состоялось (подцель была в этом списке), иначе false.
+     * @throws NullPointerException Возникает, если переданная подцель представляет собой null.
+     */
+    public boolean removeSubAim(Aim subAim) throws NullPointerException {
+        if(subAim.getSuperAim() == this) {
+            subAim.setSuperAim(null);
+        }
+        return subAims.remove(subAim);
+    }
+
+    /**
+     * Удаляет подцель из списка подцелей, по индексу, если индекс находится в пределах размера списка.
+     * @param index Индекс удаляемой подцели.
+     * @return true, если удаление подцели успешно состоялось (индекс находился в пределах размера списка), иначе false.
+     */
+    public boolean removeSubAim(int index) {
+        try {
+            Aim subAim = subAims.get(index);
+            if(subAim.getSuperAim() == this) {
+                subAim.setSuperAim(null);
+            }
+            subAims.remove(index);
+            return true;
+        }
+        catch (IndexOutOfBoundsException ex) {
+            return false;
+        }
     }
 }

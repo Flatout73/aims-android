@@ -3,6 +3,8 @@ package ru.aimsproject.models;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ru.aimsproject.exceptions.IncompatibleAimsDatesException;
+
 /**
  * Created by Антон on 27.10.2016.
  * Представляет цель 2-го типа (с подтверждением не позднее, чем через каждый определённый промежуток времени).
@@ -27,7 +29,8 @@ public class AimType2 extends Aim {
      * @param endDate Дата окончания выполнения цели.
      * @param dateSection Промежуток времени, не позднее, чем через который необходимо подтверждать цель.
      */
-    public AimType2(ArrayList<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, Date dateSection) {
+    public AimType2(ArrayList<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, Date dateSection)
+            throws IncompatibleAimsDatesException {
         super(subAims, text, header, type, flag, modif, author, date, startDate, endDate);
         this.dateSection = dateSection;
     }

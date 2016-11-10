@@ -3,6 +3,8 @@ package ru.aimsproject.models;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ru.aimsproject.exceptions.IncompatibleAimsDatesException;
+
 /**
  * Created by Антон on 27.10.2016.
  * Представляет цель 1-го типа (обычную).
@@ -20,8 +22,10 @@ public class AimType1 extends Aim {
      * @param date Дата публикации цели.
      * @param startDate Дата начала выполнения цели.
      * @param endDate Дата окончания выполнения цели.
+     * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
      */
-    public AimType1(ArrayList<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate) {
+    public AimType1(ArrayList<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate)
+            throws IncompatibleAimsDatesException {
         super(subAims, text, header, type, flag, modif, author, date, startDate, endDate);
     }
 }

@@ -3,6 +3,8 @@ package ru.aimsproject.models;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ru.aimsproject.exceptions.IncompatibleAimsDatesException;
+
 /**
  * Created by Антон on 27.10.2016.
  * Представляет цель 3-го типа (с прогрессом выполнения цели).
@@ -34,7 +36,8 @@ public class AimType3 extends Aim {
      * @param allTasks Общее количество однотипных задач, которые необходимо решить для выполнения цели.
      * @param currentTasks Текущее количество решённых однотипных задач, необходимых для выполнения цели.
      */
-    public AimType3(ArrayList<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int allTasks, int currentTasks) {
+    public AimType3(ArrayList<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int allTasks, int currentTasks)
+            throws IncompatibleAimsDatesException {
         super(subAims, text, header, type, flag, modif, author, date, startDate, endDate);
         this.allTasks = allTasks;
         this.currentTasks = currentTasks;
@@ -54,5 +57,18 @@ public class AimType3 extends Aim {
      */
     public int getCurrentTasks() {
         return currentTasks;
+    }
+
+    /**
+     * Увеличивает текущее количество решённых однотипных задач, необходимых для выполнения цели,
+     * если эта операция не превысит общее количество однотипных задач, которые необходимо решить для выполнения цели.
+     * @return true, если увеличение количества состоялось успешно (общее количество не превышено), иначе false.
+     */
+    public boolean increaseCurrentTasks() {
+        if(currentTasks < allTasks) {
+            currentTasks++;
+            return true;
+        }
+        return false;
     }
 }
