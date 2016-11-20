@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ru.aimsproject.exceptions.IncompatibleAimsDatesException;
-import ru.aimsproject.exceptions.IncompatibleSubAndSuperAimsFlagsException;
-import ru.aimsproject.exceptions.IncompatibleSubAndSuperEndDatesException;
-import ru.aimsproject.exceptions.IncompatibleSubAndSuperStartDatesException;
-import ru.aimsproject.exceptions.UnallowedAimFlagChangeException;
+import ru.aimsproject.exceptions.*;
 
 /**
  * Created by Антон on 27.10.2016.
@@ -96,10 +92,10 @@ public abstract class Aim implements Comparable<Aim> {
      */
     public Aim(List<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate) throws IncompatibleAimsDatesException {
         if(date.compareTo(startDate) > 0) {
-            throw new IncompatibleAimsDatesException("Start date of the aim should be later than publication date of the aim", this);
+            throw new IncompatibleAimsDatesException("Время начала выполнения цели должна быть не раньше времени её публикации.", this);
         }
         if(startDate.compareTo(endDate) > 0) {
-            throw new IncompatibleAimsDatesException("End date of the aim should be later than start date of the aim", this);
+            throw new IncompatibleAimsDatesException("Время окончания выполнения цели должно быть позже времени начала её выполнения.", this);
         }
         this.subAims = subAims;
         this.text = text;
@@ -252,10 +248,13 @@ public abstract class Aim implements Comparable<Aim> {
      */
     public void setFlag(int flag) throws UnallowedAimFlagChangeException {
         if(this.flag == 1 && flag == 0) {
-            throw new UnallowedAimFlagChangeException("Aim's flag cannot be changed from started to not started", this);
+            throw new UnallowedAimFlagChangeException("Состояние выполнения цели не может быть изменено с начатой на неначатую.", this);
         }
-        if(this.flag == 2 || this.flag == 3) {
-            throw new UnallowedAimFlagChangeException("Aim's flag cannot be changed if it is failed or done.", this);
+        if(this.flag == 2) {
+            throw new UnallowedAimFlagChangeException("Состояние выполнения завершённой цели не может быть изменено.", this);
+        }
+        if(this.flag == 3) {
+            throw new UnallowedAimFlagChangeException("Состояние выполнения проваленной цели не может быть изменено.", this);
         }
         this.flag = flag;
     }
@@ -368,13 +367,22 @@ public abstract class Aim implements Comparable<Aim> {
             return false;
         }
         if(startDate.compareTo(subAim.getStartDate()) > 0) {
-            throw new IncompatibleSubAndSuperStartDatesException("Start date of subaim cannot be earlier than start date of superaim", subAim, this);
+            throw new IncompatibleSubAndSuperStartDatesException("Дата начала выполнения подцели должна быть не раньше, чем дата начала выполнения надцели.", subAim, this);
         }
         if(endDate.compareTo(subAim.getEndDate()) < 0) {
-            throw new IncompatibleSubAndSuperStartDatesException("End date of subaim cannot be later than end date of superaim", subAim, this);
+            throw new IncompatibleSubAndSuperStartDatesException("Дата окончания выполнения подцели должна быть не позже, чем дата окончания выполнения надцели.", subAim, this);
         }
-        if(flag == 2 || flag == 3 || subAim.getFlag() == 2 || subAim.getFlag() == 3) {
-            throw new IncompatibleSubAndSuperAimsFlagsException("Superaim or subaim cannot be failed or done", subAim, this);
+        if(flag == 2) {
+            throw new IncompatibleSubAndSuperAimsFlagsException("Надцель не должна быть уже выполненной.", subAim, this);
+        }
+        if(flag == 3) {
+            throw new IncompatibleSubAndSuperAimsFlagsException("Надцель не должна быть уже проваленной.", subAim, this);
+        }
+        if(subAim.getFlag() == 2) {
+            throw new IncompatibleSubAndSuperAimsFlagsException("Подцель не должна быть уже выполненной.", subAim, this);
+        }
+        if(subAim.getFlag() == 3) {
+            throw new IncompatibleSubAndSuperAimsFlagsException("Подцель не должна быть уже проваленной.", subAim, this);
         }
         subAims.add(subAim);
         subAim.setSuperAim(this);

@@ -7,23 +7,61 @@ import ru.aimsproject.models.*;
 
 /**
  * Представляет хранилище данных приложения.
+ * Правда, есть подозрение, что подобным образом реализовать ничего не удастся.
+ * Но это не точно.
+ * Поэтому надо тут подумать ещё.
  * Created by Антон on 06.11.2016.
  */
 public class DataStorage {
     /**
      * Лента ("новостная лента") целей.
      */
-    private List<Aim> aimsFeed = new ArrayList<Aim>();
+    private static List<Aim> aimsFeed = new ArrayList<Aim>();
 
     /**
      * Все доступные в приложении достижения.
      */
-    private List<Achievement> allAchievements = new ArrayList<Achievement>();
+    private static List<Achievement> allAchievements = new ArrayList<Achievement>();
 
     /**
      * Пользователь, залогинившийся в приложении.
      */
-    private User me;
+    private static User me;
 
-    // Coming soon...
+    /**
+     * Текущий токен.
+     */
+    private static String token;
+
+    /**
+     * Возвращает пользователя, залогинившегося в приложении.
+     * @return Пользователь, залогинившийся в приложении.
+     */
+    public static User getMe() {
+        return me;
+    }
+
+    /**
+     * Устанавливает пользователя, залогинившегося в приложении.
+     * @param me Пользователь, залогинившийся в приложении.
+     */
+    public static void setMe(User me) {
+        DataStorage.me = me;
+    }
+
+    /**
+     * Возвращает текущий токен.
+     * @return Текущий токен.
+     */
+    public static String getToken() {
+        return token;
+    }
+
+    /**
+     * Устанавливает текущий токен.
+     * @param token Текущий токен.
+     */
+    public static void setToken(String token) {
+        DataStorage.token = token;
+    }
 }
