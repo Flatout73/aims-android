@@ -3,10 +3,13 @@ package ru.aimsproject.connectionwithbackend;
 import org.json.*;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.security.MessageDigest;
+import java.lang.String;
 
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.User;
@@ -75,11 +78,8 @@ public class RequestMethods {
         }
         catch (NoSuchAlgorithmException ex) { }
         byte[] hashBytes = messageDigest.digest(bytes);
-        String result = null;
-        try {
-            result = new String(hashBytes, "UTF-8");
-        }
-        catch (UnsupportedEncodingException ex) { }
+        BigInteger bigInteger = new BigInteger(1, hashBytes);
+        String result = bigInteger.toString(16);
         return result;
     }
 
@@ -440,5 +440,22 @@ public class RequestMethods {
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
         }
+    }
+
+    public static void addAimType1(String header, String text, int mode, Date endDate, Date startDate, String[] tags) throws Exception {
+        String urlString = aimsURL;
+        urlString += "type1/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "text", text, false);
+        urlString = addAttribute(urlString, "mode", "" + mode, false);
+        urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
+        urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
+        //urlString = addAttribute(urlString, "tags", String.)
+        //String someString = join()
+
     }
 }

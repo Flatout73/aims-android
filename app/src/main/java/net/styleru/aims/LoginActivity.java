@@ -330,6 +330,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             } catch (Exception e) {
                 Snackbar.make(mLoginFormView, e.getMessage(), Snackbar.LENGTH_LONG).show();
+                return false;
             }
 
 //            for (String credential : DUMMY_CREDENTIALS) {
