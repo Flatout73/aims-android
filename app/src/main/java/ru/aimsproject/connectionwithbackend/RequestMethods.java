@@ -12,6 +12,8 @@ import java.security.MessageDigest;
 import java.lang.String;
 
 import ru.aimsproject.data.DataStorage;
+import ru.aimsproject.exceptions.IncompatibleAimsDatesException;
+import ru.aimsproject.models.AimType1;
 import ru.aimsproject.models.User;
 
 /**
@@ -454,8 +456,109 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "mode", "" + mode, false);
         urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
         urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
-        //urlString = addAttribute(urlString, "tags", String.)
-        //String someString = join()
-        //...
+        urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        /*try {
+            DataStorage.getMe().addAim(new AimType1(null, text, header, 1, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate));
+        }
+        catch (IncompatibleAimsDatesException ex) {
+
+        }*/
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    public static void addAimType2(String header, String text, int mode, Date endDate, Date startDate, Date dateSection, String[] tags) throws Exception {
+        String urlString = aimsURL;
+        urlString += "type1/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "text", text, false);
+        urlString = addAttribute(urlString, "mode", "" + mode, false);
+        urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
+        urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
+        urlString = addAttribute(urlString, "dateSection", dateSection.toString(), false);
+        urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    public static void addAimType3(String header, String text, int mode, Date endDate, Date startDate, int AllTasks, String[] tags) throws Exception {
+        String urlString = aimsURL;
+        urlString += "type1/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "text", text, false);
+        urlString = addAttribute(urlString, "mode", "" + mode, false);
+        urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
+        urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
+        urlString = addAttribute(urlString, "AllTasks", "" + AllTasks, false);
+        urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    public static String joinTags(String[] tags) {
+        String result = "";
+        for(int i = 0; i < tags.length; i++) {
+            result += tags;
+            if(i < tags.length - 1) {
+                result += ",";
+            }
+        }
+        return result;
     }
 }

@@ -31,4 +31,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_about_target">AboutTargetActivity</string>
     <string name="title_activity_registered">RegisteredActivity</string>
+    <string name="title_activity_add_target">AddTarget</string>
 </resources>
