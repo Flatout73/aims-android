@@ -44,6 +44,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.styleru.aims.MainActivity" />
         </activity>
+        <activity
+            android:name=".RegisteredActivity"
+            android:label="@string/title_activity_registered"
+            android:parentActivityName=".LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.styleru.aims.LoginActivity" />
+        </activity>
     </application>
 
 </manifest>
