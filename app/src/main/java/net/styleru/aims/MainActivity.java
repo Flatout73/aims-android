@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Антон Ригин");
 
-        fragmentStack = new Stack<Fragment>();
+        //fragmentStack = new Stack<Fragment>();
 
         //pageFr = PageFragment.newInstance("kek", "lol");
         aimsFr = AimsFragment.newInstance("kek", "lol");
