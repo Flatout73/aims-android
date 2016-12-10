@@ -1,17 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground" >
+
+    <net.styleru.aims.fragments.RoundedImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/list_avatar"
+        android:src="@drawable/rigin"/>
 
 
     <TextView
         android:id="@+id/target_aims"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:text="Сделать ДЗ"
+        android:textSize="16sp"
+        android:layout_toEndOf="@id/list_avatar"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceListItem"
+        />
+
+    <TextView
+        android:id="@+id/date_description"
+        android:text="Выучить спикинг хохохоххохохохохохохоххохоохо хоххохооххохоохохохоххохоохохохохохохоххох"
+        android:layout_alignStart="@id/target_aims"
+        android:layout_below="@id/target_aims"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:textSize="14sp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:maxLines="2" />
     
     <TextView
         android:id="@+id/date_aims"
+        android:text="Сделать до 15.11"
+        android:layout_alignStart="@id/target_aims"
+        android:layout_below="@id/date_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:textColor="@color/medium_grey"
+        android:textSize="14sp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:maxLines="1" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="3"
+        android:id="@+id/dislikes"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@id/date_aims"
+        android:layout_marginTop="8dp"
         />
-</LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/likes"
+        android:text="2"
+        android:layout_alignBottom="@id/dislikes"
+        android:layout_toStartOf="@id/dislikes"
+        android:layout_marginEnd="8dp"/>
+
+</RelativeLayout>

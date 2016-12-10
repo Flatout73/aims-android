@@ -1,10 +1,14 @@
 package net.styleru.aims;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,25 +24,63 @@ import net.styleru.aims.fragments.FriendsFragment;
 import net.styleru.aims.fragments.PageFragment;
 import net.styleru.aims.fragments.SettingsFragment;
 
+import java.util.Stack;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-        PageFragment pageFr;
+        //PageFragment pageFr;
         AimsFragment aimsFr;
         FriendsFragment friendFr;
         SettingsFragment settingFr;
+
+        // 0 - aimsFr, 1 - friendFr, 2 - settingFr
+        byte openedFragment;
+
+        int scrollFlags;
+
+        private FragmentManager fragmentManager;
+        private Stack<Fragment> fragmentStack;
+
+        CollapsingToolbarLayout collapsingToolbar;
+        Toolbar toolbar;
+        Toolbar toolbarFriend;
+
+        AppBarLayout appBarLayoutMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        appBarLayoutMain = (AppBarLayout) findViewById(R.id.layout_main);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        pageFr = PageFragment.newInstance("kek", "lol");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("Антон Ригин");
+
+        fragmentStack = new Stack<Fragment>();
+
+        //pageFr = PageFragment.newInstance("kek", "lol");
         aimsFr = AimsFragment.newInstance("kek", "lol");
         friendFr = FriendsFragment.newInstance("kek", "lol");
         settingFr = SettingsFragment.newInstance("kek", "lol");
+
+        fragmentManager = getFragmentManager();
+        FragmentTransaction ftransp = fragmentManager.beginTransaction();
+        ftransp.replace(R.id.container, aimsFr);
+//        ftransp.add(R.id.container, aimsFr);
+//        fragmentStack.push(aimsFr);
+        ftransp.commit();
+
+        AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
+
+        scrollFlags = p.getScrollFlags();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +107,17 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+//            if(fragmentStack.size() == 2) {
+//                FragmentTransaction ft = fragmentManager.beginTransaction();
+//                fragmentStack.lastElement().onPause();
+//                ft.remove(fragmentStack.pop());
+//                fragmentStack.lastElement().onResume();
+//                ft.show(fragmentStack.lastElement());
+//                ft.commit();
+//            }
+//            else {
+                super.onBackPressed();
+          //  }
         }
     }
 
@@ -97,26 +149,56 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        FragmentTransaction ftransp = getFragmentManager().beginTransaction();
+        FragmentTransaction ftransp = fragmentManager.beginTransaction();
 
-        if (id == R.id.my_page) {
+       /* if (id == R.id.my_page) {
 
             ftransp.replace(R.id.container, pageFr);
 
-        } else if (id == R.id.target_control) {
+        } else */if (id == R.id.target_control) {
+            appBarLayoutMain.setExpanded(true, false);
+//            AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
+//            p.setScrollFlags(scrollFlags);
+//            collapsingToolbar.setLayoutParams(p);
             ftransp.replace(R.id.container, aimsFr);
+//            ftransp.add(R.id.container, aimsFr);
+//            fragmentStack.lastElement().onPause();
+//            ftransp.hide(fragmentStack.lastElement());
+//            fragmentStack.push(aimsFr);
+            collapsingToolbar.setTitle("Антон Ригин");
 
         } else if (id == R.id.friends) {
+            appBarLayoutMain.setExpanded(false, false);
+//            AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
+//            p.setScrollFlags(-1);
+//            collapsingToolbar.setLayoutParams(p);
             ftransp.replace(R.id.container, friendFr);
+            appBarLayoutMain.setExpanded(false, false);
+
+//            ftransp.add(R.id.container, friendFr);
+//            fragmentStack.lastElement().onPause();
+//            ftransp.hide(fragmentStack.lastElement());
+//            fragmentStack.push(friendFr);
+            collapsingToolbar.setTitle("Лента");
 
         } else if (id == R.id.nav_manage) {
+            appBarLayoutMain.setExpanded(false, false);
+//            AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
+//            p.setScrollFlags(-1);
+//            collapsingToolbar.setLayoutParams(p);
             ftransp.replace(R.id.container, settingFr);
+            appBarLayoutMain.setExpanded(false, false);
+//            ftransp.add(R.id.container, settingFr);
+//            fragmentStack.lastElement().onPause();
+//            ftransp.hide(fragmentStack.lastElement());
+//            fragmentStack.push(settingFr);
+            collapsingToolbar.setTitle("Настройки");
 
-        } else if (id == R.id.nav_share) {
+        } /*else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
-        }
+        }*/
 
         ftransp.commit();
 
