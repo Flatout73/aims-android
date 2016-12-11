@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
@@ -24,7 +23,6 @@ import android.view.MenuItem;
 
 import net.styleru.aims.fragments.AimsFragment;
 import net.styleru.aims.fragments.FriendsFragment;
-import net.styleru.aims.fragments.PageFragment;
 import net.styleru.aims.fragments.SettingsFragment;
 
 import java.util.Stack;
