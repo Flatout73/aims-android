@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Цель"
+        android:hint="Цель"
         android:layout_marginTop="96dp"
         android:id="@+id/addTarget1_name" />
 

@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,7 @@ import android.widget.TextView;
 
 import net.styleru.aims.R;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -100,6 +101,8 @@ public class AddTarget1 extends Fragment {
 
         typeOfTargets = (RadioGroup) view.findViewById(R.id.target_type);
 
+        addTarget = (Button) view.findViewById(R.id.button_add_target);
+
         View.OnClickListener mylistener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,18 +114,22 @@ public class AddTarget1 extends Fragment {
                         dateEndDatePicker.show();
                         break;
                     case R.id.button_add_target:
-                      //  RequestMethods.addAimType1(header.getText(), description.getText(), end, start, );
+                        try {
+                            RequestMethods.addAimType1(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
+                        } catch (Exception e) {
+                            Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
+                        }
                         break;
                 }
 
             }
         };
 
-        View.OnClickListener radioButtonListener = new View.OnClickListener() {
+        typeOfTargets.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
             @Override
-            public void onClick(View v) {
-                RadioButton rb = (RadioButton) v;
-                switch (rb.getId()) {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
                     case R.id.target0:
                         type = 0;
                         break;
@@ -137,9 +144,10 @@ public class AddTarget1 extends Fragment {
                         break;
                 }
             }
-        };
+        });
 
-        typeOfTargets.setOnClickListener(radioButtonListener);
+
+        addTarget.setOnClickListener(mylistener);
         forDate.setOnClickListener(mylistener);
         forEnd.setOnClickListener(mylistener);
 
@@ -163,7 +171,7 @@ public class AddTarget1 extends Fragment {
                 Calendar newCal=Calendar.getInstance();
                 newCal.set(year, month, dayOfMonth);
                 forDate.setText(dateFormat.format(newCal.getTime()));
-                start = (Date) newCal.getTime();
+                start = newCal.getTime();
             }
         }, newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
@@ -182,7 +190,7 @@ public class AddTarget1 extends Fragment {
                 Calendar newCal=Calendar.getInstance();
                 newCal.set(year, month, dayOfMonth);
                 forEnd.setText(dateFormat.format(newCal.getTime()));
-                end = (Date) newCal.getTime();
+                end = newCal.getTime();
             }
         }, newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
