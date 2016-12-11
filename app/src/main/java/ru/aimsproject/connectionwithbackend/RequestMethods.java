@@ -622,10 +622,11 @@ public class RequestMethods {
      * @param mode Модификатор доступа к цели (0 - всем, 1 - группе лиц, 2 - друзьям, 3 - себе).
      * @param endDate Дата окончания выполнения цели.
      * @param startDate Дата начала выполнения цели.
-     * @param tags Массив тегов цели.
+     //* @param tags Массив тегов цели.
+     * @param tags Строка тегов цели.
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
      */
-    public static void addAimType1(String header, String text, int mode, Date endDate, Date startDate, String[] tags) throws Exception {
+    public static void addAimType1(String header, String text, int mode, Date endDate, Date startDate, /* String[] tags */ String tags) throws Exception {
         String urlString = aimsURL;
         urlString += "type1/";
         String currentToken = DataStorage.getToken();
@@ -637,7 +638,8 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "mode", "" + mode, false);
         urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
         urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
-        urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        urlString = addAttribute(urlString, "tags", tags, false);
         Aim newAim = new AimType1(text, header, 1, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate);
         DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
@@ -670,10 +672,11 @@ public class RequestMethods {
      * @param endDate Дата окончания выполнения цели.
      * @param startDate Дата начала выполнения цели.
      * @param dateSection Промежуток времени, не позднее, чем через который, необходимо подтверждать цель.
-     * @param tags Массив тегов цели.
+    //* @param tags Массив тегов цели.
+     * @param tags Строка тегов цели.
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
      */
-    public static void addAimType2(String header, String text, int mode, Date endDate, Date startDate, Date dateSection, String[] tags) throws Exception {
+    public static void addAimType2(String header, String text, int mode, Date endDate, Date startDate, Date dateSection, /* String[] tags */ String tags) throws Exception {
         String urlString = aimsURL;
         urlString += "type1/";
         String currentToken = DataStorage.getToken();
@@ -686,7 +689,8 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
         urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
         urlString = addAttribute(urlString, "dateSection", dateSection.toString(), false);
-        urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        urlString = addAttribute(urlString, "tags", tags, false);
         Aim newAim = new AimType2(text, header, 2, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, dateSection);
         DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
@@ -719,10 +723,11 @@ public class RequestMethods {
      * @param endDate Дата окончания выполнения цели.
      * @param startDate Дата начала выполнения цели.
      * @param AllTasks Общее количество однотипных задач, которые необходимо решить для выполнения цели.
-     * @param tags Массив тегов цели.
+    //* @param tags Массив тегов цели.
+     * @param tags Строка тегов цели.
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
      */
-    public static void addAimType3(String header, String text, int mode, Date endDate, Date startDate, int AllTasks, String[] tags) throws Exception {
+    public static void addAimType3(String header, String text, int mode, Date endDate, Date startDate, int AllTasks, /* String[] tags */ String tags) throws Exception {
         String urlString = aimsURL;
         urlString += "type1/";
         String currentToken = DataStorage.getToken();
@@ -735,7 +740,8 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
         urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
         urlString = addAttribute(urlString, "AllTasks", "" + AllTasks, false);
-        urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        urlString = addAttribute(urlString, "tags", tags, false);
         Aim newAim = new AimType3(text, header, 3, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, AllTasks, 0);
         DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
