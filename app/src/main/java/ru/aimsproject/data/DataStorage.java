@@ -16,7 +16,7 @@ public class DataStorage {
     /**
      * Лента ("новостная лента") целей.
      */
-    private static List<Aim> aimsFeed = new ArrayList<Aim>();
+    private static List<Aim> newsFeed = new ArrayList<Aim>();
 
     /**
      * Все доступные в приложении достижения.
@@ -32,6 +32,14 @@ public class DataStorage {
      * Текущий токен.
      */
     private static String token;
+
+    /**
+     * Возвращает ленту ("новостную ленту") целей.
+     * @return Лента ("новостная лента") целей.
+     */
+    public static List<Aim> getNewsFeed() {
+        return newsFeed;
+    }
 
     /**
      * Возвращает пользователя, залогинившегося в приложении.

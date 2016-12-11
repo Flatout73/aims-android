@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.security.MessageDigest;
@@ -13,8 +14,7 @@ import java.lang.String;
 
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.exceptions.IncompatibleAimsDatesException;
-import ru.aimsproject.models.AimType1;
-import ru.aimsproject.models.User;
+import ru.aimsproject.models.*;
 
 /**
  * Created by Антон on 17.11.2016.
@@ -82,6 +82,108 @@ public class RequestMethods {
         byte[] hashBytes = messageDigest.digest(bytes);
         BigInteger bigInteger = new BigInteger(1, hashBytes);
         String result = bigInteger.toString(16);
+        return result;
+    }
+
+    /**
+     * Парсит объект JSON для получения объекта цели 1-го типа.
+     * @param jsonObjectAim Объект JSON для парсинга.
+     * @param author Автор цели (или null, если автор при вызове метода неизвестен).
+     * @return Объект цели 1-го типа.
+     * @throws JSONException Возникает, если формат JSON-объекта некорректный.
+     * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
+     */
+    private static Aim parseAimType1(JSONObject jsonObjectAim, User author) throws JSONException, IncompatibleAimsDatesException {
+        String text = jsonObjectAim.getString("Text");
+        String header = jsonObjectAim.getString("Header");
+        int flag = jsonObjectAim.getInt("Flag");
+        int modif = jsonObjectAim.getInt("Modif");
+        Date aimDate = new Date(jsonObjectAim.getString("Date"));
+        Date startDate = new Date(jsonObjectAim.getString("StartDate"));
+        Date endDate = new Date(jsonObjectAim.getString("EndDate"));
+        if(author == null) {
+            JSONObject userObject = jsonObjectAim.getJSONObject("User");
+            author = parseUser(userObject);
+        }
+        return new AimType1(text, header, 1, flag, modif, author, aimDate, startDate, endDate);
+    }
+
+    /**
+     * Парсит объект JSON для получения объекта цели 2-го типа.
+     * @param jsonObjectAim Объект JSON для парсинга.
+     * @param author Автор цели (или null, если автор при вызове метода неизвестен).
+     * @return Объект цели 2-го типа.
+     * @throws JSONException Возникает, если формат JSON-объекта некорректный.
+     * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
+     */
+    private static Aim parseAimType2(JSONObject jsonObjectAim, User author) throws JSONException, IncompatibleAimsDatesException {
+        String text = jsonObjectAim.getString("Text");
+        String header = jsonObjectAim.getString("Header");
+        int flag = jsonObjectAim.getInt("Flag");
+        int modif = jsonObjectAim.getInt("Modif");
+        Date aimDate = new Date(jsonObjectAim.getString("Date"));
+        Date startDate = new Date(jsonObjectAim.getString("StartDate"));
+        Date endDate = new Date(jsonObjectAim.getString("EndDate"));
+        Date dateSection = new Date(jsonObjectAim.getString("DateSection"));
+        if(author == null) {
+            JSONObject userObject = jsonObjectAim.getJSONObject("User");
+            author = parseUser(userObject);
+        }
+        return new AimType2(text, header, 2, flag, modif, author, aimDate, startDate, endDate, dateSection);
+    }
+
+    /**
+     * Парсит объект JSON для получения объекта цели 3-го типа.
+     * @param jsonObjectAim Объект JSON для парсинга.
+     * @param author Автор цели (или null, если автор при вызове метода неизвестен).
+     * @return Объект цели 3-го типа.
+     * @throws JSONException Возникает, если формат JSON-объекта некорректный.
+     * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
+     */
+    private static Aim parseAimType3(JSONObject jsonObjectAim, User author) throws JSONException, IncompatibleAimsDatesException {
+        String text = jsonObjectAim.getString("Text");
+        String header = jsonObjectAim.getString("Header");
+        int flag = jsonObjectAim.getInt("Flag");
+        int modif = jsonObjectAim.getInt("Modif");
+        Date aimDate = new Date(jsonObjectAim.getString("Date"));
+        Date startDate = new Date(jsonObjectAim.getString("StartDate"));
+        Date endDate = new Date(jsonObjectAim.getString("EndDate"));
+        int allTasks = jsonObjectAim.getInt("AllTasks");
+        int currentTasks = jsonObjectAim.getInt("CurrentTasks");
+        if(author == null) {
+            JSONObject userObject = jsonObjectAim.getJSONObject("User");
+            author = parseUser(userObject);
+        }
+        return new AimType3(text, header, 3, flag, modif, author, aimDate, startDate, endDate, allTasks, currentTasks);
+    }
+
+    /**
+     * Парсит объект JSON для получения объекта пользователя.
+     * @param jsonObjectUser Объект JSON для парсинга.
+     * @return Объект пользователя.
+     * @throws JSONException Возникает, если формат JSON-объекта некорректный.
+     */
+    private static User parseUser(JSONObject jsonObjectUser) throws JSONException {
+        String name = jsonObjectUser.getString("Name");
+        String login = jsonObjectUser.getString("Login");
+        int sex = jsonObjectUser.getInt("Sex");
+        String image = jsonObjectUser.getString("Image");
+        return new User(name, login, sex, image);
+    }
+
+    /**
+     * Объединяет массив тегов в одну строку, где теги разделены запятыми.
+     * @param tags Массив тегов цели.
+     * @return Возвращает строку, где теги разделены запятыми.
+     */
+    private static String joinTags(String[] tags) {
+        String result = "";
+        for(int i = 0; i < tags.length; i++) {
+            result += tags;
+            if(i < tags.length - 1) {
+                result += ",";
+            }
+        }
         return result;
     }
 
@@ -226,8 +328,8 @@ public class RequestMethods {
                 }
                 throw new Exception("Неизвестная ошибка.");
             }
-            me.setImage(image);
             DataStorage.setToken(token);
+            me.setImage(image);
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
@@ -345,14 +447,11 @@ public class RequestMethods {
                 }
                 throw new Exception("Неизвестная ошибка.");
             }
+            DataStorage.setToken(token);
             JSONArray users = jsonObject.getJSONArray("Users");
             List<User> resultList = new ArrayList<>();
             for(int i = 0; i < users.length(); i++) {
-                String name = users.getJSONObject(i).getString("Name");
-                String login = users.getJSONObject(i).getString("Login");
-                int sex = users.getJSONObject(i).getInt("Sex");
-                String image = users.getJSONObject(i).getString("Image");
-                resultList.add(new User(name, login, null, sex, image));
+                resultList.add(parseUser(users.getJSONObject(i)));
             }
             return resultList;
         }
@@ -387,14 +486,23 @@ public class RequestMethods {
                 }
                 throw new Exception("Неизвестная ошибка.");
             }
-            JSONObject userObject = jsonObject.getJSONObject("User");
-            String name = userObject.getString("Name");
-            String login = userObject.getString("Login");
-            String email = userObject.getString("Email"); // Напомнить Андрею, чтобы исправил это у себя.
-            int sex = userObject.getInt("Sex");
-            String image = userObject.getString("Image");
-            DataStorage.setMe(new User(name, login, email, sex, image));
             DataStorage.setToken(token);
+            JSONObject userObject = jsonObject.getJSONObject("User");
+            User me = parseUser(userObject);
+            JSONArray aimsType1 = jsonObject.getJSONArray("aim1");
+            for(int i = 0; i < aimsType1.length(); i++) {
+                me.addAim(parseAimType1(aimsType1.getJSONObject(i), me));
+            }
+            JSONArray aimsType2 = jsonObject.getJSONArray("aim2");
+            for(int i = 0; i < aimsType2.length(); i++) {
+                me.addAim(parseAimType2(aimsType2.getJSONObject(i), me));
+            }
+            JSONArray aimsType3 = jsonObject.getJSONArray("aim3");
+            for(int i = 0; i < aimsType3.length(); i++) {
+                me.addAim(parseAimType3(aimsType3.getJSONObject(i), me));
+            }
+            Collections.sort(me.getAims());
+            DataStorage.setMe(me);
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
@@ -432,18 +540,91 @@ public class RequestMethods {
                 }
                 throw new Exception("Неизвестная ошибка.");
             }
+            DataStorage.setToken(token);
             JSONObject userObject = jsonObject.getJSONObject("User");
-            String name = userObject.getString("Name");
-            String login = userObject.getString("Login");
-            int sex = userObject.getInt("Sex");
-            String image = userObject.getString("Image");
-            return new User(name, login, null, sex, image);
+            User user = parseUser(userObject);
+            JSONArray aimsType1 = jsonObject.getJSONArray("aim1");
+            for(int i = 0; i < aimsType1.length(); i++) {
+                user.addAim(parseAimType1(aimsType1.getJSONObject(i), user));
+            }
+            JSONArray aimsType2 = jsonObject.getJSONArray("aim2");
+            for(int i = 0; i < aimsType2.length(); i++) {
+                user.addAim(parseAimType2(aimsType2.getJSONObject(i), user));
+            }
+            JSONArray aimsType3 = jsonObject.getJSONArray("aim3");
+            for(int i = 0; i < aimsType3.length(); i++) {
+                user.addAim(parseAimType3(aimsType3.getJSONObject(i), user));
+            }
+            Collections.sort(user.getAims());
+            return user;
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
         }
     }
 
+    /**
+     * Получает цели друзей, начиная с определённого времени.
+     * @param date Время, начиная с которого получаются цели.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось или если у пользователя нет друзей.
+     */
+    public static void getNews(Date date) throws Exception {
+        String urlString = newsURL;
+        urlString += "getuserprofile/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "date", date.toString(), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("Friends Error")) {
+                    throw new Exception("У Вас нет друзей.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            DataStorage.getNewsFeed().clear();
+            JSONArray aimsType1 = jsonObject.getJSONArray("aim1");
+            for(int i = 0; i < aimsType1.length(); i++) {
+                DataStorage.getNewsFeed().add(parseAimType1(aimsType1.getJSONObject(i), null));
+            }
+            JSONArray aimsType2 = jsonObject.getJSONArray("aim2");
+            for(int i = 0; i < aimsType2.length(); i++) {
+                DataStorage.getNewsFeed().add(parseAimType2(aimsType2.getJSONObject(i), null));
+            }
+            JSONArray aimsType3 = jsonObject.getJSONArray("aim3");
+            for(int i = 0; i < aimsType3.length(); i++) {
+                DataStorage.getNewsFeed().add(parseAimType3(aimsType3.getJSONObject(i), null));
+            }
+            Collections.sort(DataStorage.getNewsFeed());
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    /**
+     * Добавляет цель 1-го типа.
+     * @param header Название цели.
+     * @param text Текст цели.
+     * @param mode Модификатор доступа к цели (0 - всем, 1 - группе лиц, 2 - друзьям, 3 - себе).
+     * @param endDate Дата окончания выполнения цели.
+     * @param startDate Дата начала выполнения цели.
+     * @param tags Массив тегов цели.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
     public static void addAimType1(String header, String text, int mode, Date endDate, Date startDate, String[] tags) throws Exception {
         String urlString = aimsURL;
         urlString += "type1/";
@@ -457,18 +638,15 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
         urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
         urlString = addAttribute(urlString, "tags", joinTags(tags), false);
-        /*try {
-            DataStorage.getMe().addAim(new AimType1(null, text, header, 1, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate));
-        }
-        catch (IncompatibleAimsDatesException ex) {
-
-        }*/
+        Aim newAim = new AimType1(text, header, 1, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate);
+        DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
             String token = jsonObject.getString("Token");
             if(!jsonObject.getBoolean("OperationOutput")) {
+                DataStorage.getMe().removeAim(newAim);
                 if(token.equals("DataBase Error")) {
                     throw new Exception("Ошибка при подключении к базе данных.");
                 }
@@ -477,12 +655,24 @@ public class RequestMethods {
                 }
                 throw new Exception("Неизвестная ошибка.");
             }
+            DataStorage.setToken(token);
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
         }
     }
 
+    /**
+     * Добавляет цель 2-го типа.
+     * @param header Название цели.
+     * @param text Текст цели.
+     * @param mode Модификатор доступа к цели (0 - всем, 1 - группе лиц, 2 - друзьям, 3 - себе).
+     * @param endDate Дата окончания выполнения цели.
+     * @param startDate Дата начала выполнения цели.
+     * @param dateSection Промежуток времени, не позднее, чем через который, необходимо подтверждать цель.
+     * @param tags Массив тегов цели.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
     public static void addAimType2(String header, String text, int mode, Date endDate, Date startDate, Date dateSection, String[] tags) throws Exception {
         String urlString = aimsURL;
         urlString += "type1/";
@@ -497,12 +687,15 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
         urlString = addAttribute(urlString, "dateSection", dateSection.toString(), false);
         urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        Aim newAim = new AimType2(text, header, 2, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, dateSection);
+        DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
             String token = jsonObject.getString("Token");
             if(!jsonObject.getBoolean("OperationOutput")) {
+                DataStorage.getMe().removeAim(newAim);
                 if(token.equals("DataBase Error")) {
                     throw new Exception("Ошибка при подключении к базе данных.");
                 }
@@ -511,12 +704,24 @@ public class RequestMethods {
                 }
                 throw new Exception("Неизвестная ошибка.");
             }
+            DataStorage.setToken(token);
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
         }
     }
 
+    /**
+     * Добавляет цель 1-го типа.
+     * @param header Название цели.
+     * @param text Текст цели.
+     * @param mode Модификатор доступа к цели (0 - всем, 1 - группе лиц, 2 - друзьям, 3 - себе).
+     * @param endDate Дата окончания выполнения цели.
+     * @param startDate Дата начала выполнения цели.
+     * @param AllTasks Общее количество однотипных задач, которые необходимо решить для выполнения цели.
+     * @param tags Массив тегов цели.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
     public static void addAimType3(String header, String text, int mode, Date endDate, Date startDate, int AllTasks, String[] tags) throws Exception {
         String urlString = aimsURL;
         urlString += "type1/";
@@ -531,12 +736,15 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
         urlString = addAttribute(urlString, "AllTasks", "" + AllTasks, false);
         urlString = addAttribute(urlString, "tags", joinTags(tags), false);
+        Aim newAim = new AimType3(text, header, 3, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, AllTasks, 0);
+        DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
             String token = jsonObject.getString("Token");
             if(!jsonObject.getBoolean("OperationOutput")) {
+                DataStorage.getMe().removeAim(newAim);
                 if(token.equals("DataBase Error")) {
                     throw new Exception("Ошибка при подключении к базе данных.");
                 }
@@ -545,20 +753,10 @@ public class RequestMethods {
                 }
                 throw new Exception("Неизвестная ошибка.");
             }
+            DataStorage.setToken(token);
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
         }
-    }
-
-    public static String joinTags(String[] tags) {
-        String result = "";
-        for(int i = 0; i < tags.length; i++) {
-            result += tags;
-            if(i < tags.length - 1) {
-                result += ",";
-            }
-        }
-        return result;
     }
 }

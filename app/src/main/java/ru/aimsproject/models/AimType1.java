@@ -12,7 +12,7 @@ import ru.aimsproject.exceptions.IncompatibleAimsDatesException;
 public class AimType1 extends Aim {
     /**
      * Конструктор, инициализирует объект цели 1-го типа (обычную).
-     * @param subAims Список подцелей.
+     // * @param subAims Список подцелей.
      * @param text Текст цели.
      * @param header Название цели.
      * @param type Тип цели (1 - обычная, 2 - с подтверждением через каждый определённый промежуток времени, 3 - с прогрессом выполнения цели).
@@ -24,8 +24,8 @@ public class AimType1 extends Aim {
      * @param endDate Дата окончания выполнения цели.
      * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
      */
-    public AimType1(ArrayList<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate)
+    public AimType1( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate)
             throws IncompatibleAimsDatesException {
-        super(subAims, text, header, type, flag, modif, author, date, startDate, endDate);
+        super( /* subAims, */ text, header, type, flag, modif, author, date, startDate, endDate);
     }
 }
