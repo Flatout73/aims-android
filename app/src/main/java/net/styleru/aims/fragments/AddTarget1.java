@@ -1,12 +1,27 @@
 package net.styleru.aims.fragments;
 
+import android.annotation.TargetApi;
+import android.app.DatePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import net.styleru.aims.R;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import ru.aimsproject.connectionwithbackend.RequestMethods;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,6 +30,16 @@ import net.styleru.aims.R;
  */
 public class AddTarget1 extends Fragment {
 
+    DatePickerDialog dateStartDatePicker, dateEndDatePicker;
+    Button forDate, forEnd, addTarget;
+
+    Date start, end;
+
+    RadioGroup typeOfTargets;
+
+    EditText header, description, tags;
+
+    int type;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,14 +80,111 @@ public class AddTarget1 extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view;
-        //inflater
-        return inflater.inflate(R.layout.fragment_new_add_target_1, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_add_target_1, container, false);;
+
+        forDate = (Button) view.findViewById(R.id.addTarget1_start_date);
+        forEnd = (Button) view.findViewById(R.id.addTarget1_end_date);
+        addTarget = (Button) view.findViewById(R.id.button_add_target);
+
+        header = (EditText) view.findViewById(R.id.addTarget1_name);
+        description = (EditText) view.findViewById(R.id.addTarget1_description);
+        tags = (EditText) view.findViewById(R.id.addTarget1_tags);
+
+        typeOfTargets = (RadioGroup) view.findViewById(R.id.target_type);
+
+        View.OnClickListener mylistener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.addTarget1_start_date:
+                        dateStartDatePicker.show();
+                        break;
+                    case R.id.addTarget1_end_date:
+                        dateEndDatePicker.show();
+                        break;
+                    case R.id.button_add_target:
+                      //  RequestMethods.addAimType1(header.getText(), description.getText(), end, start, );
+                        break;
+                }
+
+            }
+        };
+
+        View.OnClickListener radioButtonListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioButton rb = (RadioButton) v;
+                switch (rb.getId()) {
+                    case R.id.target0:
+                        type = 0;
+                        break;
+                    case R.id.target1:
+                        type = 1;
+                        break;
+                    case R.id.target2:
+                        type = 2;
+                    case R.id.target3:
+                        type = 3;
+                    default:
+                        break;
+                }
+            }
+        };
+
+        typeOfTargets.setOnClickListener(radioButtonListener);
+        forDate.setOnClickListener(mylistener);
+        forEnd.setOnClickListener(mylistener);
+
+        initStartDatePicker();
+        initEndDatePicker();
+        return view;
     }
-}
+
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private void initStartDatePicker(){
+
+        Calendar newCalendar = Calendar.getInstance();
+
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+        dateStartDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Calendar newCal=Calendar.getInstance();
+                newCal.set(year, month, dayOfMonth);
+                forDate.setText(dateFormat.format(newCal.getTime()));
+                start = (Date) newCal.getTime();
+            }
+        }, newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private void initEndDatePicker(){
+
+        Calendar newCalendar = Calendar.getInstance();
+
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+        dateEndDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Calendar newCal=Calendar.getInstance();
+                newCal.set(year, month, dayOfMonth);
+                forEnd.setText(dateFormat.format(newCal.getTime()));
+                end = (Date) newCal.getTime();
+            }
+        }, newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    }
