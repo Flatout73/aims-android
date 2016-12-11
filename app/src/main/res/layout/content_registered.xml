@@ -16,17 +16,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AIMS"
+            android:textSize="20pt"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_marginTop="16dp"
         android:inputType="textPersonName"
-        android:hint="Name"
+        android:hint="Login"
         android:ems="10"
-        android:id="@+id/editText4" />
+        android:id="@+id/login_register" />
 
     <EditText
         android:layout_width="match_parent"
@@ -35,7 +43,7 @@
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:id="@+id/editText2" />
+        android:id="@+id/email_register" />
 
     <EditText
         android:layout_width="match_parent"
@@ -44,12 +52,50 @@
         android:hint="Password"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/editText3" />
+        android:id="@+id/password_register" />
 
-        <Button
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textPersonName"
+            android:hint="Name"
+            android:ems="10"
+            android:id="@+id/name_register" />
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Зарегистрироваться"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="Пол"/>
+
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/male"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Мужской" />
+
+                <RadioButton
+                    android:id="@+id/female"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Женский" />
+
+            </RadioGroup>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Зарегистрироваться"
+            android:layout_marginTop="16dp"
+            android:onClick="registerToTheBase"/>
 
     </LinearLayout>
 

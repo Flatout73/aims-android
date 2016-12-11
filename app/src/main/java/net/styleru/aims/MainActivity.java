@@ -9,7 +9,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,7 +30,7 @@ import net.styleru.aims.fragments.SettingsFragment;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MenuItemCompat.OnActionExpandListener {
 
         //PageFragment pageFr;
         AimsFragment aimsFr;
@@ -40,6 +42,8 @@ public class MainActivity extends AppCompatActivity
 
         int scrollFlags;
 
+        int id;
+
         private FragmentManager fragmentManager;
         private Stack<Fragment> fragmentStack;
 
@@ -48,6 +52,9 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbarFriend;
 
         AppBarLayout appBarLayoutMain;
+
+        MenuItem searchMenuItem;
+        SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +80,11 @@ public class MainActivity extends AppCompatActivity
 
         fragmentManager = getFragmentManager();
         FragmentTransaction ftransp = fragmentManager.beginTransaction();
-        ftransp.replace(R.id.container, aimsFr);
+
+            ftransp.replace(R.id.container, aimsFr);
 //        ftransp.add(R.id.container, aimsFr);
 //        fragmentStack.push(aimsFr);
-        ftransp.commit();
+            ftransp.commit();
 
         AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
 
@@ -118,29 +126,17 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        searchMenuItem = menu.findItem(R.id.action_search);
+
+        MenuItemCompat.setOnActionExpandListener(searchMenuItem, this);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        id = item.getItemId();
 
         FragmentTransaction ftransp = fragmentManager.beginTransaction();
 
@@ -203,5 +199,16 @@ public class MainActivity extends AppCompatActivity
     public void addTarget(View view) {
         Intent intent = new Intent(this, AddTarget.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+        appBarLayoutMain.setExpanded(false, true);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        return false;
     }
 }
