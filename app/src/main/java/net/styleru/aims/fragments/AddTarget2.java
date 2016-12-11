@@ -118,8 +118,11 @@ public class AddTarget2 extends Fragment {
                         break;
                     case R.id.button_add_target:
                         try {
-                            RequestMethods.addAimType3(header.getText().toString(), description.getText().toString(), type, end, start, Integer.getInteger(tasks.getText().toString()), tags.getText().toString());
-                        } catch (Exception e) {
+                            RequestMethods.addAimType3(header.getText().toString(), description.getText().toString(), type, end, start, Integer.parseInt(tasks.getText().toString()), tags.getText().toString());
+                        } catch (NumberFormatException ex) {
+                            Snackbar.make(v, "Введите число в поле Количество задач", Snackbar.LENGTH_LONG).show();
+                        }
+                        catch (Exception e) {
                             Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
                         }
                         break;
