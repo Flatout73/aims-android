@@ -19,11 +19,6 @@ public class User implements Comparable<User> {
     private String login;
 
     /**
-     * E-mail пользователя.
-     */
-    private String email;
-
-    /**
      * Пол пользователя.
      */
     private int sex;
@@ -52,14 +47,12 @@ public class User implements Comparable<User> {
      * Конструктор, инициализирует объект пользователя.
      * @param name Имя пользователя.
      * @param login Логин пользователя.
-     * @param email E-mail пользователя.
      * @param sex Пол пользователя.
      * @param image Аватарка пользователя (изображение, сохранённое в виде строки).
      */
-    public User(String name, String login, String email, int sex, String image) {
+    public User(String name, String login, int sex, String image) {
         this.name = name;
         this.login = login;
-        this.email = email;
         this.sex = sex;
         this.image = image;
     }
@@ -78,14 +71,6 @@ public class User implements Comparable<User> {
      */
     public String getLogin() {
         return login;
-    }
-
-    /**
-     * Возвращает E-mail пользователя.
-     * @return E-mail пользователя.
-     */
-    public String getEmail() {
-        return email;
     }
 
     /**
@@ -126,14 +111,6 @@ public class User implements Comparable<User> {
      */
     public List<Achievement> getAchievements() {
         return achievements;
-    }
-
-    /**
-     * Устанавливает E-mail пользователя.
-     * @param email E-mail пользователя.
-     */
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     /**

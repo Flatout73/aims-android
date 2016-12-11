@@ -2,6 +2,7 @@ package ru.aimsproject.models;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ru.aimsproject.exceptions.IncompatibleAimsDatesException;
 
@@ -23,7 +24,7 @@ public class AimType3 extends Aim {
 
     /**
      * Конструктор, инициализирует объект цели 3-го типа (с прогрессом выполнения цели).
-     * @param subAims Список подцелей.
+     // * @param subAims Список подцелей.
      * @param text Текст цели.
      * @param header Название цели.
      * @param type Тип цели (1 - обычная, 2 - с подтверждением через каждый определённый промежуток времени, 3 - с прогрессом выполнения цели).
@@ -36,9 +37,9 @@ public class AimType3 extends Aim {
      * @param allTasks Общее количество однотипных задач, которые необходимо решить для выполнения цели.
      * @param currentTasks Текущее количество решённых однотипных задач, необходимых для выполнения цели.
      */
-    public AimType3(ArrayList<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int allTasks, int currentTasks)
+    public AimType3( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int allTasks, int currentTasks)
             throws IncompatibleAimsDatesException {
-        super(subAims, text, header, type, flag, modif, author, date, startDate, endDate);
+        super( /* subAims, */ text, header, type, flag, modif, author, date, startDate, endDate);
         this.allTasks = allTasks;
         this.currentTasks = currentTasks;
     }
