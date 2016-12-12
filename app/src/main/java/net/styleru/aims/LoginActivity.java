@@ -3,7 +3,9 @@ package net.styleru.aims;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -40,6 +42,8 @@ import java.util.List;
 
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 
+import ru.aimsproject.data.DataStorage;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -47,18 +51,17 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    public static final String APP_REFERENCES = "settingsForToken";
+
+    public static final String APP_REFERENCE_Token = "token";
+
+    SharedPreferences mToken;
+
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -78,6 +81,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mToken = getSharedPreferences(APP_REFERENCES, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor edit = mToken.edit();
+        if(mToken.contains(APP_REFERENCE_Token)) {
+            edit.remove(APP_REFERENCE_Token);
+            edit.clear();
+        }
+
+        edit.apply();
+
+        if(mToken.contains(APP_REFERENCE_Token)) {
+            DataStorage.setToken(mToken.getString(APP_REFERENCE_Token, ""));
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -335,6 +354,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             } catch (Exception e) {
                 Snackbar.make(mLoginFormView, e.getMessage(), Snackbar.LENGTH_LONG).show();
+               // return false;
             }
 
 //            for (String credential : DUMMY_CREDENTIALS) {
@@ -355,6 +375,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                SharedPreferences.Editor edit = mToken.edit();
+                edit.putString(APP_REFERENCE_Token, DataStorage.getToken());
+                edit.apply();
               //  Snackbar.make(mLoginFormView, "Yeah", Snackbar.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);

@@ -207,6 +207,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
-        return false;
+        return true;
     }
 }

@@ -93,7 +93,7 @@
                 android:layout_width="fill_parent"
                 android:layout_weight="1"
                 android:layout_marginTop="16dp"
-                android:text="Register"
+                android:text="Регистрация"
                 android:onClick="register"
                 android:textStyle="bold" />
             </LinearLayout>

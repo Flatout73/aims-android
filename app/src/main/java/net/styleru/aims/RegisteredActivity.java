@@ -1,5 +1,8 @@
 package net.styleru.aims;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.aimsproject.connectionwithbackend.RequestMethods;
+import ru.aimsproject.data.DataStorage;
 
 public class RegisteredActivity extends AppCompatActivity {
 
@@ -26,9 +30,26 @@ public class RegisteredActivity extends AppCompatActivity {
     String name;
     String email;
 
+    public static final String APP_REFERENCES = "settingsForToken";
+
+    public static final String APP_REFERENCE_Token = "token";
+
+    SharedPreferences mToken;
+    SharedPreferences.Editor edit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mToken = getSharedPreferences(APP_REFERENCES, Context.MODE_PRIVATE);
+        edit = mToken.edit();
+        if(mToken.contains(APP_REFERENCE_Token)) {
+            edit.remove(APP_REFERENCE_Token);
+            edit.clear();
+        }
+
+        edit.apply();
+
         setContentView(R.layout.activity_registered);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,6 +90,12 @@ public class RegisteredActivity extends AppCompatActivity {
             name = ((EditText) findViewById(R.id.name_register)).getText().toString();
             email = ((EditText) findViewById(R.id.email_register)).getText().toString();
             RequestMethods.register(login, password, email, name, sex);
+
+            edit = mToken.edit();
+            edit.putString(APP_REFERENCE_Token, DataStorage.getToken());
+            edit.apply();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         } catch (NullPointerException e) {
             Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
         } catch (Exception ex) {

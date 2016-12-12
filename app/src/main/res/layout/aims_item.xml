@@ -4,19 +4,18 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground" >
 
-    <net.styleru.aims.fragments.RoundedImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_centerVertical="true"
-        android:id="@+id/list_avatar"
-        android:src="@drawable/rigin"/>
+    <!--<net.styleru.aims.fragments.RoundedImageView-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:id="@+id/list_avatar"-->
+        <!--android:src="@drawable/rigin"/>-->
 
 
     <TextView
         android:id="@+id/target_aims"
         android:text="Сделать ДЗ"
         android:textSize="16sp"
-        android:layout_toEndOf="@id/list_avatar"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"

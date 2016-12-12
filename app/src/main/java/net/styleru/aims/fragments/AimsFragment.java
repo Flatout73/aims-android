@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import ru.aimsproject.data.DataStorage;
+import ru.aimsproject.models.Aim;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AimsFragment#newInstance} factory method to
@@ -47,6 +50,8 @@ public class AimsFragment extends Fragment {
     private ArrayList<HashMap<String, String>> mTargetList = new ArrayList<>();
     private static final String TITLE = "targetname";
     private static final String DATE = "date";
+
+    List<Aim> myAims;
 
     public AimsFragment() {
         // Required empty public constructor
@@ -87,8 +92,18 @@ public class AimsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_aims, container, false);
         NestedScrollingListView listView = (NestedScrollingListView) view.findViewById(R.id.aimsListView);
-
         HashMap<String, String> hm;
+
+//        myAims = DataStorage.getMe().getAims();
+//
+//        for(int i = 0; i < myAims.size(); i++) {
+//            Aim currentAim = myAims.get(i);
+//            hm = new HashMap<>();
+//            hm.put(TITLE, currentAim.getHeader());
+//            hm.put(DATE, currentAim.getDate().toString());
+//        }
+
+
         hm = new HashMap<>();
         hm.put(TITLE, "Cinema");
         hm.put(DATE, "Tomorrow");
@@ -141,6 +156,7 @@ public class AimsFragment extends Fragment {
         listView.setNestedScrollingEnabled(true);
         return view;
     }
+
 
     AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
 

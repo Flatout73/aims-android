@@ -1,67 +1,97 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="net.styleru.aims.fragments.SettingsFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/email_edit">
+        android:layout_height="match_parent"
+        android:padding="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="Изменить Email:"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-
-        <EditText
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_target"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Изменить Email"
-            android:gravity="left"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:padding="8dp">
 
-    </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@id/email_edit"
-        android:layout_marginTop="16dp"
-        android:id="@+id/password_edit">
+            <LinearLayout
+                android:id="@+id/email_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="center_horizontal"-->
+                    <!--android:text="Изменить Email:"-->
+                    <!--android:textAppearance="@style/TextAppearance.AppCompat.Medium" />-->
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:hint="Изменить Email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/password_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_below="@id/email_edit"
+                    android:orientation="vertical">
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="left"-->
+                        <!--android:text="Изменить пароль:"-->
+                        <!--android:textAppearance="@style/TextAppearance.AppCompat.Medium" />-->
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Изменить пароль"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </LinearLayout>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:text="Изменить пароль:"/>
+                <Button
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:gravity="center"
+                    android:layout_below="@id/password_edit"
+                    android:text="Принять изменеия"
+                    android:textStyle="bold" />
 
-        <EditText
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_password"
+            android:layout_below="@id/card_target"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Изменить пароль"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
 
-    <Button
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="16dp"
-        android:text="Принять изменения"
-        android:layout_below="@id/password_edit"
-        android:textStyle="bold" />
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
