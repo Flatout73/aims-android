@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.security.MessageDigest;
 import java.lang.String;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,6 +58,11 @@ public class RequestMethods {
      * Элемент HTTP-запроса для методов из группы user.
      */
     private static final String userURL = "user/";
+
+    /**
+     * Разница в миллисекундах между временем текущего часового пояса и временем UTC.
+     */
+    private static final long timeZoneOffsetMilliseconds = TimeZone.getDefault().getRawOffset();
 
     /**
      * Добавляет атрибут (имя атрибута и его значение) к HTTP-запросу.
@@ -109,17 +115,17 @@ public class RequestMethods {
         Date aimDate = null;
         Matcher aimDateMatcher = datePattern.matcher(jsonObjectAim.getString("Date"));
         if(aimDateMatcher.matches()) {
-            aimDate = new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6)));
+            aimDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6))));
         }
         Date startDate = null;
         Matcher startDateMatcher = datePattern.matcher(jsonObjectAim.getString("StartDate"));
         if(startDateMatcher.matches()) {
-            startDate = new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6)));
+            startDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6))));
         }
         Date endDate = null;
         Matcher endDateMatcher = datePattern.matcher(jsonObjectAim.getString("EndDate"));
         if(endDateMatcher.matches()) {
-            endDate = new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6)));
+            endDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6))));
         }
         if(author == null) {
             JSONObject userObject = jsonObjectAim.getJSONObject("User");
@@ -145,17 +151,17 @@ public class RequestMethods {
         Date aimDate = null;
         Matcher aimDateMatcher = datePattern.matcher(jsonObjectAim.getString("Date"));
         if(aimDateMatcher.matches()) {
-            aimDate = new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6)));
+            aimDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6))));
         }
         Date startDate = null;
         Matcher startDateMatcher = datePattern.matcher(jsonObjectAim.getString("StartDate"));
         if(startDateMatcher.matches()) {
-            startDate = new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6)));
+            startDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6))));
         }
         Date endDate = null;
         Matcher endDateMatcher = datePattern.matcher(jsonObjectAim.getString("EndDate"));
         if(endDateMatcher.matches()) {
-            endDate = new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6)));
+            endDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6))));
         }
         Matcher dateSectionMatcher = datePattern.matcher(jsonObjectAim.getString("DateSection"));
         Date dateSection = null;
@@ -186,17 +192,17 @@ public class RequestMethods {
         Date aimDate = null;
         Matcher aimDateMatcher = datePattern.matcher(jsonObjectAim.getString("Date"));
         if(aimDateMatcher.matches()) {
-            aimDate = new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6)));
+            aimDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6))));
         }
         Date startDate = null;
         Matcher startDateMatcher = datePattern.matcher(jsonObjectAim.getString("StartDate"));
         if(startDateMatcher.matches()) {
-            startDate = new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6)));
+            startDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6))));
         }
         Date endDate = null;
         Matcher endDateMatcher = datePattern.matcher(jsonObjectAim.getString("EndDate"));
         if(endDateMatcher.matches()) {
-            endDate = new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6)));
+            endDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6))));
         }
         int allTasks = jsonObjectAim.getInt("AllTasks");
         int currentTasks = jsonObjectAim.getInt("CurrentTasks");
@@ -259,6 +265,24 @@ public class RequestMethods {
         byte[] bytes = Base64.decode(base64String, Base64.DEFAULT);
         Bitmap imageBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         return imageBitmap;
+    }
+
+    /**
+     * Получает время UTC из времени в текущем часовом поясе.
+     * @param date Время в текущем часовом поясе.
+     * @return Время UTC из времени в текущем часовом поясе.
+     */
+    private static Date getUTCDate(Date date) {
+        return new Date(date.getTime() - timeZoneOffsetMilliseconds);
+    }
+
+    /**
+     * Получает время в текущем часовом поясе из времени UTC.
+     * @param date Время UTC.
+     * @return Время в текущем часовом поясе из времени UTC.
+     */
+    private static Date getCurrentTimeZoneDateFromUTC(Date date) {
+        return new Date(date.getTime() + timeZoneOffsetMilliseconds);
     }
 
     /**
@@ -650,7 +674,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        urlString = addAttribute(urlString, "date", date.toString(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(date).toString(), false);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
@@ -710,8 +734,8 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "text", text, false);
         urlString = addAttribute(urlString, "mode", "" + mode, false);
-        urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
-        urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
+        urlString = addAttribute(urlString, "endDate", getUTCDate(endDate).toString(), false);
+        urlString = addAttribute(urlString, "startDate", getUTCDate(startDate).toString(), false);
         //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
         urlString = addAttribute(urlString, "tags", tags, false);
         Aim newAim = new AimType1(new ArrayList<Aim>(), text, header, 1, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, new ArrayList<Proof>());
@@ -760,8 +784,8 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "text", text, false);
         urlString = addAttribute(urlString, "mode", "" + mode, false);
-        urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
-        urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
+        urlString = addAttribute(urlString, "endDate", getUTCDate(endDate).toString(), false);
+        urlString = addAttribute(urlString, "startDate", getUTCDate(startDate).toString(), false);
         urlString = addAttribute(urlString, "dateSection", dateSection.toString(), false);
         //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
         urlString = addAttribute(urlString, "tags", tags, false);
@@ -811,8 +835,8 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "text", text, false);
         urlString = addAttribute(urlString, "mode", "" + mode, false);
-        urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
-        urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
+        urlString = addAttribute(urlString, "endDate", getUTCDate(endDate).toString(), false);
+        urlString = addAttribute(urlString, "startDate", getUTCDate(startDate).toString(), false);
         urlString = addAttribute(urlString, "AllTasks", "" + AllTasks, false);
         //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
         urlString = addAttribute(urlString, "tags", tags, false);
@@ -853,7 +877,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(aim.getDate()).toString(), false);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
@@ -890,7 +914,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(aim.getDate()).toString(), false);
         urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
         urlString = addAttribute(urlString, "comment", comment, false);
         String response = Request.doRequest(urlString);
@@ -932,7 +956,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
-        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(aim.getDate()).toString(), false);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
@@ -975,7 +999,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
-        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(aim.getDate()).toString(), false);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
@@ -1019,10 +1043,10 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(aim.getDate()).toString(), false);
         urlString = addAttribute(urlString, "proofText", proofText, false);
         Date proofDate = new Date();
-        urlString = addAttribute(urlString, "dateProof", proofDate.toString(), false);
+        urlString = addAttribute(urlString, "dateProof", getUTCDate(proofDate).toString(), false);
         urlString = addAttribute(urlString, "image", getBase64String(image), false);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
