@@ -1,5 +1,7 @@
 package ru.aimsproject.models;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +26,9 @@ public class User implements Comparable<User> {
     private int sex;
 
     /**
-     * Аватарка пользователя (изображение, сохранённое в виде строки).
+     * Аватарка пользователя (изображение, сохранённое в виде Bitmap).
      */
-    private String image;
+    private Bitmap image;
 
     /**
      * Список друзей пользователя.
@@ -48,9 +50,9 @@ public class User implements Comparable<User> {
      * @param name Имя пользователя.
      * @param login Логин пользователя.
      * @param sex Пол пользователя.
-     * @param image Аватарка пользователя (изображение, сохранённое в виде строки).
+     * @param image Аватарка пользователя (изображение, сохранённое в виде Bitmap).
      */
-    public User(String name, String login, int sex, String image) {
+    public User(String name, String login, int sex, Bitmap image) {
         this.name = name;
         this.login = login;
         this.sex = sex;
@@ -82,10 +84,10 @@ public class User implements Comparable<User> {
     }
 
     /**
-     * Возвращает аватарку пользователя (изображение, сохранённое в виде строки).
-     * @return Аватарка пользователя (изображение, сохранённое в виде строки).
+     * Возвращает аватарку пользователя (изображение, сохранённое в виде Bitmap).
+     * @return Аватарка пользователя (изображение, сохранённое в виде Bitmap).
      */
-    public String getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
@@ -114,10 +116,10 @@ public class User implements Comparable<User> {
     }
 
     /**
-     * Устанавливает аватарку пользователя (изображение, сохранённое в виде строки).
-     * @param image Аватарка пользователя (изображение, сохранённое в виде строки).
+     * Устанавливает аватарку пользователя (изображение, сохранённое в виде Bitmap).
+     * @param image Аватарка пользователя (изображение, сохранённое в виде Bitmap).
      */
-    public void setImage(String image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 

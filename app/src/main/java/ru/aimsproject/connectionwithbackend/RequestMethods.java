@@ -1,7 +1,12 @@
 package ru.aimsproject.connectionwithbackend;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 import org.json.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -120,7 +125,7 @@ public class RequestMethods {
             JSONObject userObject = jsonObjectAim.getJSONObject("User");
             author = parseUser(userObject);
         }
-        return new AimType1(text, header, 1, flag, modif, author, aimDate, startDate, endDate, 0, 0);
+        return new AimType1(new ArrayList<Aim>(), text, header, 1, flag, modif, author, aimDate, startDate, endDate, 0, 0, new ArrayList<Proof>());
     }
 
     /**
@@ -161,7 +166,7 @@ public class RequestMethods {
             JSONObject userObject = jsonObjectAim.getJSONObject("User");
             author = parseUser(userObject);
         }
-        return new AimType2(text, header, 2, flag, modif, author, aimDate, startDate, endDate, 0, 0, dateSection);
+        return new AimType2(new ArrayList<Aim>(), text, header, 2, flag, modif, author, aimDate, startDate, endDate, 0, 0, new ArrayList<Proof>(), dateSection);
     }
 
     /**
@@ -199,7 +204,7 @@ public class RequestMethods {
             JSONObject userObject = jsonObjectAim.getJSONObject("User");
             author = parseUser(userObject);
         }
-        return new AimType3(text, header, 3, flag, modif, author, aimDate, startDate, endDate, 0, 0, allTasks, currentTasks);
+        return new AimType3(new ArrayList<Aim>(), text, header, 3, flag, modif, author, aimDate, startDate, endDate, 0, 0, new ArrayList<Proof>(), allTasks, currentTasks);
     }
 
     /**
@@ -212,14 +217,14 @@ public class RequestMethods {
         String name = jsonObjectUser.getString("Name");
         String login = jsonObjectUser.getString("Login");
         int sex = jsonObjectUser.getInt("Sex");
-        String image = jsonObjectUser.getString("Image");
+        Bitmap image = getBitmapFromBase64(jsonObjectUser.getString("Image"));
         return new User(name, login, sex, image);
     }
 
     /**
      * Объединяет массив тегов в одну строку, где теги разделены запятыми.
      * @param tags Массив тегов цели.
-     * @return Возвращает строку, где теги разделены запятыми.
+     * @return Строка, где теги разделены запятыми.
      */
     private static String joinTags(String[] tags) {
         String result = "";
@@ -230,6 +235,30 @@ public class RequestMethods {
             }
         }
         return result;
+    }
+
+    /**
+     * Получает строку Base64 из изображения, сохранённого в виде Bitmap.
+     * @param imageBitmap Изображение, сохранённое в виде Bitmap.
+     * @return Строка Base64.
+     */
+    private static String getBase64String(Bitmap imageBitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] bytes = stream.toByteArray();
+        String base64String = Base64.encodeToString(bytes, Base64.DEFAULT);
+        return base64String;
+    }
+
+    /**
+     * Получает изображение, сохранённое в виде Bitmap, из строки Base64.
+     * @param base64String Строка Base64.
+     * @return Изображение, сохранённое в виде Bitmap.
+     */
+    private static Bitmap getBitmapFromBase64(String base64String) {
+        byte[] bytes = Base64.decode(base64String, Base64.DEFAULT);
+        Bitmap imageBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        return imageBitmap;
     }
 
     /**
@@ -346,7 +375,7 @@ public class RequestMethods {
      * @param image Новая аватарка пользователя (изображение, сохранённое в виде строки).
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
      */
-    public static void changeImage(String image) throws Exception {
+    public static void changeImage(Bitmap image) throws Exception {
         String urlString = userURL;
         urlString += "changeimage/";
         String currentToken = DataStorage.getToken();
@@ -358,7 +387,7 @@ public class RequestMethods {
             throw new Exception("Ошибка: на устройстве не обнаружен вошедший в систему пользователь.");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        urlString = addAttribute(urlString, "image", image, false);
+        urlString = addAttribute(urlString, "image", getBase64String(image), false);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
@@ -685,7 +714,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
         //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
         urlString = addAttribute(urlString, "tags", tags, false);
-        Aim newAim = new AimType1(text, header, 1, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0);
+        Aim newAim = new AimType1(new ArrayList<Aim>(), text, header, 1, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, new ArrayList<Proof>());
         DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
@@ -736,7 +765,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "dateSection", dateSection.toString(), false);
         //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
         urlString = addAttribute(urlString, "tags", tags, false);
-        Aim newAim = new AimType2(text, header, 2, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, dateSection);
+        Aim newAim = new AimType2(new ArrayList<Aim>(), text, header, 2, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, new ArrayList<Proof>(), dateSection);
         DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
@@ -787,7 +816,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "AllTasks", "" + AllTasks, false);
         //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
         urlString = addAttribute(urlString, "tags", tags, false);
-        Aim newAim = new AimType3(text, header, 3, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, AllTasks, 0);
+        Aim newAim = new AimType3(new ArrayList<Aim>(), text, header, 3, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, new ArrayList<Proof>(), AllTasks, 0);
         DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
@@ -969,6 +998,49 @@ public class RequestMethods {
             }
             DataStorage.setToken(token);
             aim.addDislike();
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    /**
+     * Добавляет подтверждение выполнения цели в виде фотографии.
+     * @param aim Подтверждаемая цель.
+     * @param proofText Текст подтверждения выполнения цели.
+     * @param image Фотография подтверждения выполнения цели.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
+    public void addProofPhoto(Aim aim, String proofText, Bitmap image) throws Exception {
+        String urlString = proofsURL;
+        urlString += "addproofphoto/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        urlString = addAttribute(urlString, "proofText", proofText, false);
+        Date proofDate = new Date();
+        urlString = addAttribute(urlString, "dateProof", proofDate.toString(), false);
+        urlString = addAttribute(urlString, "image", getBase64String(image), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            Proof proofPhoto = new ProofPhoto(proofText, proofDate, image);
+            aim.addProof(proofPhoto);
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
