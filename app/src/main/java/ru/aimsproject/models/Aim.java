@@ -77,6 +77,11 @@ public abstract class Aim implements Comparable<Aim> {
     private Date endDate;
 
     /**
+     * Комментарии к цели.
+     */
+    private List<String> comments = new ArrayList<String>();
+
+    /**
      * Конструктор, инициализирует объект цели.
      // * @param subAims Список подцелей.
      * @param text Текст цели.
@@ -423,5 +428,17 @@ public abstract class Aim implements Comparable<Aim> {
         catch (IndexOutOfBoundsException ex) {
             return false;
         }
+    }
+
+    public List<String> getComments() {
+        List<String> result = new ArrayList<>(comments.size());
+        for(String comment : comments) {
+            result.add(new String(comment));
+        }
+        return result;
+    }
+
+    public void addComment(String comment) {
+        comments.add(comment);
     }
 }

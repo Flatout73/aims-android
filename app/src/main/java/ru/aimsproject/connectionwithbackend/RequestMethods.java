@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.security.MessageDigest;
 import java.lang.String;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.exceptions.IncompatibleAimsDatesException;
@@ -98,9 +100,22 @@ public class RequestMethods {
         String header = jsonObjectAim.getString("Header");
         int flag = jsonObjectAim.getInt("Flag");
         int modif = jsonObjectAim.getInt("Modif");
-        Date aimDate = new Date(jsonObjectAim.getString("Date"));
-        Date startDate = new Date(jsonObjectAim.getString("StartDate"));
-        Date endDate = new Date(jsonObjectAim.getString("EndDate"));
+        Pattern datePattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})");
+        Date aimDate = null;
+        Matcher aimDateMatcher = datePattern.matcher(jsonObjectAim.getString("Date"));
+        if(aimDateMatcher.matches()) {
+            aimDate = new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6)));
+        }
+        Date startDate = null;
+        Matcher startDateMatcher = datePattern.matcher(jsonObjectAim.getString("StartDate"));
+        if(startDateMatcher.matches()) {
+            startDate = new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6)));
+        }
+        Date endDate = null;
+        Matcher endDateMatcher = datePattern.matcher(jsonObjectAim.getString("EndDate"));
+        if(endDateMatcher.matches()) {
+            endDate = new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6)));
+        }
         if(author == null) {
             JSONObject userObject = jsonObjectAim.getJSONObject("User");
             author = parseUser(userObject);
@@ -121,10 +136,27 @@ public class RequestMethods {
         String header = jsonObjectAim.getString("Header");
         int flag = jsonObjectAim.getInt("Flag");
         int modif = jsonObjectAim.getInt("Modif");
-        Date aimDate = new Date(jsonObjectAim.getString("Date"));
-        Date startDate = new Date(jsonObjectAim.getString("StartDate"));
-        Date endDate = new Date(jsonObjectAim.getString("EndDate"));
-        Date dateSection = new Date(jsonObjectAim.getString("DateSection"));
+        Pattern datePattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})");
+        Date aimDate = null;
+        Matcher aimDateMatcher = datePattern.matcher(jsonObjectAim.getString("Date"));
+        if(aimDateMatcher.matches()) {
+            aimDate = new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6)));
+        }
+        Date startDate = null;
+        Matcher startDateMatcher = datePattern.matcher(jsonObjectAim.getString("StartDate"));
+        if(startDateMatcher.matches()) {
+            startDate = new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6)));
+        }
+        Date endDate = null;
+        Matcher endDateMatcher = datePattern.matcher(jsonObjectAim.getString("EndDate"));
+        if(endDateMatcher.matches()) {
+            endDate = new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6)));
+        }
+        Matcher dateSectionMatcher = datePattern.matcher(jsonObjectAim.getString("DateSection"));
+        Date dateSection = null;
+        if(dateSectionMatcher.matches()) {
+            dateSection = new Date(Integer.parseInt(dateSectionMatcher.group(1)), Integer.parseInt(dateSectionMatcher.group(2)), Integer.parseInt(dateSectionMatcher.group(3)), Integer.parseInt(dateSectionMatcher.group(4)), Integer.parseInt(dateSectionMatcher.group(5)), Integer.parseInt(dateSectionMatcher.group(6)));
+        }
         if(author == null) {
             JSONObject userObject = jsonObjectAim.getJSONObject("User");
             author = parseUser(userObject);
@@ -145,9 +177,22 @@ public class RequestMethods {
         String header = jsonObjectAim.getString("Header");
         int flag = jsonObjectAim.getInt("Flag");
         int modif = jsonObjectAim.getInt("Modif");
-        Date aimDate = new Date(jsonObjectAim.getString("Date"));
-        Date startDate = new Date(jsonObjectAim.getString("StartDate"));
-        Date endDate = new Date(jsonObjectAim.getString("EndDate"));
+        Pattern datePattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})");
+        Date aimDate = null;
+        Matcher aimDateMatcher = datePattern.matcher(jsonObjectAim.getString("Date"));
+        if(aimDateMatcher.matches()) {
+            aimDate = new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6)));
+        }
+        Date startDate = null;
+        Matcher startDateMatcher = datePattern.matcher(jsonObjectAim.getString("StartDate"));
+        if(startDateMatcher.matches()) {
+            startDate = new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6)));
+        }
+        Date endDate = null;
+        Matcher endDateMatcher = datePattern.matcher(jsonObjectAim.getString("EndDate"));
+        if(endDateMatcher.matches()) {
+            endDate = new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6)));
+        }
         int allTasks = jsonObjectAim.getInt("AllTasks");
         int currentTasks = jsonObjectAim.getInt("CurrentTasks");
         if(author == null) {
@@ -536,7 +581,7 @@ public class RequestMethods {
                     throw new Exception("Неправильный токен.");
                 }
                 if(token.equals("User Error")) {
-                    throw new Exception("Такого пользователя не существует."); // Подумать, не лучше ли возвращать просто пустой список.
+                    throw new Exception("Такого пользователя не существует.");
                 }
                 throw new Exception("Неизвестная ошибка.");
             }
@@ -760,6 +805,108 @@ public class RequestMethods {
                 throw new Exception("Неизвестная ошибка.");
             }
             DataStorage.setToken(token);
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    public static void skipAim(Aim aim) throws Exception {
+        String urlString = aimsURL;
+        urlString += "skip/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            aim.setFlag(3);
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    public static void commentAim(Aim aim, String comment) throws Exception {
+        String urlString = aimsURL;
+        urlString += "comment/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
+        urlString = addAttribute(urlString, "comment", comment, false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("User Error")) {
+                    throw new Exception("Такого пользователя не существует.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            aim.addComment(comment);
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    public static void likeAim(Aim aim) throws Exception {
+        String urlString = likesURL;
+        urlString += "likes/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
+        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("User Error")) {
+                    throw new Exception("Такого пользователя не существует.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            // Coming soon...
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
