@@ -82,6 +82,16 @@ public abstract class Aim implements Comparable<Aim> {
     private List<String> comments = new ArrayList<String>();
 
     /**
+     * Количество лайков цели.
+     */
+    private int likes;
+
+    /**
+     * Количество дислайков цели.
+     */
+    private int dislikes;
+
+    /**
      * Конструктор, инициализирует объект цели.
      // * @param subAims Список подцелей.
      * @param text Текст цели.
@@ -93,9 +103,11 @@ public abstract class Aim implements Comparable<Aim> {
      * @param date Дата публикации цели.
      * @param startDate Дата начала выполнения цели.
      * @param endDate Дата окончания выполнения цели.
+     * @param likes Количество лайков цели.
+     * @param dislikes Количество дислайков цели.
      * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
      */
-    public Aim( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate) throws IncompatibleAimsDatesException {
+    public Aim( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes) throws IncompatibleAimsDatesException {
         if(date.compareTo(startDate) > 0) {
             throw new IncompatibleAimsDatesException("Время начала выполнения цели должно быть не раньше времени её публикации.", this);
         }
@@ -112,6 +124,8 @@ public abstract class Aim implements Comparable<Aim> {
         this.date = date;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.likes = likes;
+        this.dislikes = dislikes;
     }
 
     /**
@@ -216,6 +230,34 @@ public abstract class Aim implements Comparable<Aim> {
      */
     public Date getEndDate() {
         return endDate;
+    }
+
+    /**
+     * Получает список комментариев к цели.
+     * @return Список коммментариев к цели.
+     */
+    public List<String> getComments() {
+        List<String> result = new ArrayList<>(comments.size());
+        for(String comment : comments) {
+            result.add(new String(comment));
+        }
+        return result;
+    }
+
+    /**
+     * Получает количество лайков цели.
+     * @return Количество лайков цели.
+     */
+    public int getLikes() {
+        return likes;
+    }
+
+    /**
+     * Получает количество дислайков цели.
+     * @return Количество дислайков цели.
+     */
+    public int getDislikes() {
+        return dislikes;
     }
 
     /**
@@ -430,15 +472,25 @@ public abstract class Aim implements Comparable<Aim> {
         }
     }
 
-    public List<String> getComments() {
-        List<String> result = new ArrayList<>(comments.size());
-        for(String comment : comments) {
-            result.add(new String(comment));
-        }
-        return result;
-    }
-
+    /**
+     * Добавляет комментарий к цели.
+     * @param comment Добавляемый комментарий к цели.
+     */
     public void addComment(String comment) {
         comments.add(comment);
+    }
+
+    /**
+     * Добавляет лайк к цели.
+     */
+    public void addLike() {
+        likes++;
+    }
+
+    /**
+     * Добавляет дислайк к цели.
+     */
+    public void addDislike() {
+        dislikes++;
     }
 }

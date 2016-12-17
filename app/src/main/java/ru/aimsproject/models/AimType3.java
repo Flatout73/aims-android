@@ -34,12 +34,14 @@ public class AimType3 extends Aim {
      * @param date Дата публикации цели.
      * @param startDate Дата начала выполнения цели.
      * @param endDate Дата окончания выполнения цели.
+     * @param likes Количество лайков цели.
+     * @param dislikes Количество дислайков цели.
      * @param allTasks Общее количество однотипных задач, которые необходимо решить для выполнения цели.
      * @param currentTasks Текущее количество решённых однотипных задач, необходимых для выполнения цели.
      */
-    public AimType3( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int allTasks, int currentTasks)
+    public AimType3( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes, int allTasks, int currentTasks)
             throws IncompatibleAimsDatesException {
-        super( /* subAims, */ text, header, type, flag, modif, author, date, startDate, endDate);
+        super( /* subAims, */ text, header, type, flag, modif, author, date, startDate, endDate, likes, dislikes);
         this.allTasks = allTasks;
         this.currentTasks = currentTasks;
     }

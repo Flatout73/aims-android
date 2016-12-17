@@ -22,10 +22,12 @@ public class AimType1 extends Aim {
      * @param date Дата публикации цели.
      * @param startDate Дата начала выполнения цели.
      * @param endDate Дата окончания выполнения цели.
+     * @param likes Количество лайков цели.
+     * @param dislikes Количество дислайков цели.
      * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
      */
-    public AimType1( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate)
+    public AimType1( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes)
             throws IncompatibleAimsDatesException {
-        super( /* subAims, */ text, header, type, flag, modif, author, date, startDate, endDate);
+        super( /* subAims, */ text, header, type, flag, modif, author, date, startDate, endDate, likes, dislikes);
     }
 }

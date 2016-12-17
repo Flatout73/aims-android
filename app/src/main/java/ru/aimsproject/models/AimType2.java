@@ -28,11 +28,13 @@ public class AimType2 extends Aim {
      * @param date Дата публикации цели.
      * @param startDate Дата начала выполнения цели.
      * @param endDate Дата окончания выполнения цели.
+     * @param likes Количество лайков цели.
+     * @param dislikes Количество дислайков цели.
      * @param dateSection Промежуток времени, не позднее, чем через который, необходимо подтверждать цель.
      */
-    public AimType2( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, Date dateSection)
+    public AimType2( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes, Date dateSection)
             throws IncompatibleAimsDatesException {
-        super( /* subAims, */ text, header, type, flag, modif, author, date, startDate, endDate);
+        super( /* subAims, */ text, header, type, flag, modif, author, date, startDate, endDate, likes, dislikes);
         this.dateSection = dateSection;
     }
 
