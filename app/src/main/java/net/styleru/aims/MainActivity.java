@@ -1,13 +1,17 @@
 package net.styleru.aims;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
@@ -20,12 +24,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import net.styleru.aims.fragments.AimsFragment;
 import net.styleru.aims.fragments.FriendsFragment;
 import net.styleru.aims.fragments.SettingsFragment;
 
 import java.util.Stack;
+import java.util.concurrent.ExecutionException;
+
+import ru.aimsproject.connectionwithbackend.RequestMethods;
+import ru.aimsproject.data.DataStorage;
+
+import static net.styleru.aims.LoginActivity.APP_REFERENCES;
+import static net.styleru.aims.LoginActivity.APP_REFERENCE_Token;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MenuItemCompat.OnActionExpandListener {
@@ -34,6 +46,8 @@ public class MainActivity extends AppCompatActivity
         AimsFragment aimsFr;
         FriendsFragment friendFr;
         SettingsFragment settingFr;
+
+        SharedPreferences mToken;
 
         // 0 - aimsFr, 1 - friendFr, 2 - settingFr
         byte openedFragment;
@@ -57,6 +71,28 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mToken = getSharedPreferences(APP_REFERENCES, Context.MODE_PRIVATE);
+
+        TaskProfile taskProfile = new TaskProfile();
+
+        try {
+            if(!taskProfile.execute().get()) {
+                SharedPreferences.Editor edit = mToken.edit();
+                if (mToken.contains(APP_REFERENCE_Token)) {
+                    edit.remove(APP_REFERENCE_Token);
+                    edit.clear();
+                }
+                edit.apply();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         setContentView(R.layout.activity_main);
         appBarLayoutMain = (AppBarLayout) findViewById(R.id.layout_main);
 
@@ -77,12 +113,13 @@ public class MainActivity extends AppCompatActivity
         settingFr = SettingsFragment.newInstance("kek", "lol");
 
         fragmentManager = getFragmentManager();
+
         FragmentTransaction ftransp = fragmentManager.beginTransaction();
 
-            ftransp.replace(R.id.container, aimsFr);
+        ftransp.replace(R.id.container, aimsFr);
 //        ftransp.add(R.id.container, aimsFr);
 //        fragmentStack.push(aimsFr);
-            ftransp.commit();
+        ftransp.commit();
 
         AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
 
@@ -101,6 +138,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -116,6 +163,7 @@ public class MainActivity extends AppCompatActivity
 //            }
 //            else {
                 super.onBackPressed();
+                finish();
           //  }
         }
     }
@@ -208,5 +256,73 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(DataStorage.getToken() != null) {
+        SharedPreferences.Editor edit = mToken.edit();
+        if(mToken.contains(APP_REFERENCE_Token)) {
+            edit.remove(APP_REFERENCE_Token);
+            edit.clear();
+        }
+        edit.apply();
+
+        edit.putString(APP_REFERENCE_Token, DataStorage.getToken());
+        edit.apply();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(DataStorage.getToken() != null) {
+            SharedPreferences.Editor edit = mToken.edit();
+            if (mToken.contains(APP_REFERENCE_Token)) {
+                edit.remove(APP_REFERENCE_Token);
+                edit.clear();
+            }
+            edit.apply();
+
+            edit.putString(APP_REFERENCE_Token, DataStorage.getToken());
+            edit.apply();
+        }
+
+    }
+
+    public void Exit(View view) {
+
+        SharedPreferences.Editor edit = mToken.edit();
+        if(mToken.contains(APP_REFERENCE_Token)) {
+            edit.remove(APP_REFERENCE_Token);
+            edit.clear();
+        }
+        edit.apply();
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        DataStorage.setToken(null);
+        finish();
+    }
+
+    class TaskProfile extends AsyncTask<Void, Void, Boolean> {
+
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            synchronized (DataStorage.class) {
+            try {
+                RequestMethods.getProfile();
+            } catch (Exception e) {
+                    Toast.makeText(MainActivity.this.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
     }
 }

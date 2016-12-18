@@ -43,9 +43,9 @@ public class AddTarget extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         PagesAdapter pagesAdapter = new PagesAdapter(getSupportFragmentManager());
-        pagesAdapter.addFragment(new AddTarget1(), "1");
-        pagesAdapter.addFragment(new AddTarget2(), "2");
-        pagesAdapter.addFragment(new AddTarget3(), "3");
+        pagesAdapter.addFragment(new AddTarget1(), "Цель");
+        pagesAdapter.addFragment(new AddTarget3(), "Цель с интервалом");
+        pagesAdapter.addFragment(new AddTarget2(), "Цель с подзадачами");
         viewPager.setAdapter(pagesAdapter);
     }
 

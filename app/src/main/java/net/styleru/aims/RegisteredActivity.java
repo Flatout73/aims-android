@@ -3,6 +3,7 @@ package net.styleru.aims;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -37,6 +38,8 @@ public class RegisteredActivity extends AppCompatActivity {
     SharedPreferences mToken;
     SharedPreferences.Editor edit;
 
+    View mContentView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,8 @@ public class RegisteredActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registered);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mContentView = findViewById(R.id.register_form);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -89,7 +94,9 @@ public class RegisteredActivity extends AppCompatActivity {
             password = ((EditText) findViewById(R.id.password_register)).getText().toString();
             name = ((EditText) findViewById(R.id.name_register)).getText().toString();
             email = ((EditText) findViewById(R.id.email_register)).getText().toString();
-            RequestMethods.register(login, password, email, name, sex);
+
+            MyTask myTask = new MyTask(login, password, email, name, sex);
+            myTask.execute();
 
             edit = mToken.edit();
             edit.putString(APP_REFERENCE_Token, DataStorage.getToken());
@@ -100,6 +107,34 @@ public class RegisteredActivity extends AppCompatActivity {
             Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
         } catch (Exception ex) {
             Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    class MyTask extends AsyncTask<Void, Void, Void> {
+
+        String sex;
+        String login;
+        String password;
+        String name;
+        String email;
+
+      public MyTask(String l, String p, String e, String n, String s) {
+          login = l;
+          password = p;
+          email = e;
+          name = n;
+          sex = s;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                RequestMethods.register(login, password, email, name, sex);
+            } catch (Exception e) {
+                Snackbar.make(mContentView, e.getMessage(), Snackbar.LENGTH_LONG);
+            }
+
+            return null;
         }
     }
 }

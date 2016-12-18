@@ -5,9 +5,11 @@ import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.util.EventLogTags;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import net.styleru.aims.AboutTargetActivity;
+import net.styleru.aims.LoginActivity;
 import net.styleru.aims.MainActivity;
 import net.styleru.aims.R;
 
@@ -28,8 +31,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.Aim;
+
+import static net.styleru.aims.LoginActivity.APP_REFERENCE_Token;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -94,15 +100,21 @@ public class AimsFragment extends Fragment {
         NestedScrollingListView listView = (NestedScrollingListView) view.findViewById(R.id.aimsListView);
         HashMap<String, String> hm;
 
-//        myAims = DataStorage.getMe().getAims();
-//
-//        for(int i = 0; i < myAims.size(); i++) {
-//            Aim currentAim = myAims.get(i);
-//            hm = new HashMap<>();
-//            hm.put(TITLE, currentAim.getHeader());
-//            hm.put(DATE, currentAim.getDate().toString());
-//        }
+        synchronized (DataStorage.class) {
+            try {
+                myAims = DataStorage.getMe().getAims();
 
+                for (int i = 0; i < myAims.size(); i++) {
+                    Aim currentAim = myAims.get(i);
+                    hm = new HashMap<>();
+                    hm.put(TITLE, currentAim.getHeader());
+                    hm.put(DATE, currentAim.getDate().toString());
+                    mTargetList.add(hm);
+                }
+            } catch (Exception ex) {
+                Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        }
 
         hm = new HashMap<>();
         hm.put(TITLE, "Cinema");

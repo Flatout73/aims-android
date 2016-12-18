@@ -85,17 +85,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mToken = getSharedPreferences(APP_REFERENCES, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor edit = mToken.edit();
-        if(mToken.contains(APP_REFERENCE_Token)) {
-            edit.remove(APP_REFERENCE_Token);
-            edit.clear();
-        }
-
-        edit.apply();
+//        if(mToken.contains(APP_REFERENCE_Token)) {
+//            edit.remove(APP_REFERENCE_Token);
+//            edit.clear();
+//        }
+//
+//        edit.apply();
 
         if(mToken.contains(APP_REFERENCE_Token)) {
             DataStorage.setToken(mToken.getString(APP_REFERENCE_Token, ""));
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
         setContentView(R.layout.activity_login);
         // Set up the login form.
@@ -354,7 +355,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             } catch (Exception e) {
                 Snackbar.make(mLoginFormView, e.getMessage(), Snackbar.LENGTH_LONG).show();
-               // return false;
+                return false;
             }
 
 //            for (String credential : DUMMY_CREDENTIALS) {
@@ -375,12 +376,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                SharedPreferences.Editor edit = mToken.edit();
-                edit.putString(APP_REFERENCE_Token, DataStorage.getToken());
-                edit.apply();
               //  Snackbar.make(mLoginFormView, "Yeah", Snackbar.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
 
             } else {
                 mPasswordView.setError("Incorrect login or password.");

@@ -9,10 +9,64 @@
         android:layout_height="match_parent"
         android:padding="8dp">
 
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/image_name">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <net.styleru.aims.fragments.RoundedImageView
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:id="@+id/settings_avatar"
+                    android:src="@drawable/rigin"
+                    android:layout_alignParentStart="true" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/set_name"
+                    android:layout_toRightOf="@id/settings_avatar"
+                    android:layout_marginLeft="16dp"
+                    android:text="Антон"
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/set_name"
+                    android:id="@+id/set_surname"
+                    android:layout_toRightOf="@id/settings_avatar"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Ригин"/>
+
+                <Button
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:layout_below="@id/set_surname"
+                    android:text="Принять изменеия"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+
+        </android.support.v7.widget.CardView>
+
         <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/card_target"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/image_name"
             android:padding="8dp">
 
             <RelativeLayout
@@ -83,14 +137,22 @@
 
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_password"
-            android:layout_below="@id/card_target"
-            android:layout_width="match_parent"
+
+        <android.support.v7.widget.CardView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_height="wrap_content">
-
-
+            android:layout_marginBottom="0dp"
+            android:layout_below="@id/card_target">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_margin="8dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="@color/blue_button"
+                android:onClick="Exit"
+                android:text="Выйти"/>
         </android.support.v7.widget.CardView>
     </RelativeLayout>
 

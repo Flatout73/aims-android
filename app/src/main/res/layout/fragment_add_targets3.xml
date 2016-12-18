@@ -3,11 +3,156 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="net.styleru.aims.fragments.AddTarget3">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="Цель"
+                android:layout_marginTop="96dp"
+                android:id="@+id/addTarget1_name" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/addTarget1_name"
+                android:inputType="textPersonName"
+                android:hint="Описание"
+                android:id="@+id/addTarget1_description"
+                android:maxLines="3" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addTarget1_description"
+                android:id="@+id/type_label"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="Выберите тип цели:"/>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/type_label"
+                android:id="@+id/target_type"
+
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/target0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Общедоступная цель"/>
+
+                <RadioButton
+                    android:id="@+id/target1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Доступна определенной группе"/>
+
+                <RadioButton
+                    android:id="@+id/target2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Доступна друзьям"/>
+
+                <RadioButton
+                    android:id="@+id/target3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Личная цель"/>
+
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_below="@id/target_type"
+                android:id="@+id/dates">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Выбрать дату начала"
+                    android:layout_weight="0.5"
+                    android:id="@+id/addTarget1_start_date"
+                    />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Выбрать дату конца"
+                    android:layout_weight="0.5"
+                    android:id="@+id/addTarget1_end_date" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dates"
+                android:id="@+id/times_label"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:text="Интервал для подтверждения цели"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/times_label"
+                android:id="@+id/timer">
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Дни"
+                    android:layout_weight="1"
+                    android:id="@+id/day_timer"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Часы"
+                    android:layout_weight="1"
+                    android:id="@+id/hour_timer"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Минуты"
+                    android:id="@+id/minuts_timer"/>
+
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Теги"
+                android:id="@+id/addTarget1_tags"
+                android:layout_below="@id/timer"
+                android:maxLines="4" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_below="@id/addTarget1_tags"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_add_target"
+                android:text="Добавить цель"/>
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </FrameLayout>
