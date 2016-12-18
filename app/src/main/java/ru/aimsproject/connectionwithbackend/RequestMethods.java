@@ -1,7 +1,12 @@
 package ru.aimsproject.connectionwithbackend;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 import org.json.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -11,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.security.MessageDigest;
 import java.lang.String;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,6 +58,11 @@ public class RequestMethods {
      * Элемент HTTP-запроса для методов из группы user.
      */
     private static final String userURL = "user/";
+
+    /**
+     * Разница в миллисекундах между временем текущего часового пояса и временем UTC.
+     */
+    private static final long timeZoneOffsetMilliseconds = TimeZone.getDefault().getRawOffset();
 
     /**
      * Добавляет атрибут (имя атрибута и его значение) к HTTP-запросу.
@@ -104,23 +115,23 @@ public class RequestMethods {
         Date aimDate = null;
         Matcher aimDateMatcher = datePattern.matcher(jsonObjectAim.getString("Date"));
         if(aimDateMatcher.matches()) {
-            aimDate = new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6)));
+            aimDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6))));
         }
         Date startDate = null;
         Matcher startDateMatcher = datePattern.matcher(jsonObjectAim.getString("StartDate"));
         if(startDateMatcher.matches()) {
-            startDate = new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6)));
+            startDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6))));
         }
         Date endDate = null;
         Matcher endDateMatcher = datePattern.matcher(jsonObjectAim.getString("EndDate"));
         if(endDateMatcher.matches()) {
-            endDate = new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6)));
+            endDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6))));
         }
         if(author == null) {
             JSONObject userObject = jsonObjectAim.getJSONObject("User");
             author = parseUser(userObject);
         }
-        return new AimType1(text, header, 1, flag, modif, author, aimDate, startDate, endDate);
+        return new AimType1(new ArrayList<Aim>(), text, header, 1, flag, modif, author, aimDate, startDate, endDate, 0, 0, new ArrayList<Proof>());
     }
 
     /**
@@ -140,17 +151,17 @@ public class RequestMethods {
         Date aimDate = null;
         Matcher aimDateMatcher = datePattern.matcher(jsonObjectAim.getString("Date"));
         if(aimDateMatcher.matches()) {
-            aimDate = new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6)));
+            aimDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6))));
         }
         Date startDate = null;
         Matcher startDateMatcher = datePattern.matcher(jsonObjectAim.getString("StartDate"));
         if(startDateMatcher.matches()) {
-            startDate = new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6)));
+            startDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6))));
         }
         Date endDate = null;
         Matcher endDateMatcher = datePattern.matcher(jsonObjectAim.getString("EndDate"));
         if(endDateMatcher.matches()) {
-            endDate = new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6)));
+            endDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6))));
         }
         Matcher dateSectionMatcher = datePattern.matcher(jsonObjectAim.getString("DateSection"));
         Date dateSection = null;
@@ -161,7 +172,7 @@ public class RequestMethods {
             JSONObject userObject = jsonObjectAim.getJSONObject("User");
             author = parseUser(userObject);
         }
-        return new AimType2(text, header, 2, flag, modif, author, aimDate, startDate, endDate, dateSection);
+        return new AimType2(new ArrayList<Aim>(), text, header, 2, flag, modif, author, aimDate, startDate, endDate, 0, 0, new ArrayList<Proof>(), dateSection);
     }
 
     /**
@@ -181,17 +192,17 @@ public class RequestMethods {
         Date aimDate = null;
         Matcher aimDateMatcher = datePattern.matcher(jsonObjectAim.getString("Date"));
         if(aimDateMatcher.matches()) {
-            aimDate = new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6)));
+            aimDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(aimDateMatcher.group(1)), Integer.parseInt(aimDateMatcher.group(2)), Integer.parseInt(aimDateMatcher.group(3)), Integer.parseInt(aimDateMatcher.group(4)), Integer.parseInt(aimDateMatcher.group(5)), Integer.parseInt(aimDateMatcher.group(6))));
         }
         Date startDate = null;
         Matcher startDateMatcher = datePattern.matcher(jsonObjectAim.getString("StartDate"));
         if(startDateMatcher.matches()) {
-            startDate = new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6)));
+            startDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(startDateMatcher.group(1)), Integer.parseInt(startDateMatcher.group(2)), Integer.parseInt(startDateMatcher.group(3)), Integer.parseInt(startDateMatcher.group(4)), Integer.parseInt(startDateMatcher.group(5)), Integer.parseInt(startDateMatcher.group(6))));
         }
         Date endDate = null;
         Matcher endDateMatcher = datePattern.matcher(jsonObjectAim.getString("EndDate"));
         if(endDateMatcher.matches()) {
-            endDate = new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6)));
+            endDate = getCurrentTimeZoneDateFromUTC(new Date(Integer.parseInt(endDateMatcher.group(1)), Integer.parseInt(endDateMatcher.group(2)), Integer.parseInt(endDateMatcher.group(3)), Integer.parseInt(endDateMatcher.group(4)), Integer.parseInt(endDateMatcher.group(5)), Integer.parseInt(endDateMatcher.group(6))));
         }
         int allTasks = jsonObjectAim.getInt("AllTasks");
         int currentTasks = jsonObjectAim.getInt("CurrentTasks");
@@ -199,7 +210,7 @@ public class RequestMethods {
             JSONObject userObject = jsonObjectAim.getJSONObject("User");
             author = parseUser(userObject);
         }
-        return new AimType3(text, header, 3, flag, modif, author, aimDate, startDate, endDate, allTasks, currentTasks);
+        return new AimType3(new ArrayList<Aim>(), text, header, 3, flag, modif, author, aimDate, startDate, endDate, 0, 0, new ArrayList<Proof>(), allTasks, currentTasks);
     }
 
     /**
@@ -212,14 +223,14 @@ public class RequestMethods {
         String name = jsonObjectUser.getString("Name");
         String login = jsonObjectUser.getString("Login");
         int sex = jsonObjectUser.getInt("Sex");
-        String image = jsonObjectUser.getString("Image");
+        Bitmap image = getBitmapFromBase64(jsonObjectUser.getString("Image"));
         return new User(name, login, sex, image);
     }
 
     /**
      * Объединяет массив тегов в одну строку, где теги разделены запятыми.
      * @param tags Массив тегов цели.
-     * @return Возвращает строку, где теги разделены запятыми.
+     * @return Строка, где теги разделены запятыми.
      */
     private static String joinTags(String[] tags) {
         String result = "";
@@ -230,6 +241,48 @@ public class RequestMethods {
             }
         }
         return result;
+    }
+
+    /**
+     * Получает строку Base64 из изображения, сохранённого в виде Bitmap.
+     * @param imageBitmap Изображение, сохранённое в виде Bitmap.
+     * @return Строка Base64.
+     */
+    private static String getBase64String(Bitmap imageBitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] bytes = stream.toByteArray();
+        String base64String = Base64.encodeToString(bytes, Base64.DEFAULT);
+        return base64String;
+    }
+
+    /**
+     * Получает изображение, сохранённое в виде Bitmap, из строки Base64.
+     * @param base64String Строка Base64.
+     * @return Изображение, сохранённое в виде Bitmap.
+     */
+    private static Bitmap getBitmapFromBase64(String base64String) {
+        byte[] bytes = Base64.decode(base64String, Base64.DEFAULT);
+        Bitmap imageBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        return imageBitmap;
+    }
+
+    /**
+     * Получает время UTC из времени в текущем часовом поясе.
+     * @param date Время в текущем часовом поясе.
+     * @return Время UTC из времени в текущем часовом поясе.
+     */
+    private static Date getUTCDate(Date date) {
+        return new Date(date.getTime() - timeZoneOffsetMilliseconds);
+    }
+
+    /**
+     * Получает время в текущем часовом поясе из времени UTC.
+     * @param date Время UTC.
+     * @return Время в текущем часовом поясе из времени UTC.
+     */
+    private static Date getCurrentTimeZoneDateFromUTC(Date date) {
+        return new Date(date.getTime() + timeZoneOffsetMilliseconds);
     }
 
     /**
@@ -346,7 +399,7 @@ public class RequestMethods {
      * @param image Новая аватарка пользователя (изображение, сохранённое в виде строки).
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
      */
-    public static void changeImage(String image) throws Exception {
+    public static void changeImage(Bitmap image) throws Exception {
         String urlString = userURL;
         urlString += "changeimage/";
         String currentToken = DataStorage.getToken();
@@ -358,7 +411,7 @@ public class RequestMethods {
             throw new Exception("Ошибка: на устройстве не обнаружен вошедший в систему пользователь.");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        urlString = addAttribute(urlString, "image", image, false);
+        urlString = addAttribute(urlString, "image", getBase64String(image), false);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
@@ -621,7 +674,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        urlString = addAttribute(urlString, "date", date.toString(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(date).toString(), false);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
@@ -681,11 +734,11 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "text", text, false);
         urlString = addAttribute(urlString, "mode", "" + mode, false);
-        urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
-        urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
+        urlString = addAttribute(urlString, "endDate", getUTCDate(endDate).toString(), false);
+        urlString = addAttribute(urlString, "startDate", getUTCDate(startDate).toString(), false);
         //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
         urlString = addAttribute(urlString, "tags", tags, false);
-        Aim newAim = new AimType1(text, header, 1, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate);
+        Aim newAim = new AimType1(new ArrayList<Aim>(), text, header, 1, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, new ArrayList<Proof>());
         DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
@@ -731,12 +784,12 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "text", text, false);
         urlString = addAttribute(urlString, "mode", "" + mode, false);
-        urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
-        urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
+        urlString = addAttribute(urlString, "endDate", getUTCDate(endDate).toString(), false);
+        urlString = addAttribute(urlString, "startDate", getUTCDate(startDate).toString(), false);
         urlString = addAttribute(urlString, "dateSection", dateSection.toString(), false);
         //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
         urlString = addAttribute(urlString, "tags", tags, false);
-        Aim newAim = new AimType2(text, header, 2, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, dateSection);
+        Aim newAim = new AimType2(new ArrayList<Aim>(), text, header, 2, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, new ArrayList<Proof>(), dateSection);
         DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
@@ -782,12 +835,12 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "text", text, false);
         urlString = addAttribute(urlString, "mode", "" + mode, false);
-        urlString = addAttribute(urlString, "endDate", endDate.toString(), false);
-        urlString = addAttribute(urlString, "startDate", startDate.toString(), false);
+        urlString = addAttribute(urlString, "endDate", getUTCDate(endDate).toString(), false);
+        urlString = addAttribute(urlString, "startDate", getUTCDate(startDate).toString(), false);
         urlString = addAttribute(urlString, "AllTasks", "" + AllTasks, false);
         //urlString = addAttribute(urlString, "tags", joinTags(tags), false);
         urlString = addAttribute(urlString, "tags", tags, false);
-        Aim newAim = new AimType3(text, header, 3, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, AllTasks, 0);
+        Aim newAim = new AimType3(new ArrayList<Aim>(), text, header, 3, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, new ArrayList<Proof>(), AllTasks, 0);
         DataStorage.getMe().addAim(newAim);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
@@ -811,6 +864,11 @@ public class RequestMethods {
         }
     }
 
+    /**
+     * Пропускает цель (делает её проваленной).
+     * @param aim Цель для пропуска.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
     public static void skipAim(Aim aim) throws Exception {
         String urlString = aimsURL;
         urlString += "skip/";
@@ -819,7 +877,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(aim.getDate()).toString(), false);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
@@ -842,6 +900,12 @@ public class RequestMethods {
         }
     }
 
+    /**
+     * Добавляет комментарий к цели.
+     * @param aim Цель для добавления комментария.
+     * @param comment Добавляемый комментарий.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
     public static void commentAim(Aim aim, String comment) throws Exception {
         String urlString = aimsURL;
         urlString += "comment/";
@@ -850,7 +914,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(aim.getDate()).toString(), false);
         urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
         urlString = addAttribute(urlString, "comment", comment, false);
         String response = Request.doRequest(urlString);
@@ -878,6 +942,11 @@ public class RequestMethods {
         }
     }
 
+    /**
+     * Добавляет лайк к цели.
+     * @param aim Цель для лайка.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось или данный пользователь уже ставил лайк к данной цели.
+     */
     public static void likeAim(Aim aim) throws Exception {
         String urlString = likesURL;
         urlString += "likes/";
@@ -887,7 +956,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
-        urlString = addAttribute(urlString, "date", aim.getDate().toString(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(aim.getDate()).toString(), false);
         String response = Request.doRequest(urlString);
         JSONObject jsonObject;
         try {
@@ -903,10 +972,99 @@ public class RequestMethods {
                 if(token.equals("User Error")) {
                     throw new Exception("Такого пользователя не существует.");
                 }
+                if(token.equals("Like Error")) {
+                    throw new Exception("Вы уже ставили лайк к этой цели.");
+                }
                 throw new Exception("Неизвестная ошибка.");
             }
             DataStorage.setToken(token);
-            // Coming soon...
+            aim.addLike();
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    /**
+     * Добавляет дислайк к цели.
+     * @param aim Цель для дислайка.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось или данный пользователь уже ставил дислайк к данной цели.
+     */
+    public void dislikeAim(Aim aim) throws Exception {
+        String urlString = likesURL;
+        urlString += "dislikes/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
+        urlString = addAttribute(urlString, "date", getUTCDate(aim.getDate()).toString(), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("User Error")) {
+                    throw new Exception("Такого пользователя не существует.");
+                }
+                if(token.equals("Dislike Error")) {
+                    throw new Exception("Вы уже ставили дислайк к этой цели.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            aim.addDislike();
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    /**
+     * Добавляет подтверждение выполнения цели в виде фотографии.
+     * @param aim Подтверждаемая цель.
+     * @param proofText Текст подтверждения выполнения цели.
+     * @param image Фотография подтверждения выполнения цели.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
+    public void addProofPhoto(Aim aim, String proofText, Bitmap image) throws Exception {
+        String urlString = proofsURL;
+        urlString += "addproofphoto/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "date", getUTCDate(aim.getDate()).toString(), false);
+        urlString = addAttribute(urlString, "proofText", proofText, false);
+        Date proofDate = new Date();
+        urlString = addAttribute(urlString, "dateProof", getUTCDate(proofDate).toString(), false);
+        urlString = addAttribute(urlString, "image", getBase64String(image), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            Proof proofPhoto = new ProofPhoto(proofText, proofDate, image);
+            aim.addProof(proofPhoto);
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");

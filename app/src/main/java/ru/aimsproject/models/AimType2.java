@@ -18,7 +18,7 @@ public class AimType2 extends Aim {
 
     /**
      * Конструктор, инициализирует объект цели 2-го типа (с подтверждением не позднее, чем через каждый определённый промежуток времени).
-     // * @param subAims Список подцелей.
+     * @param subAims Список подцелей.
      * @param text Текст цели.
      * @param header Название цели.
      * @param type Тип цели (1 - обычная, 2 - с подтверждением через каждый определённый промежуток времени, 3 - с прогрессом выполнения цели).
@@ -28,11 +28,14 @@ public class AimType2 extends Aim {
      * @param date Дата публикации цели.
      * @param startDate Дата начала выполнения цели.
      * @param endDate Дата окончания выполнения цели.
+     * @param likes Количество лайков цели.
+     * @param dislikes Количество дислайков цели.
+     * @param proofs Подтверждения выполнения цели.
      * @param dateSection Промежуток времени, не позднее, чем через который, необходимо подтверждать цель.
      */
-    public AimType2( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, Date dateSection)
+    public AimType2(List<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes, List<Proof> proofs, Date dateSection)
             throws IncompatibleAimsDatesException {
-        super( /* subAims, */ text, header, type, flag, modif, author, date, startDate, endDate);
+        super(subAims, text, header, type, flag, modif, author, date, startDate, endDate, likes, dislikes, proofs);
         this.dateSection = dateSection;
     }
 

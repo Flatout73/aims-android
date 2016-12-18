@@ -82,8 +82,23 @@ public abstract class Aim implements Comparable<Aim> {
     private List<String> comments = new ArrayList<String>();
 
     /**
+     * Подтверждения выполнения цели.
+     */
+    private List<Proof> proofs = new ArrayList<Proof>();
+
+    /**
+     * Количество лайков цели.
+     */
+    private int likes;
+
+    /**
+     * Количество дислайков цели.
+     */
+    private int dislikes;
+
+    /**
      * Конструктор, инициализирует объект цели.
-     // * @param subAims Список подцелей.
+     * @param subAims Список подцелей.
      * @param text Текст цели.
      * @param header Название цели.
      * @param type Тип цели (1 - обычная, 2 - с подтверждением не позднее, чем через каждый определённый промежуток времени, 3 - с прогрессом выполнения цели).
@@ -93,16 +108,19 @@ public abstract class Aim implements Comparable<Aim> {
      * @param date Дата публикации цели.
      * @param startDate Дата начала выполнения цели.
      * @param endDate Дата окончания выполнения цели.
+     * @param likes Количество лайков цели.
+     * @param dislikes Количество дислайков цели.
+     * @param proofs Подтверждения выполнения цели.
      * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
      */
-    public Aim( /* List<Aim> subAims, */ String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate) throws IncompatibleAimsDatesException {
+    public Aim(List<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes, List<Proof> proofs) throws IncompatibleAimsDatesException {
         if(date.compareTo(startDate) > 0) {
             throw new IncompatibleAimsDatesException("Время начала выполнения цели должно быть не раньше времени её публикации.", this);
         }
         if(startDate.compareTo(endDate) > 0) {
             throw new IncompatibleAimsDatesException("Время окончания выполнения цели должно быть позже времени начала её выполнения.", this);
         }
-        // this.subAims = subAims;
+        this.subAims = subAims;
         this.text = text;
         this.header = header;
         this.type = type;
@@ -112,6 +130,9 @@ public abstract class Aim implements Comparable<Aim> {
         this.date = date;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.proofs = proofs;
     }
 
     /**
@@ -216,6 +237,34 @@ public abstract class Aim implements Comparable<Aim> {
      */
     public Date getEndDate() {
         return endDate;
+    }
+
+    /**
+     * Возвращает список комментариев к цели.
+     * @return Список коммментариев к цели.
+     */
+    public List<String> getComments() {
+        List<String> result = new ArrayList<>(comments.size());
+        for(String comment : comments) {
+            result.add(new String(comment));
+        }
+        return result;
+    }
+
+    /**
+     * Возвращает количество лайков цели.
+     * @return Количество лайков цели.
+     */
+    public int getLikes() {
+        return likes;
+    }
+
+    /**
+     * Возвращает количество дислайков цели.
+     * @return Количество дислайков цели.
+     */
+    public int getDislikes() {
+        return dislikes;
     }
 
     /**
@@ -430,15 +479,62 @@ public abstract class Aim implements Comparable<Aim> {
         }
     }
 
-    public List<String> getComments() {
-        List<String> result = new ArrayList<>(comments.size());
-        for(String comment : comments) {
-            result.add(new String(comment));
-        }
-        return result;
-    }
-
+    /**
+     * Добавляет комментарий к цели.
+     * @param comment Добавляемый комментарий к цели.
+     */
     public void addComment(String comment) {
         comments.add(comment);
+    }
+
+    /**
+     * Добавляет лайк к цели.
+     */
+    public void addLike() {
+        likes++;
+    }
+
+    /**
+     * Добавляет дислайк к цели.
+     */
+    public void addDislike() {
+        dislikes++;
+    }
+
+    /**
+     * Добавляет подтверждение выполнения цели в список подтверждений.
+     * @param proof Подтверждение выполнения цели.
+     * @return true, если добавление подтверждения успешно состоялось (подтверждения ещё не было в этом списке), иначе false.
+     */
+    public boolean addProof(Proof proof) {
+        if(!proofs.contains(proof)) {
+            proofs.add(proof);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Удаляет подтверждение выполнения цели из списка подтверждений.
+     * @param proof Удаляемое подтверждение выполнения цели.
+     * @return true, если удаление подтверждения успешно состоялось (подтверждение было в этом списке), иначе false.
+     */
+    public boolean removeProof(Proof proof) {
+        return proofs.remove(proof);
+    }
+
+    /**
+     * Удаляет подтверждение выполнения цели из списка подтверждений.
+     * @param index Индекс удаляемого подтверждения выполнения цели.
+     * @return true, если удаление подтверждения успешно состоялось (индекс находился в границах списка), иначе false.
+     */
+    public boolean removeProof(int index) {
+        try {
+            proofs.remove(index);
+            return true;
+        }
+        catch (IndexOutOfBoundsException ex) {
+            return false;
+        }
     }
 }
