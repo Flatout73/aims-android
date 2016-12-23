@@ -3,6 +3,7 @@ package net.styleru.aims.fragments;
 
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import net.styleru.aims.Aim;
 import net.styleru.aims.R;
 
 import java.text.SimpleDateFormat;
@@ -112,7 +114,9 @@ public class AddTarget3 extends Fragment {
                         break;
                     case R.id.button_add_target:
                         try {
-                            RequestMethods.addAimType3(header.getText().toString(), description.getText().toString(), type, end, start, Integer.parseInt(tasks.getText().toString()), tags.getText().toString());
+                            Aim aim = new Aim(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
+                           // aim.setMiniTargets();
+
                         } catch (NumberFormatException ex) {
                             Snackbar.make(v, "Введите число в поле Количество задач", Snackbar.LENGTH_LONG).show();
                         }
@@ -169,7 +173,7 @@ public class AddTarget3 extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newCal=Calendar.getInstance();
-                newCal.set(year, month, dayOfMonth);
+                newCal.set(year, month, dayOfMonth, 23, 59, 59);
                 forDate.setText(dateFormat.format(newCal.getTime()));
                 start = newCal.getTime();
             }
@@ -188,10 +192,19 @@ public class AddTarget3 extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newCal=Calendar.getInstance();
-                newCal.set(year, month, dayOfMonth);
+                newCal.set(year, month, dayOfMonth, 23, 59, 59);
                 forEnd.setText(dateFormat.format(newCal.getTime()));
                 end = newCal.getTime();
             }
         }, newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    class AsyncAdd extends AsyncTask<Aim, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Aim... params) {
+           // RequestMethods.addAimType2();
+            return false;
+        }
     }
 }

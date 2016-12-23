@@ -2,6 +2,7 @@ package net.styleru.aims.fragments;
 
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -16,11 +17,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import net.styleru.aims.Aim;
 import net.styleru.aims.R;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
 
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 
@@ -41,6 +44,8 @@ public class AddTarget1 extends Fragment {
     EditText header, description, tags;
 
     int type;
+
+    Aim aim;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -114,9 +119,17 @@ public class AddTarget1 extends Fragment {
                         dateEndDatePicker.show();
                         break;
                     case R.id.button_add_target:
+                        aim = new Aim(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
+                        AsyncAdd asyncAdd = new AsyncAdd();
                         try {
-                            RequestMethods.addAimType1(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
-                        } catch (Exception e) {
+                          if(asyncAdd.execute(aim).get()) {
+                              getActivity().finish();
+                          } else {
+                              Snackbar.make(v, "Заполните все поля", Snackbar.LENGTH_LONG).show();
+                          }
+                        } catch (InterruptedException e) {
+                            Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
+                        } catch (ExecutionException e) {
                             Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
                         }
                         break;
@@ -169,7 +182,7 @@ public class AddTarget1 extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newCal=Calendar.getInstance();
-                newCal.set(year, month, dayOfMonth);
+                newCal.set(year, month, dayOfMonth, 23, 59, 59);
                 forDate.setText(dateFormat.format(newCal.getTime()));
                 start = newCal.getTime();
             }
@@ -188,11 +201,23 @@ public class AddTarget1 extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newCal=Calendar.getInstance();
-                newCal.set(year, month, dayOfMonth);
+                newCal.set(year, month, dayOfMonth, 23, 59, 59);
                 forEnd.setText(dateFormat.format(newCal.getTime()));
                 end = newCal.getTime();
             }
         }, newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
+    class AsyncAdd extends AsyncTask<Aim, Void, Boolean> {
 
+        @Override
+        protected Boolean doInBackground(Aim... params) {
+            try {
+                RequestMethods.addAimType1(params[0].getHeader(), params[0].getDesription(), params[0].getType(), params[0].getEndDate(), params[0].getStartDate(), params[0].getTags());
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
+        }
     }
+
+}

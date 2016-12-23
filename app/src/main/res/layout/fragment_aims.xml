@@ -4,13 +4,21 @@
     android:layout_height="match_parent"
     tools:context="net.styleru.aims.fragments.AimsFragment">
 
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:text="Ваш рейтинг: 98"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:id="@+id/rating"/>
 
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/rating"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true">
 

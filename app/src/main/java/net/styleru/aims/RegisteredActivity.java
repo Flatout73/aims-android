@@ -96,13 +96,15 @@ public class RegisteredActivity extends AppCompatActivity {
             email = ((EditText) findViewById(R.id.email_register)).getText().toString();
 
             MyTask myTask = new MyTask(login, password, email, name, sex);
-            myTask.execute();
-
-            edit = mToken.edit();
-            edit.putString(APP_REFERENCE_Token, DataStorage.getToken());
-            edit.apply();
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            if(myTask.execute().get()) {
+                edit = mToken.edit();
+                edit.putString(APP_REFERENCE_Token, DataStorage.getToken());
+                edit.apply();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                Snackbar.make(mContentView, "Что-то пошло не так", Snackbar.LENGTH_LONG);
+            }
         } catch (NullPointerException e) {
             Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
         } catch (Exception ex) {
@@ -110,7 +112,7 @@ public class RegisteredActivity extends AppCompatActivity {
         }
     }
 
-    class MyTask extends AsyncTask<Void, Void, Void> {
+    class MyTask extends AsyncTask<Void, Void, Boolean> {
 
         String sex;
         String login;
@@ -127,14 +129,13 @@ public class RegisteredActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
             try {
                 RequestMethods.register(login, password, email, name, sex);
             } catch (Exception e) {
-                Snackbar.make(mContentView, e.getMessage(), Snackbar.LENGTH_LONG);
+                return false;
             }
-
-            return null;
+            return true;
         }
     }
 }
