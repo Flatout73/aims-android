@@ -73,7 +73,9 @@ public class RequestMethods {
      * @return Обновлённый URL-адрес для запроса (с добавленным атрибутом).
      */
     private static String addAttribute(String urlString, String attributeName, String attributeValue, boolean isFirstAttribute) {
-        return urlString + (isFirstAttribute ? "?" : "&") + attributeName + "=" + attributeValue;
+        String value = attributeValue.substring(0);
+        value.replaceAll("&", "%26");
+        return urlString + (isFirstAttribute ? "?" : "&") + attributeName + "=" + value;
     }
 
     /**
@@ -96,6 +98,20 @@ public class RequestMethods {
         BigInteger bigInteger = new BigInteger(1, hashBytes);
         String result = bigInteger.toString(16);
         return result;
+    }
+
+    /**
+     * Проверяет символы логина.
+     * @param login Строка логина.
+     * @return true, если login содержит только допустимые символы, false в ином случае.
+     */
+    private static boolean checkLogin(String login) {
+        for(int i = 0; i < login.length(); i++) {
+            if(!((login.charAt(i) >= 'A' && login.charAt(i) <= 'Z') || (login.charAt(i) >= 'a' && login.charAt(i) <= 'z') || (login.charAt(i) >= '0' && login.charAt(i) <= '9') || login.charAt(i) == '_')) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -329,6 +345,9 @@ public class RequestMethods {
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
      */
     public static void register(String userLogin, String userPassword, String email, String name, String sex) throws Exception {
+        if(!checkLogin(userLogin)) {
+            throw new Exception("Логин может содержать только латинские символы, цифры и символы подчёркивания.");
+        }
         String hashPsd = getMD5Hash(userPassword);
         String urlString = userURL;
         urlString += "register/";
