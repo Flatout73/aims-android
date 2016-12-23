@@ -122,7 +122,11 @@ public class AddTarget1 extends Fragment {
                         aim = new Aim(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
                         AsyncAdd asyncAdd = new AsyncAdd();
                         try {
-                          asyncAdd.execute(aim).get();
+                          if(asyncAdd.execute(aim).get()) {
+                              getActivity().finish();
+                          } else {
+                              Snackbar.make(v, "Заполните все поля", Snackbar.LENGTH_LONG).show();
+                          }
                         } catch (InterruptedException e) {
                             Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
                         } catch (ExecutionException e) {
@@ -178,7 +182,7 @@ public class AddTarget1 extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newCal=Calendar.getInstance();
-                newCal.set(year, month, dayOfMonth);
+                newCal.set(year, month, dayOfMonth, 23, 59, 59);
                 forDate.setText(dateFormat.format(newCal.getTime()));
                 start = newCal.getTime();
             }
@@ -197,7 +201,7 @@ public class AddTarget1 extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar newCal=Calendar.getInstance();
-                newCal.set(year, month, dayOfMonth);
+                newCal.set(year, month, dayOfMonth, 23, 59, 59);
                 forEnd.setText(dateFormat.format(newCal.getTime()));
                 end = newCal.getTime();
             }

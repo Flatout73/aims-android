@@ -45,6 +45,7 @@ public class Aim {
 
     private String tags;
 
+    private int miniTargets;
 
     public Aim(String header, String desription, int type, Date end, Date start, String tags) {
         this.header = header;
@@ -91,4 +92,14 @@ public class Aim {
     public String getTags() {
         return tags;
     }
+
+    public int getMiniTargets() {
+        return miniTargets;
+    }
+
+    public void setMiniTargets(int miniTargets) {
+        this.miniTargets = miniTargets;
+    }
 }
+
+
