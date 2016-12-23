@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity
                 edit.apply();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -316,7 +317,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 RequestMethods.getProfile();
             } catch (Exception e) {
-                    Toast.makeText(MainActivity.this.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MainActivity.this.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     return false;
                 }
             }
