@@ -1089,4 +1089,248 @@ public class RequestMethods {
             throw new Exception("Ошибка формата ответа сервера.");
         }
     }
+
+    /**
+     * Отправляет запрос на добавление в друзья.
+     * @param user Пользователь, которому отправляется запрос на добавления в друзья.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
+    public static void addFriend(User user) throws Exception {
+        String urlString = friendshipsURL;
+        urlString += "add/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "userlogin", user.getLogin(), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("User Error")) {
+                    throw new Exception("Такого пользователя не существует.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    /**
+     * Отклоняет запрос на добавление в друзья.
+     * @param user Пользователь, чей запрос на добавление в друзья отклоняется.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
+    public static void declineRequest(User user) throws Exception {
+        String urlString = friendshipsURL;
+        urlString += "decline/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "userlogin", user.getLogin(), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("User Error")) {
+                    throw new Exception("Такого пользователя не существует.");
+                }
+                if(token.equals("Request Error")) {
+                    throw new Exception("Такого запроса на добавления в друзья не существует.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    /**
+     * Подтверждает запрос на добавление в друзья.
+     * @param user Пользователь, чей запрос на добавление в друзья подтверждается.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
+    public static void acceptFriendship(User user) throws Exception {
+        String urlString = friendshipsURL;
+        urlString += "accept/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "userlogin", user.getLogin(), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("User Error")) {
+                    throw new Exception("Такого пользователя не существует.");
+                }
+                if(token.equals("Request Error")) {
+                    throw new Exception("Такого запроса на добавления в друзья не существует.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            DataStorage.getMe().addFriend(user);
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    /**
+     * Удаляет пользователя из списка друзей.
+     * @param user Пользователь, удаляемый из спика друзей.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
+    public static void deleteFriend(User user) throws Exception {
+        String urlString = friendshipsURL;
+        urlString += "delete/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "userlogin", user.getLogin(), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("User Error")) {
+                    throw new Exception("Такого пользователя не существует.");
+                }
+                if(token.equals("Friend Error")) {
+                    throw new Exception("У Вас нет этого друга.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            DataStorage.getMe().removeFriend(user);
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    /**
+     * Получает список друзей пользователя.
+     * @param user Пользователь, список друзей которого получаем.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
+    public static void getFriends(User user) throws Exception {
+        String urlString = friendshipsURL;
+        urlString += "get/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "userlogin", user.getLogin(), false);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("User Error")) {
+                    throw new Exception("Такого пользователя не существует.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            JSONArray users = jsonObject.getJSONArray("Users");
+            DataStorage.getMe().getFriends().clear();
+            for(int i = 0; i < users.length(); i++) {
+                DataStorage.getMe().getFriends().add(parseUser(users.getJSONObject(i)));
+            }
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    /**
+     * Получает список запросов на добавление в друзья.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
+    public static void getFriendshipRequests() throws Exception {
+        String urlString = friendshipsURL;
+        urlString += "getreq/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        String response = Request.doRequest(urlString);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            JSONArray users = jsonObject.getJSONArray("Users");
+            DataStorage.getFriendshipRequests().clear();
+            for(int i = 0; i < users.length(); i++) {
+                DataStorage.getFriendshipRequests().add(parseUser(users.getJSONObject(i)));
+            }
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
 }

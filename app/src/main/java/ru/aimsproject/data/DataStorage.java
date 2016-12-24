@@ -24,6 +24,11 @@ public class DataStorage {
     private static List<Achievement> allAchievements = new ArrayList<Achievement>();
 
     /**
+     * Запросы на добавление в друзья.
+     */
+    private static List<User> friendshipRequests = new ArrayList<User>();
+
+    /**
      * Пользователь, залогинившийся в приложении.
      */
     private static User me;
@@ -39,6 +44,14 @@ public class DataStorage {
      */
     public static List<Aim> getNewsFeed() {
         return newsFeed;
+    }
+
+    /**
+     * Возвращает запросы на добавление в друзья.
+     * @return Запросы на добавление в друзья.
+     */
+    public static List<User> getFriendshipRequests() {
+        return friendshipRequests;
     }
 
     /**
