@@ -4,19 +4,26 @@ package net.styleru.aims.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toolbar;
+import android.widget.TextView;
 
 import net.styleru.aims.AboutTargetActivity;
 import net.styleru.aims.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import ru.aimsproject.data.DataStorage;
+import ru.aimsproject.models.Aim;
+
+import static net.styleru.aims.fragments.AimsFragment.DESCRIPTION;
+import static net.styleru.aims.fragments.AimsFragment.ID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,49 +84,26 @@ public class FriendsFragment extends Fragment {
         NestedScrollingListView listView = (NestedScrollingListView) view.findViewById(R.id.friendsListView);
 
         HashMap<String, String> hm;
-        hm = new HashMap<>();
-        hm.put(TITLE, "Cinema");
-        hm.put(DATE, "Tomorrow");
-        mTargetList.add(hm);
+        List<Aim> friendAims = DataStorage.getNewsFeed();
 
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
+        if(friendAims.size() != 0) {
+            try {
+                for (int i = 0; i < friendAims.size(); i++) {
+                    Aim currentAim = friendAims.get(i);
+                    hm = new HashMap<>();
+                    hm.put(TITLE, currentAim.getHeader());
+                    hm.put(DATE, currentAim.getDate().toString());
+                    hm.put(DESCRIPTION, currentAim.getText());
+                    mTargetList.add(hm);
+                }
+            } catch (Exception ex) {
+                Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG);
+            }
+        }
+        else {
+            TextView empty = (TextView) view.findViewById(R.id.empty);
+            empty.setVisibility(View.VISIBLE);
+        }
 
         AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item_2, mTargetList);
         listView.setAdapter(adapterAims);
@@ -134,6 +118,8 @@ public class FriendsFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             Intent intent = new Intent(getActivity(), AboutTargetActivity.class);
+            intent.putExtra(ID, i);
+            intent.putExtra("type", 1);
             startActivity(intent);
         }
     };

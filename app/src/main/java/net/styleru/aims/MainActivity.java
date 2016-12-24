@@ -24,10 +24,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import net.styleru.aims.fragments.AimsFragment;
 import net.styleru.aims.fragments.FriendsFragment;
+import net.styleru.aims.fragments.NestedScrollingListView;
 import net.styleru.aims.fragments.SettingsFragment;
 
 import java.util.Stack;
@@ -40,7 +42,7 @@ import static net.styleru.aims.LoginActivity.APP_REFERENCES;
 import static net.styleru.aims.LoginActivity.APP_REFERENCE_Token;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MenuItemCompat.OnActionExpandListener {
+        implements SearchView.OnQueryTextListener, NavigationView.OnNavigationItemSelectedListener, MenuItemCompat.OnActionExpandListener {
 
         //PageFragment pageFr;
         AimsFragment aimsFr;
@@ -49,8 +51,7 @@ public class MainActivity extends AppCompatActivity
 
         SharedPreferences mToken;
 
-        // 0 - aimsFr, 1 - friendFr, 2 - settingFr
-        byte openedFragment;
+        SearchAdapter searchAdapter;
 
         int scrollFlags;
 
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 edit.apply();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             }
@@ -136,6 +138,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        searchAdapter = new SearchAdapter(this);
     }
 
     @Override
@@ -174,7 +178,23 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         searchMenuItem = menu.findItem(R.id.action_search);
+        SearchView searchView;
+        searchView = (SearchView) searchMenuItem.getActionView();
+        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchAdapter.getFilter().filter(newText);
+                return true;
+            }
+        };
+
+        searchView.setOnQueryTextListener(queryTextListener);
         MenuItemCompat.setOnActionExpandListener(searchMenuItem, this);
         return true;
     }
@@ -249,13 +269,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        searchAdapter.getFilter().filter(newText);
+        return false;
+    }
+
+    @Override
     public boolean onMenuItemActionExpand(MenuItem item) {
         appBarLayoutMain.setExpanded(false, true);
+        ListView searchView = (ListView) findViewById(R.id.main_search);
+        searchView.setVisibility(View.VISIBLE);
+        findViewById(R.id.container).setVisibility(View.GONE);
+        searchView.setAdapter(searchAdapter);
         return true;
     }
 
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
+        ListView searchView = (ListView) findViewById(R.id.main_search);
+        searchView.setVisibility(View.GONE);
+        findViewById(R.id.container).setVisibility(View.VISIBLE);
         return true;
     }
 
@@ -303,6 +341,7 @@ public class MainActivity extends AppCompatActivity
         edit.apply();
 
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         DataStorage.setToken(null);
         finish();

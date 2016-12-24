@@ -16,14 +16,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-import net.styleru.aims.Aim;
+import net.styleru.aims.MyAim;
 import net.styleru.aims.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import ru.aimsproject.connectionwithbackend.RequestMethods;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +36,7 @@ public class AddTarget3 extends Fragment {
 
     RadioGroup typeOfTargets;
 
-    EditText header, description, tags, tasks;
+    EditText header, description, tags, days, hours, minuts;
 
     int type;
 
@@ -97,6 +95,9 @@ public class AddTarget3 extends Fragment {
         description = (EditText) view.findViewById(R.id.addTarget1_description);
         tags = (EditText) view.findViewById(R.id.addTarget1_tags);
 
+        days = (EditText) view.findViewById(R.id.day_timer);
+        hours = (EditText) view.findViewById(R.id.hour_timer);
+        minuts = (EditText) view.findViewById(R.id.minuts_timer);
 
         typeOfTargets = (RadioGroup) view.findViewById(R.id.target_type);
 
@@ -114,8 +115,8 @@ public class AddTarget3 extends Fragment {
                         break;
                     case R.id.button_add_target:
                         try {
-                            Aim aim = new Aim(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
-                           // aim.setMiniTargets();
+                            MyAim aim = new MyAim(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
+                           // aim.setSelectionDate(new Date(Integer.parseInt(da)));
 
                         } catch (NumberFormatException ex) {
                             Snackbar.make(v, "Введите число в поле Количество задач", Snackbar.LENGTH_LONG).show();
@@ -199,10 +200,10 @@ public class AddTarget3 extends Fragment {
         }, newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    class AsyncAdd extends AsyncTask<Aim, Void, Boolean> {
+    class AsyncAdd extends AsyncTask<MyAim, Void, Boolean> {
 
         @Override
-        protected Boolean doInBackground(Aim... params) {
+        protected Boolean doInBackground(MyAim... params) {
            // RequestMethods.addAimType2();
             return false;
         }
