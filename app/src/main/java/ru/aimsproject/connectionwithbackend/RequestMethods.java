@@ -539,7 +539,7 @@ public class RequestMethods {
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось или если таких пользователей не найдено.
      */
     public static List<User> search(String userLogin) throws Exception {
-        String urlString = newsURL;
+        String urlString = userURL;
         urlString += "search/";
         String currentToken = DataStorage.getToken();
         if(currentToken == null) {
