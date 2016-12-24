@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by LeonidL on 23.12.16.
  */
 
-public class Aim {
+public class MyAim {
 
     private String text;
 
@@ -47,7 +47,9 @@ public class Aim {
 
     private int miniTargets;
 
-    public Aim(String header, String desription, int type, Date end, Date start, String tags) {
+    private Date selectionDate;
+
+    public MyAim(String header, String desription, int type, Date end, Date start, String tags) {
         this.header = header;
         this.desription = desription;
         this.type = type;
@@ -99,6 +101,14 @@ public class Aim {
 
     public void setMiniTargets(int miniTargets) {
         this.miniTargets = miniTargets;
+    }
+
+    public Date getSelectionDate() {
+        return selectionDate;
+    }
+
+    public void setSelectionDate(Date selectionDate) {
+        this.selectionDate = selectionDate;
     }
 }
 

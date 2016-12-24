@@ -2,15 +2,11 @@ package net.styleru.aims.fragments;
 
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.media.MediaBrowserServiceCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-import net.styleru.aims.Aim;
+import net.styleru.aims.MyAim;
 import net.styleru.aims.R;
 
 import java.text.SimpleDateFormat;
@@ -121,7 +117,7 @@ public class AddTarget2 extends Fragment {
                         break;
                     case R.id.button_add_target:
                         try {
-                            Aim aim = new Aim(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
+                            MyAim aim = new MyAim(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
                             aim.setMiniTargets(Integer.parseInt(tasks.getText().toString()));
                             AsyncAdd asyncAdd = new AsyncAdd();
                             if(asyncAdd.execute(aim).get()) {
@@ -212,10 +208,10 @@ public class AddTarget2 extends Fragment {
         }, newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    class AsyncAdd extends AsyncTask<Aim, Void, Boolean> {
+    class AsyncAdd extends AsyncTask<MyAim, Void, Boolean> {
 
         @Override
-        protected Boolean doInBackground(Aim... params) {
+        protected Boolean doInBackground(MyAim... params) {
             try {
                 RequestMethods.addAimType3(params[0].getHeader(), params[0].getDesription(), params[0].getType(), params[0].getEndDate(), params[0].getStartDate(), params[0].getMiniTargets(), params[0].getTags());
             } catch (Exception e) {

@@ -18,6 +18,9 @@ import android.widget.TextView;
 
 import net.styleru.aims.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,9 @@ import java.util.Objects;
 import java.util.StringTokenizer;
 
 import static android.support.v4.content.ContextCompat.getColor;
+import static net.styleru.aims.fragments.AimsFragment.DATE;
+import static net.styleru.aims.fragments.AimsFragment.DESCRIPTION;
+import static net.styleru.aims.fragments.AimsFragment.TITLE;
 
 
 // Убрать хешмеп и сделать 2 листа. Наследовать от эррей адаптера, как в статье на хабре
@@ -61,9 +67,25 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
       //  TextView textView1 = (TextView)rowView1.findViewById(R.id.target_aims);
       //  TextView textView2 = (TextView)rowView2.findViewById(R.id.target_aims2);
       //  if(position != 0) {
-            rowView = inflater.inflate(resource, parent, false);
-            TextView textView1 = (TextView)rowView.findViewById(R.id.target_aims);
-            textView1.setText(targets.get(position).get("targetname"));
+        rowView = inflater.inflate(resource, parent, false);
+        TextView header = (TextView)rowView.findViewById(R.id.target_aims);
+        TextView description = (TextView) rowView.findViewById(R.id.date_description);
+        TextView date = (TextView) rowView.findViewById(R.id.date_aims);
+
+        HashMap<String, String> aimMap = targets.get(position);
+        header.setText(aimMap.get(TITLE));
+        description.setText(aimMap.get(DESCRIPTION));
+
+        SimpleDateFormat format = new SimpleDateFormat();
+        format.applyPattern("EEE MMM dd HH:mm:ss");
+        try {
+            Date aimDate = format.parse(aimMap.get(DATE));
+            SimpleDateFormat printDate = new SimpleDateFormat("dd.MM.yyyy");
+            date.setText("Выполнить до: " + printDate.format(aimDate));
+        } catch (ParseException e) {
+            date.setText("Выполнить до: " + aimMap.get(DATE));
+            e.printStackTrace();
+        }
 
 //                textView1.setText((CharSequence) targets.get(position));
 //            return rowView1;

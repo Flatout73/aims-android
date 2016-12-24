@@ -4,8 +4,17 @@
     android:layout_height="match_parent"
     tools:context="net.styleru.aims.fragments.FriendsFragment">
 
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="Нет новостей">
+    </TextView>
+
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -14,7 +23,9 @@
         <net.styleru.aims.fragments.NestedScrollingListView
             android:id="@+id/friendsListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></net.styleru.aims.fragments.NestedScrollingListView>
+            android:layout_height="wrap_content">
+
+        </net.styleru.aims.fragments.NestedScrollingListView>
 
     </LinearLayout>
 

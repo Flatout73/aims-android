@@ -13,6 +13,15 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:id="@+id/rating"/>
 
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="Нет новостей">
+    </TextView>
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -26,6 +35,14 @@
             android:id="@+id/aimsListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></net.styleru.aims.fragments.NestedScrollingListView>
+
+        <TextView
+            android:id="@id/android:empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="У вас нет целей">
+        </TextView>
 
     </LinearLayout>
 

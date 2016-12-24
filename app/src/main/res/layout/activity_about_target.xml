@@ -21,6 +21,140 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_about_target" />
+    <LinearLayout
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_target"
+        android:layout_width="match_parent"
+        android:layout_height="400dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <ProgressBar
+                android:id="@+id/target_progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="20" />
+            <!--android:progressDrawable="@drawable/target_progress_bar"-->
+
+            <TextView
+                android:id="@+id/progress_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/target_progressBar"
+                android:layout_below="@id/target_progressBar"
+                android:background="@android:color/transparent"
+                android:text="20%"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/target_progressBar"
+                android:layout_below="@id/target_progressBar"
+                android:text="20/100"/>
+
+            <TextView
+                android:id="@+id/target_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/progress_horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="8dp"
+                android:text="Выучить 1005000 бесполезных билетов по истории чтобы ее не завалить и не вылетить кек" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="192dp"
+                android:id="@+id/proofs"
+                android:layout_below="@+id/target_description"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_margin="8dp"
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/rigin"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_margin="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/rigin"
+                    android:layout_weight="1"
+                    />
+
+                <ImageView
+                    android:layout_margin="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/rigin"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/target_submit"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/proofs"
+                android:layout_marginTop="8dp"
+                android:text="Подтвердить" />
+
+
+            <TextView
+                android:id="@+id/slash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/target_submit"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:text="/"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/trues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/slash"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/slash"
+                android:text="1 верю"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/falses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/slash"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/slash"
+                android:text="3 не верю"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

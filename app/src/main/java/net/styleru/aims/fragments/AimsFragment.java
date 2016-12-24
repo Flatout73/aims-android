@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import net.styleru.aims.AboutTargetActivity;
 import net.styleru.aims.LoginActivity;
@@ -48,14 +49,19 @@ public class AimsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    public static final String ID = "id";
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private ListView mListView;
     private ArrayList<HashMap<String, String>> mTargetList = new ArrayList<>();
-    private static final String TITLE = "targetname";
-    private static final String DATE = "date";
+
+
+    public static final String TITLE = "targetname";
+    public static final String DATE = "date";
+    public static final String DESCRIPTION = "description";
 
     List<Aim> myAims;
 
@@ -103,13 +109,19 @@ public class AimsFragment extends Fragment {
         synchronized (DataStorage.class) {
             try {
                 myAims = DataStorage.getMe().getAims();
-
-                for (int i = 0; i < myAims.size(); i++) {
-                    Aim currentAim = myAims.get(i);
-                    hm = new HashMap<>();
-                    hm.put(TITLE, currentAim.getHeader());
-                    hm.put(DATE, currentAim.getDate().toString());
-                    mTargetList.add(hm);
+                if(myAims.size() != 0) {
+                    for (int i = 0; i < myAims.size(); i++) {
+                        Aim currentAim = myAims.get(i);
+                        hm = new HashMap<>();
+                        hm.put(TITLE, currentAim.getHeader());
+                        hm.put(DATE, currentAim.getDate().toString());
+                        hm.put(DESCRIPTION, currentAim.getText());
+                        mTargetList.add(hm);
+                    }
+                }
+                else {
+                    TextView empty = (TextView) view.findViewById(R.id.empty);
+                    empty.setVisibility(View.VISIBLE);
                 }
             } catch (Exception ex) {
                 Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
@@ -175,6 +187,7 @@ public class AimsFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             Intent intent = new Intent(getActivity(), AboutTargetActivity.class);
+            intent.putExtra(ID, i);
             startActivity(intent);
         }
     };

@@ -13,11 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
-import net.styleru.aims.Aim;
+import net.styleru.aims.MyAim;
 import net.styleru.aims.R;
 
 import java.util.Date;
@@ -45,7 +43,7 @@ public class AddTarget1 extends Fragment {
 
     int type;
 
-    Aim aim;
+    MyAim aim;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -119,7 +117,7 @@ public class AddTarget1 extends Fragment {
                         dateEndDatePicker.show();
                         break;
                     case R.id.button_add_target:
-                        aim = new Aim(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
+                        aim = new MyAim(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
                         AsyncAdd asyncAdd = new AsyncAdd();
                         try {
                           if(asyncAdd.execute(aim).get()) {
@@ -207,10 +205,10 @@ public class AddTarget1 extends Fragment {
             }
         }, newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
-    class AsyncAdd extends AsyncTask<Aim, Void, Boolean> {
+    class AsyncAdd extends AsyncTask<MyAim, Void, Boolean> {
 
         @Override
-        protected Boolean doInBackground(Aim... params) {
+        protected Boolean doInBackground(MyAim... params) {
             try {
                 RequestMethods.addAimType1(params[0].getHeader(), params[0].getDesription(), params[0].getType(), params[0].getEndDate(), params[0].getStartDate(), params[0].getTags());
             } catch (Exception e) {
