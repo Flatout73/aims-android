@@ -12,7 +12,7 @@ import java.net.URL;
  * Created by Антон on 27.10.2016.
  * Представляет запрос к серверу.
  */
-public class Request {
+class Request {
     /**
      * Содержит URL-адрес нашего сервера.
      */

@@ -79,7 +79,7 @@ public abstract class Aim implements Comparable<Aim> {
     /**
      * Комментарии к цели.
      */
-    private List<String> comments = new ArrayList<String>();
+    private List<Comment> comments = new ArrayList<Comment>();
 
     /**
      * Подтверждения выполнения цели.
@@ -97,6 +97,11 @@ public abstract class Aim implements Comparable<Aim> {
     private int dislikes;
 
     /**
+     * -1 - мы дизлайкнули, 0 - никаких действий, 1 - мы лайкнули.
+     */
+    private int liked;
+
+    /**
      * Конструктор, инициализирует объект цели.
      * @param subAims Список подцелей.
      * @param text Текст цели.
@@ -110,10 +115,12 @@ public abstract class Aim implements Comparable<Aim> {
      * @param endDate Дата окончания выполнения цели.
      * @param likes Количество лайков цели.
      * @param dislikes Количество дислайков цели.
+     * @param liked -1 - мы дизлайкнули, 0 - никаких действий, 1 - мы лайкнули.
+     * @param comments Комментарии к цели.
      * @param proofs Подтверждения выполнения цели.
      * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
      */
-    public Aim(List<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes, List<Proof> proofs) throws IncompatibleAimsDatesException {
+    public Aim(List<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes, int liked, List<Comment> comments, List<Proof> proofs) throws IncompatibleAimsDatesException {
         if(date.compareTo(startDate) > 0) {
             throw new IncompatibleAimsDatesException("Время начала выполнения цели должно быть не раньше времени её публикации.", this);
         }
@@ -132,6 +139,7 @@ public abstract class Aim implements Comparable<Aim> {
         this.endDate = endDate;
         this.likes = likes;
         this.dislikes = dislikes;
+        this.liked = liked;
         this.proofs = proofs;
     }
 
@@ -224,6 +232,14 @@ public abstract class Aim implements Comparable<Aim> {
     }
 
     /**
+     * Устанавливает дату публикации цели.
+     * @param date Дата публикации цели.
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    /**
      * Возвращает дату начала выполнения цели.
      * @return Дата начала выполнения цели.
      */
@@ -243,12 +259,21 @@ public abstract class Aim implements Comparable<Aim> {
      * Возвращает список комментариев к цели.
      * @return Список коммментариев к цели.
      */
-    public List<String> getComments() {
-        List<String> result = new ArrayList<>(comments.size());
+    public List<Comment> getComments() {
+        /*List<String> result = new ArrayList<>(comments.size());
         for(String comment : comments) {
             result.add(new String(comment));
         }
-        return result;
+        return result;*/
+        return comments;
+    }
+
+    /**
+     * Возвращает подтверждения выполнения цели.
+     * @return Подтверждения выполнения цели.
+     */
+    public List<Proof> getProofs() {
+        return proofs;
     }
 
     /**
@@ -265,6 +290,14 @@ public abstract class Aim implements Comparable<Aim> {
      */
     public int getDislikes() {
         return dislikes;
+    }
+
+    /**
+     * Возвращает: -1 - мы дизлайкнули, 0 - никаких действий, 1 - мы лайкнули.
+     * @return -1 - мы дизлайкнули, 0 - никаких действий, 1 - мы лайкнули.
+     */
+    public int getLiked() {
+        return liked;
     }
 
     /**
@@ -482,9 +515,14 @@ public abstract class Aim implements Comparable<Aim> {
     /**
      * Добавляет комментарий к цели.
      * @param comment Добавляемый комментарий к цели.
+     * @return true, если добавление подтверждения успешно состоялось (подтверждения ещё не было в этом списке), иначе false.
      */
-    public void addComment(String comment) {
-        comments.add(comment);
+    public boolean addComment(Comment comment) {
+        if(!comments.contains(comment)) {
+            comments.add(comment);
+            return true;
+        }
+        return false;
     }
 
     /**

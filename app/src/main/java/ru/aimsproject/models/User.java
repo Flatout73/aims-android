@@ -21,6 +21,11 @@ public class User implements Comparable<User> {
     private String login;
 
     /**
+     * E-mail пользователя.
+     */
+    private String email;
+
+    /**
      * Пол пользователя.
      */
     private int sex;
@@ -29,6 +34,16 @@ public class User implements Comparable<User> {
      * Аватарка пользователя (изображение, сохранённое в виде Bitmap).
      */
     private Bitmap image;
+
+    /**
+     * Рейтинг пользователя.
+     */
+    private int rating;
+
+    /**
+     * -2 - пользователь в подписчиках, -1 - пользователь в читаемых, 0 - пользователь не в друзьях, 1 - пользователь в друзьях.
+     */
+    private int inFriends;
 
     /**
      * Список друзей пользователя.
@@ -49,14 +64,20 @@ public class User implements Comparable<User> {
      * Конструктор, инициализирует объект пользователя.
      * @param name Имя пользователя.
      * @param login Логин пользователя.
+     * @param email E-mail пользователя.
      * @param sex Пол пользователя.
      * @param image Аватарка пользователя (изображение, сохранённое в виде Bitmap).
+     * @param rating Рейтинг пользователя.
+     * @param inFriends -2 - пользователь в подписчиках, -1 - пользователь в читаемых, 0 - пользователь не в друзьях, 1 - пользователь в друзьях.
      */
-    public User(String name, String login, int sex, Bitmap image) {
+    public User(String name, String login, String email, int sex, Bitmap image, int rating, int inFriends) {
         this.name = name;
         this.login = login;
+        this.email = email;
         this.sex = sex;
         this.image = image;
+        this.rating = rating;
+        this.inFriends = inFriends;
     }
 
     /**
@@ -76,6 +97,14 @@ public class User implements Comparable<User> {
     }
 
     /**
+     * Возвращает E-mail пользователя.
+     * @return E-mail пользователя.
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
      * Возвращает пол пользователя.
      * @return Пол пользователя.
      */
@@ -89,6 +118,30 @@ public class User implements Comparable<User> {
      */
     public Bitmap getImage() {
         return image;
+    }
+
+    /**
+     * Возвращает рейтинг пользователя.
+     * @return Рейтинг пользователя.
+     */
+    public int getRating() {
+        return rating;
+    }
+
+    /**
+     * Возвращает -2 - пользователь в подписчиках, -1 - пользователь в читаемых, 0 - пользователь не в друзьях, 1 - пользователь в друзьях.
+     * @return -2 - пользователь в подписчиках, -1 - пользователь в читаемых, 0 - пользователь не в друзьях, 1 - пользователь в друзьях.
+     */
+    public int getInFriends() {
+        return inFriends;
+    }
+
+    /**
+     * Устанавливает -2 - пользователь в подписчиках, -1 - пользователь в читаемых, 0 - пользователь не в друзьях, 1 - пользователь в друзьях.
+     * @param inFriends -2 - пользователь в подписчиках, -1 - пользователь в читаемых, 0 - пользователь не в друзьях, 1 - пользователь в друзьях.
+     */
+    public void setInFriends(int inFriends) {
+        this.inFriends = inFriends;
     }
 
     /**

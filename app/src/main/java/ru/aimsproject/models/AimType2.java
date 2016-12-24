@@ -14,7 +14,7 @@ public class AimType2 extends Aim {
     /**
      * Промежуток времени, не позднее, чем через который необходимо подтверждать цель.
      */
-    private Date dateSection;
+    private int dateSection;
 
     /**
      * Конструктор, инициализирует объект цели 2-го типа (с подтверждением не позднее, чем через каждый определённый промежуток времени).
@@ -30,12 +30,14 @@ public class AimType2 extends Aim {
      * @param endDate Дата окончания выполнения цели.
      * @param likes Количество лайков цели.
      * @param dislikes Количество дислайков цели.
+     * @param liked -1 - мы дизлайкнули, 0 - никаких действий, 1 - мы лайкнули.
+     * @param comments Комментарии к цели.
      * @param proofs Подтверждения выполнения цели.
      * @param dateSection Промежуток времени, не позднее, чем через который, необходимо подтверждать цель.
      */
-    public AimType2(List<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes, List<Proof> proofs, Date dateSection)
+    public AimType2(List<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes, int liked, List<Comment> comments, List<Proof> proofs, int dateSection)
             throws IncompatibleAimsDatesException {
-        super(subAims, text, header, type, flag, modif, author, date, startDate, endDate, likes, dislikes, proofs);
+        super(subAims, text, header, type, flag, modif, author, date, startDate, endDate, likes, dislikes, liked, comments, proofs);
         this.dateSection = dateSection;
     }
 
@@ -43,7 +45,7 @@ public class AimType2 extends Aim {
      * Возвращает промежуток времени, не позднее, чем через который необходимо подтверждать цель.
      * @return Промежуток времени, не позднее, чем через который необходимо подтверждать цель.
      */
-    public Date getDateSection() {
+    public int getDateSection() {
         return dateSection;
     }
 }
