@@ -188,6 +188,7 @@ public class AimsFragment extends Fragment {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             Intent intent = new Intent(getActivity(), AboutTargetActivity.class);
             intent.putExtra(ID, i);
+//            intent.putExtra("aim", mTargetList.get(i));
             startActivity(intent);
         }
     };

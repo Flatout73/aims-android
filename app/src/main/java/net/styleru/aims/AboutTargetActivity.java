@@ -15,6 +15,7 @@ import android.widget.TextView;
 import net.styleru.aims.R;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.*;
@@ -41,6 +42,7 @@ public class AboutTargetActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.target_progressBar);
         tvProgressHorizontal = (TextView) findViewById(R.id.progress_horizontal);
 
+//        aim = (Aim) getIntent().getExtras().get("aim");
         id = getIntent().getExtras().getInt(ID);
         int type = getIntent().getExtras().getInt("type");
 

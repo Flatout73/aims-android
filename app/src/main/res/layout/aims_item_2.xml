@@ -2,12 +2,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:id="@+id/friend_user">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/catik"
+        android:id="@+id/friend_avatar"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Антон Ригин"
+        android:layout_toRightOf="@id/friend_avatar"
+        android:layout_marginStart="8dp"
+       android:layout_centerVertical="true"
+        android:textSize="16sp"
+        android:textAppearance="?attr/textAppearanceListItem"/>
+
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/target_aims"
         android:text="Сделать ДЗ"
-        android:textSize="16sp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:textSize="20sp"
+        android:layout_below="@id/friend_user"
+        android:layout_alignStart="@id/friend_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceListItem"
@@ -21,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:textSize="14sp"
+        android:textSize="18sp"
         android:textAppearance="?attr/textAppearanceListItem"
         android:maxLines="2" />
 
@@ -34,29 +60,8 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:textColor="@color/medium_grey"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItem"
         android:maxLines="1" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="3"
-        android:id="@+id/dislikes"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@id/date_aims"
-        android:layout_marginTop="8dp"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/likes"
-        android:text="2"
-        android:layout_alignBottom="@id/dislikes"
-        android:layout_toStartOf="@id/dislikes"
-        android:layout_marginEnd="8dp"/>
 
 </RelativeLayout>

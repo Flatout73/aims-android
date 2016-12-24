@@ -24,6 +24,8 @@
                     android:layout_height="88dp"
                     android:id="@+id/settings_avatar"
                     android:src="@drawable/rigin"
+                    android:clickable="true"
+                    android:onClick="changeImage"
                     android:layout_alignParentStart="true" />
 
                 <EditText
@@ -48,6 +50,7 @@
                 <Button
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
+                    android:onClick="change_name"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:gravity="center"
@@ -91,6 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
+                    android:id="@+id/set_email"
                     android:hint="Изменить Email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
@@ -116,6 +120,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Изменить пароль"
+                        android:id="@+id/set_password"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true" />
@@ -129,6 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:gravity="center"
+                    android:onClick="changeEmailPassword"
                     android:layout_below="@id/password_edit"
                     android:text="Принять изменеия"
                     android:textStyle="bold" />

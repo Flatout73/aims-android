@@ -4,8 +4,11 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +27,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,6 +37,7 @@ import net.styleru.aims.fragments.FriendsFragment;
 import net.styleru.aims.fragments.NestedScrollingListView;
 import net.styleru.aims.fragments.SettingsFragment;
 
+import java.io.IOException;
 import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 
@@ -44,6 +50,8 @@ import static net.styleru.aims.LoginActivity.APP_REFERENCE_Token;
 public class MainActivity extends AppCompatActivity
         implements SearchView.OnQueryTextListener, NavigationView.OnNavigationItemSelectedListener, MenuItemCompat.OnActionExpandListener {
 
+
+        static final int GALLERY_REQUEST = 1;
         //PageFragment pageFr;
         AimsFragment aimsFr;
         FriendsFragment friendFr;
@@ -331,6 +339,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //выход в настройках
     public void Exit(View view) {
 
         SharedPreferences.Editor edit = mToken.edit();
@@ -345,6 +354,65 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
         DataStorage.setToken(null);
         finish();
+    }
+
+    //смена картинки в настройках
+    public void changeImage(View view) {
+        Intent intentPhotoPicker = new Intent(Intent.ACTION_PICK);
+        intentPhotoPicker.setType("image/*");
+        startActivityForResult(intentPhotoPicker, GALLERY_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Bitmap bitmap = null;
+        ImageView image = (ImageView) findViewById(R.id.settings_avatar);
+
+        switch (requestCode) {
+            case GALLERY_REQUEST:
+                if(resultCode == RESULT_OK) {
+                    Uri selectedImage = data.getData();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image.setImageBitmap(bitmap);
+                    changeImage(image);
+                }
+        }
+    }
+
+    public void change_name(View view) {
+        EditText name = (EditText) findViewById(R.id.set_name);
+        EditText surname = (EditText) findViewById(R.id.set_surname);
+
+    }
+
+    public void changeEmailPassword(View view) {
+        EditText email = (EditText) findViewById(R.id.set_email);
+        EditText password = (EditText) findViewById(R.id.set_password);
+
+        if(email.getText() != null) {
+
+        }
+
+        if(password.getText() != null) {
+            try {
+                ChangePassword changePsw = new ChangePassword();
+                if(changePsw.execute(password.getText().toString()).get()) {
+                    Snackbar.make(view, "Пароль успешно изменен", Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                    Snackbar.make(view, "Не удалось изменить пароль", Snackbar.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        }
+
     }
 
     class TaskProfile extends AsyncTask<Void, Void, Boolean> {
@@ -364,5 +432,18 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
+    }
+
+    class ChangePassword extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            try {
+                RequestMethods.changePsd(params[0]);
+            } catch (Exception e) {
+                return false;
+            }
+            return  true;
+        }
     }
 }
