@@ -72,4 +72,13 @@ public class DataStorage {
     public static void setToken(String token) {
         DataStorage.token = token;
     }
+
+    /**
+     * Очищает хранилище данных приложения.
+     */
+    public static void clear() {
+        newsFeed.clear();
+        me = null;
+        token = null;
+    }
 }
