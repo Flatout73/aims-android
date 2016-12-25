@@ -112,6 +112,14 @@ public class User implements Comparable<User> {
     }
 
     /**
+     * Устанавливает E-mail пользователя.
+     * @param email E-mail пользователя.
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
      * Возвращает пол пользователя.
      * @return Пол пользователя.
      */

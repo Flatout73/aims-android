@@ -487,10 +487,6 @@ public class RequestMethods {
         if(currentToken == null) {
             throw new Exception("Ошибка подключения к серверу: пустой token.");
         }
-        User me = DataStorage.getMe();
-        if(me == null) {
-            throw new Exception("Ошибка: на устройстве не обнаружен вошедший в систему пользователь.");
-        }
         urlString = addAttribute(urlString, "token", currentToken, true);
         //urlString = addAttribute(urlString, "image", getBase64String(image), false);
         String response = Request.doRequest(urlString, getBase64String(image));
@@ -508,7 +504,7 @@ public class RequestMethods {
                 throw new Exception("Неизвестная ошибка.");
             }
             DataStorage.setToken(token);
-            me.setImage(image);
+            DataStorage.getMe().setImage(image);
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
@@ -590,6 +586,7 @@ public class RequestMethods {
                 throw new Exception("Неизвестная ошибка.");
             }
             DataStorage.setToken(token);
+            DataStorage.getMe().setEmail(email);
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
@@ -1080,7 +1077,7 @@ public class RequestMethods {
                 throw new Exception("Неизвестная ошибка.");
             }
             DataStorage.setToken(token);
-            aim.addComment(new Comment(comment, DataStorage.getMe().getLogin(), DataStorage.getMe().getName(), DataStorage.getMe().getImage(), new Date()));
+            aim.addComment(new Comment(comment, DataStorage.getMe().getLogin(), DataStorage.getMe().getName(), DataStorage.getMe().getImageMin(), new Date()));
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
