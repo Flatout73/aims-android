@@ -29,7 +29,7 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
     public SearchAdapter(Context context){
         super();
         mResult = new ArrayList<>();
-        mResult.add(new User("kek", "lol", null, 1, null, 0, 0));
+        mResult.add(new User("kek", "lol", null, 1, null, null, 0, 0));
         this.context = context;
     }
     @Override

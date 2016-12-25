@@ -36,6 +36,11 @@ public class User implements Comparable<User> {
     private Bitmap image;
 
     /**
+     * Сжатая аватарка пользователя (изображение, сохранённое в виде Bitmap).
+     */
+    private Bitmap imageMin;
+
+    /**
      * Рейтинг пользователя.
      */
     private int rating;
@@ -67,15 +72,17 @@ public class User implements Comparable<User> {
      * @param email E-mail пользователя.
      * @param sex Пол пользователя.
      * @param image Аватарка пользователя (изображение, сохранённое в виде Bitmap).
+     * @param imageMin Сжатая аватарка пользователя (изображение, сохранённое в виде Bitmap).
      * @param rating Рейтинг пользователя.
      * @param inFriends -2 - пользователь в подписчиках, -1 - пользователь в читаемых, 0 - пользователь не в друзьях, 1 - пользователь в друзьях.
      */
-    public User(String name, String login, String email, int sex, Bitmap image, int rating, int inFriends) {
+    public User(String name, String login, String email, int sex, Bitmap image, Bitmap imageMin, int rating, int inFriends) {
         this.name = name;
         this.login = login;
         this.email = email;
         this.sex = sex;
         this.image = image;
+        this.imageMin = imageMin;
         this.rating = rating;
         this.inFriends = inFriends;
     }
@@ -118,6 +125,14 @@ public class User implements Comparable<User> {
      */
     public Bitmap getImage() {
         return image;
+    }
+
+    /**
+     * Возвращает сжатую аватарку пользователя (изображение, сохранённое в виде Bitmap).
+     * @return Сжатая аватарка пользователя (изображение, сохранённое в виде Bitmap).
+     */
+    public Bitmap getImageMin() {
+        return imageMin;
     }
 
     /**
@@ -174,6 +189,14 @@ public class User implements Comparable<User> {
      */
     public void setImage(Bitmap image) {
         this.image = image;
+    }
+
+    /**
+     * Устанавливает сжатую аватарку пользователя (изображение, сохранённое в виде Bitmap).
+     * @param imageMin Сжатая аватарка пользователя (изображение, сохранённое в виде Bitmap).
+     */
+    public void setImageMin(Bitmap imageMin) {
+        this.imageMin = imageMin;
     }
 
     /**
