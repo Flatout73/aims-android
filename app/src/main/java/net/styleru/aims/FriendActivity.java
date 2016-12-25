@@ -58,6 +58,10 @@ public class FriendActivity extends AppCompatActivity {
         AimsAsync aimsAsync = new AimsAsync();
         try {
             user = aimsAsync.execute(login).get();
+            if(user == null) {
+                Toast.makeText(getApplicationContext(), "Не удалось найти пользователя", Toast.LENGTH_LONG).show();
+                finish();
+            }
         } catch (InterruptedException e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         } catch (ExecutionException e) {
