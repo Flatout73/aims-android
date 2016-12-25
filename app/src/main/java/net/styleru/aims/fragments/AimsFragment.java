@@ -105,6 +105,7 @@ public class AimsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_aims, container, false);
         NestedScrollingListView listView = (NestedScrollingListView) view.findViewById(R.id.aimsListView);
         HashMap<String, String> hm;
+        mTargetList.clear();
 
         synchronized (DataStorage.class) {
             try {

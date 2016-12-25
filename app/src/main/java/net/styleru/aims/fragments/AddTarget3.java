@@ -3,6 +3,7 @@ package net.styleru.aims.fragments;
 
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import net.styleru.aims.MainActivity;
 import net.styleru.aims.MyAim;
 import net.styleru.aims.R;
 
@@ -123,6 +125,9 @@ public class AddTarget3 extends Fragment {
                             AsyncAdd asyncAdd = new AsyncAdd();
                             if(asyncAdd.execute(aim).get()) {
                                 Snackbar.make(v, "Цель успешно добавлена", Snackbar.LENGTH_LONG);
+                                Intent inten = new Intent(getActivity(), MainActivity.class);
+                                inten.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(inten);
                             }
                             else {
                                 Snackbar.make(v, "Ошибка добавления цели", Snackbar.LENGTH_LONG);
@@ -216,7 +221,7 @@ public class AddTarget3 extends Fragment {
         protected Boolean doInBackground(MyAim... params) {
             MyAim aim = params[0];
             try {
-                RequestMethods.addAimType2(aim.getHeader(), aim.getText(), aim.getModif(), aim.getEndDate(), aim.getStartDate(), aim.getSelectionDate(), aim.getTags());
+                RequestMethods.addAimType2(aim.getHeader(), aim.getDesription(), aim.getModif(), aim.getEndDate(), aim.getStartDate(), aim.getSelectionDate(), aim.getTags());
             } catch (Exception e) {
                 return false;
             }

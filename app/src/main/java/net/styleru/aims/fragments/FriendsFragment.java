@@ -86,6 +86,8 @@ public class FriendsFragment extends Fragment {
         HashMap<String, String> hm;
         List<Aim> friendAims = DataStorage.getNewsFeed();
 
+        mTargetList.clear();
+
         if(friendAims.size() != 0) {
             try {
                 for (int i = 0; i < friendAims.size(); i++) {

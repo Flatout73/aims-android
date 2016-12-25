@@ -7,11 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.User;
@@ -59,6 +61,8 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
         }
         User user = getItem(position);
         ((TextView)convertView.findViewById(R.id.search_name)).setText(user.getName());
+        CircleImageView avatar = (de.hdodenhof.circleimageview.CircleImageView)convertView.findViewById(R.id.search_avatar);
+        avatar.setImageBitmap(user.getImageMin());
 
         return convertView;
 

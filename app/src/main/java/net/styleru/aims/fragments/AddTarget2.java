@@ -2,6 +2,7 @@ package net.styleru.aims.fragments;
 
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import net.styleru.aims.MainActivity;
 import net.styleru.aims.MyAim;
 import net.styleru.aims.R;
 
@@ -121,10 +123,13 @@ public class AddTarget2 extends Fragment {
                             aim.setMiniTargets(Integer.parseInt(tasks.getText().toString()));
                             AsyncAdd asyncAdd = new AsyncAdd();
                             if(asyncAdd.execute(aim).get()) {
-                                getActivity().finish();
+                                Snackbar.make(v, "Цель добавлена", Snackbar.LENGTH_LONG).show();
+                                Intent inten = new Intent(getActivity(), MainActivity.class);
+                                inten.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(inten);
                             }
                             else {
-                                Snackbar.make(v, "Заполните все поля", Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(v, "Ошибка добавления цели", Snackbar.LENGTH_LONG).show();
                             }
                         } catch (NumberFormatException ex) {
                             Snackbar.make(v, "Введите число в поле Количество задач", Snackbar.LENGTH_LONG).show();

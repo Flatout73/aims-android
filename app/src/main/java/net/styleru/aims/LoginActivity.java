@@ -354,7 +354,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             } catch (InterruptedException e) {
                 return false;
             } catch (Exception e) {
-                Snackbar.make(mLoginFormView, e.getMessage(), Snackbar.LENGTH_LONG).show();
+                //Snackbar.make(mLoginFormView, e.getMessage(), Snackbar.LENGTH_LONG).show();
                 return false;
             }
 
