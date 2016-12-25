@@ -28,6 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/add_to_friend"
+        android:onClick="addToFriend"
+        android:layout_centerHorizontal="true"
         android:text="Добавить в друзья"/>
 
     <LinearLayout
@@ -39,7 +41,7 @@
         android:layout_alignParentRight="true">
 
         <net.styleru.aims.fragments.NestedScrollingListView
-            android:id="@+id/aimsListView"
+            android:id="@+id/friends_ListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></net.styleru.aims.fragments.NestedScrollingListView>
 

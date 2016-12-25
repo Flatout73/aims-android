@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, FriendActivity.class);
-               // intent.putExtra("User", searchAdapter.getUser(position));
+                intent.putExtra("User", searchAdapter.getUser(position).getLogin());
                 startActivity(intent);
             }
 
@@ -405,6 +405,8 @@ public class MainActivity extends AppCompatActivity
         EditText name = (EditText) findViewById(R.id.set_name);
         EditText surname = (EditText) findViewById(R.id.set_surname);
 
+        Snackbar.make(view, "Будет реализвано позже! Успехов!", Snackbar.LENGTH_LONG).show();
+
     }
 
     public void changeEmailPassword(final View view) {
@@ -412,7 +414,47 @@ public class MainActivity extends AppCompatActivity
         final EditText password = (EditText) findViewById(R.id.set_password);
 
         if(email.getText() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("E-mail");
+            builder.setMessage("Введить старый адрес электронной почты");
+            final EditText input = new EditText(MainActivity.this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            input.setLayoutParams(lp);
+            builder.setView(input);
 
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    oldPassword = input.getText().toString();
+                    ChangeEmail changeEmail = new ChangeEmail();
+                    try {
+                        if(changeEmail.execute(password.getText().toString(), oldPassword).get()) {
+                            Toast.makeText(MainActivity.this.getApplicationContext(), "E-mail успешно изменен", Toast.LENGTH_LONG).show();
+                            password.setText("");
+                        }
+                        else {
+                            Snackbar.make(view, "Не удалось изменить E-mail", Snackbar.LENGTH_LONG).show();
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+            builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
         }
 
         if(password.getText() != null) {
@@ -495,6 +537,29 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
             return  true;
+        }
+    }
+
+    class ChangeEmail extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            try {
+                RequestMethods.changeMail(params[0], params[1]);
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
+        }
+    }
+
+    class ChangeName extends AsyncTask<String, Void, Boolean> {
+
+
+        //TODO: do change name
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return true;
         }
     }
 }
