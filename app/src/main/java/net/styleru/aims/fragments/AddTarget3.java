@@ -23,6 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import ru.aimsproject.connectionwithbackend.RequestMethods;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -116,10 +118,18 @@ public class AddTarget3 extends Fragment {
                     case R.id.button_add_target:
                         try {
                             MyAim aim = new MyAim(header.getText().toString(), description.getText().toString(), type, end, start, tags.getText().toString());
-                           // aim.setSelectionDate(new Date(Integer.parseInt(da)));
+                            int sumMin = Integer.parseInt(days.getText().toString()) * 24 + Integer.parseInt(hours.getText().toString()) * 60 + Integer.parseInt(minuts.getText().toString());
+                            aim.setSelectionDate(sumMin);
+                            AsyncAdd asyncAdd = new AsyncAdd();
+                            if(asyncAdd.execute(aim).get()) {
+                                Snackbar.make(v, "Цель успешно добавлена", Snackbar.LENGTH_LONG);
+                            }
+                            else {
+                                Snackbar.make(v, "Ошибка добавления цели", Snackbar.LENGTH_LONG);
+                            }
 
                         } catch (NumberFormatException ex) {
-                            Snackbar.make(v, "Введите число в поле Количество задач", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(v, "Введите числа в поля интервала", Snackbar.LENGTH_LONG).show();
                         }
                         catch (Exception e) {
                             Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
@@ -204,8 +214,13 @@ public class AddTarget3 extends Fragment {
 
         @Override
         protected Boolean doInBackground(MyAim... params) {
-           // RequestMethods.addAimType2();
-            return false;
+            MyAim aim = params[0];
+            try {
+                RequestMethods.addAimType2(aim.getHeader(), aim.getText(), aim.getModif(), aim.getEndDate(), aim.getStartDate(), aim.getSelectionDate(), aim.getTags());
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
         }
     }
 }

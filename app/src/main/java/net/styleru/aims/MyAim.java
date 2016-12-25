@@ -47,7 +47,7 @@ public class MyAim {
 
     private int miniTargets;
 
-    private Date selectionDate;
+    private int selectionDate;
 
     public MyAim(String header, String desription, int type, Date end, Date start, String tags) {
         this.header = header;
@@ -103,11 +103,11 @@ public class MyAim {
         this.miniTargets = miniTargets;
     }
 
-    public Date getSelectionDate() {
+    public int getSelectionDate() {
         return selectionDate;
     }
 
-    public void setSelectionDate(Date selectionDate) {
+    public void setSelectionDate(int selectionDate) {
         this.selectionDate = selectionDate;
     }
 }
