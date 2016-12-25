@@ -31,6 +31,7 @@ class Request {
             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
             if(imageBase64String != null) {
                 httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 httpURLConnection.setRequestProperty("token", token);
                 httpURLConnection.setRequestProperty("image", imageBase64String);
             }
