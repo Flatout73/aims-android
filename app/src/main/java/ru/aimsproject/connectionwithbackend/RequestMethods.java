@@ -1087,7 +1087,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        urlString = addAttribute(urlString, "date", getCSharpDateString(getUTCDate(aim.getDate())), false);
+        urlString = addAttribute(urlString, "dateAim", getCSharpDateString(getUTCDate(aim.getDate())), false);
         urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
         urlString = addAttribute(urlString, "comment", comment, false);
         String response = Request.doRequest(urlString, null, null);
