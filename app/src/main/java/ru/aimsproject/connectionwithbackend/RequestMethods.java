@@ -284,7 +284,7 @@ public class RequestMethods {
      * @param jsonObjectUser Объект JSON для парсинга.
      * @param needEmail Показывает, нужно ли парсить E-mail пользователя.
      * @param needRating Показывает, нужно ли парсить рейтинг пользователя.
-     * @param inFriends -2 - пользователь в подписчиках, -1 - пользователь в читаемых, 0 - пользователь не в друзьях, 1 - пользователь в друзьях.
+     * @param inFriends -2 - пользователь в читаемых, -1 - пользователь в подписчиках, 0 - пользователь не в друзьях, 1 - пользователь в друзьях.
      * @return Объект пользователя.
      * @throws JSONException Возникает, если формат JSON-объекта некорректный.
      */
@@ -488,7 +488,6 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token.");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        //urlString = addAttribute(urlString, "image", getBase64String(image), false);
         String response = Request.doRequest(urlString, getBase64String(image));
         JSONObject jsonObject;
         try {
@@ -1189,7 +1188,6 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "proofText", proofText, false);
         Date proofDate = new Date();
         urlString = addAttribute(urlString, "dateProof", getCSharpDateString(getUTCDate(proofDate)), false);
-        //urlString = addAttribute(urlString, "image", getBase64String(image), false);
         String response = Request.doRequest(urlString, getBase64String(image));
         JSONObject jsonObject;
         try {
@@ -1449,7 +1447,7 @@ public class RequestMethods {
             JSONArray users = jsonObject.getJSONArray("Users");
             DataStorage.getFriendshipRequests().clear();
             for(int i = 0; i < users.length(); i++) {
-                DataStorage.getFriendshipRequests().add(parseUser(users.getJSONObject(i), false, false, -2));
+                DataStorage.getFriendshipRequests().add(parseUser(users.getJSONObject(i), false, false, -1));
             }
         }
         catch (JSONException ex) {
