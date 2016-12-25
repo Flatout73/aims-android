@@ -375,7 +375,7 @@ public class RequestMethods {
         urlString += "login/";
         urlString = addAttribute(urlString, "login", userLogin, true);
         urlString = addAttribute(urlString, "hashpsd", hashPsd, false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -418,7 +418,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "email", email, false);
         urlString = addAttribute(urlString, "name", name, false);
         urlString = addAttribute(urlString, "sex", sex, false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -452,7 +452,7 @@ public class RequestMethods {
         String urlString = userURL;
         urlString += "resetpsd/";
         urlString = addAttribute(urlString, "email", email, true);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -487,8 +487,7 @@ public class RequestMethods {
         if(currentToken == null) {
             throw new Exception("Ошибка подключения к серверу: пустой token.");
         }
-        urlString = addAttribute(urlString, "token", currentToken, true);
-        String response = Request.doRequest(urlString, getBase64String(image));
+        String response = Request.doRequest(urlString, getBase64String(image), currentToken);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -527,7 +526,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "lasthashpsd", lastHashPsd, false);
         urlString = addAttribute(urlString, "hashpsd", hashPsd, false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -567,7 +566,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "email", email, false);
         urlString = addAttribute(urlString, "lastemail", lastEmail, false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -607,7 +606,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", userLogin, false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -649,7 +648,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -700,7 +699,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -755,7 +754,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "date", getCSharpDateString(getUTCDate(date)), false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -819,7 +818,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "tags", tags, false);
         Aim newAim = new AimType1(new ArrayList<Aim>(), text, header, 1, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, 0, new ArrayList<Comment>(), new ArrayList<Proof>());
         DataStorage.getMe().addAim(newAim);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -871,7 +870,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "tags", tags, false);
         Aim newAim = new AimType2(new ArrayList<Aim>(), text, header, 2, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, 0, new ArrayList<Comment>(), new ArrayList<Proof>(), dateSection);
         DataStorage.getMe().addAim(newAim);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -923,7 +922,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "tags", tags, false);
         Aim newAim = new AimType3(new ArrayList<Aim>(), text, header, 3, 0, mode, DataStorage.getMe(), new Date(), startDate, endDate, 0, 0, 0, new ArrayList<Comment>(), new ArrayList<Proof>(), AllTasks, 0);
         DataStorage.getMe().addAim(newAim);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -963,7 +962,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
         urlString = addAttribute(urlString, "date", getCSharpDateString(getUTCDate(aim.getDate())), false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1019,7 +1018,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "date", getCSharpDateString(getUTCDate(aim.getDate())), false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1058,7 +1057,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "date", getCSharpDateString(getUTCDate(aim.getDate())), false);
         urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
         urlString = addAttribute(urlString, "comment", comment, false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1098,7 +1097,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
         urlString = addAttribute(urlString, "date", getCSharpDateString(getUTCDate(aim.getDate())), false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1141,7 +1140,7 @@ public class RequestMethods {
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", aim.getAuthor().getLogin(), false);
         urlString = addAttribute(urlString, "date", getCSharpDateString(getUTCDate(aim.getDate())), false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1183,12 +1182,11 @@ public class RequestMethods {
         if(currentToken == null) {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
-        urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "date", getCSharpDateString(getUTCDate(aim.getDate())), false);
         urlString = addAttribute(urlString, "proofText", proofText, false);
         Date proofDate = new Date();
         urlString = addAttribute(urlString, "dateProof", getCSharpDateString(getUTCDate(proofDate)), false);
-        String response = Request.doRequest(urlString, getBase64String(image));
+        String response = Request.doRequest(urlString, getBase64String(image), currentToken);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1225,7 +1223,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", user.getLogin(), false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1263,7 +1261,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", user.getLogin(), false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1304,7 +1302,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", user.getLogin(), false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1346,7 +1344,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", user.getLogin(), false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1388,7 +1386,7 @@ public class RequestMethods {
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
         urlString = addAttribute(urlString, "userlogin", user.getLogin(), false);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
@@ -1429,7 +1427,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
-        String response = Request.doRequest(urlString, null);
+        String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(response);
