@@ -592,6 +592,42 @@ public class RequestMethods {
     }
 
     /**
+     * Метод для изменения имени пользователя.
+     * @param name Новое имя пользователя.
+     * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     */
+    public static void changeName(String name) throws Exception {
+        String urlString = userURL;
+        urlString += "changename/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "name", name, false);
+        String response = Request.doRequest(urlString, null, null);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            DataStorage.getMe().setName(name);
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    /**
      * Метод для поиска пользователя по логину.
      * @param userLogin Логин искомого пользователя.
      * @return Возвращает найденного пользователя.
@@ -617,9 +653,6 @@ public class RequestMethods {
                 }
                 if(token.equals("Token Error")) {
                     throw new Exception("Неправильный токен.");
-                }
-                if(token.equals("User Error")) {
-                    throw new Exception("Не существует пользователя с таким или похожим логином."); // Подумать, не лучше ли возвращать просто пустой список.
                 }
                 throw new Exception("Неизвестная ошибка.");
             }
@@ -1088,6 +1121,9 @@ public class RequestMethods {
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось или данный пользователь уже ставил лайк к данной цели.
      */
     public static void likeAim(Aim aim) throws Exception {
+        if(aim.getLiked() == -1) {
+            dislikeAim(aim);
+        }
         String urlString = likesURL;
         urlString += "likes/";
         String currentToken = DataStorage.getToken();
@@ -1112,9 +1148,6 @@ public class RequestMethods {
                 if(token.equals("User Error")) {
                     throw new Exception("Такого пользователя не существует.");
                 }
-                if(token.equals("Like Error")) {
-                    throw new Exception("Вы уже ставили лайк к этой цели.");
-                }
                 throw new Exception("Неизвестная ошибка.");
             }
             DataStorage.setToken(token);
@@ -1130,7 +1163,10 @@ public class RequestMethods {
      * @param aim Цель для дислайка.
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось или данный пользователь уже ставил дислайк к данной цели.
      */
-    public void dislikeAim(Aim aim) throws Exception {
+    public static void dislikeAim(Aim aim) throws Exception {
+        if(aim.getLiked() == 1) {
+            likeAim(aim);
+        }
         String urlString = likesURL;
         urlString += "dislikes/";
         String currentToken = DataStorage.getToken();
@@ -1155,9 +1191,6 @@ public class RequestMethods {
                 if(token.equals("User Error")) {
                     throw new Exception("Такого пользователя не существует.");
                 }
-                if(token.equals("Dislike Error")) {
-                    throw new Exception("Вы уже ставили дислайк к этой цели.");
-                }
                 throw new Exception("Неизвестная ошибка.");
             }
             DataStorage.setToken(token);
@@ -1175,7 +1208,7 @@ public class RequestMethods {
      * @param image Фотография подтверждения выполнения цели.
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
      */
-    public void addProofPhoto(Aim aim, String proofText, Bitmap image) throws Exception {
+    public static void addProofPhoto(Aim aim, String proofText, Bitmap image) throws Exception {
         String urlString = proofsURL;
         urlString += "addproofphoto/";
         String currentToken = DataStorage.getToken();
@@ -1358,9 +1391,6 @@ public class RequestMethods {
                 }
                 if(token.equals("User Error")) {
                     throw new Exception("Такого пользователя не существует.");
-                }
-                if(token.equals("Friend Error")) {
-                    throw new Exception("У Вас нет этого друга.");
                 }
                 throw new Exception("Неизвестная ошибка.");
             }

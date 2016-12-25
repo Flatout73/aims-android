@@ -532,14 +532,34 @@ public abstract class Aim implements Comparable<Aim>/*, Parcelable*/ {
      * Добавляет лайк к цели.
      */
     public void addLike() {
-        likes++;
+        if(liked == 1) {
+            likes--;
+            liked = 0;
+        }
+        else {
+            if(liked == -1) {
+                dislikes--;
+            }
+            likes++;
+            liked = 1;
+        }
     }
 
     /**
      * Добавляет дислайк к цели.
      */
     public void addDislike() {
-        dislikes++;
+        if(liked == -1) {
+            dislikes--;
+            liked = 0;
+        }
+        else {
+            if(liked == 1) {
+                likes--;
+            }
+            dislikes++;
+            liked = -1;
+        }
     }
 
     /**
