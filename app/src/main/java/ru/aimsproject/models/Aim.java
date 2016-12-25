@@ -1,5 +1,8 @@
 package ru.aimsproject.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +13,7 @@ import ru.aimsproject.exceptions.*;
  * Created by Антон on 27.10.2016.
  * Представляет цель. Абстрактный класс.
  */
-public abstract class Aim implements Comparable<Aim> {
+public abstract class Aim implements Comparable<Aim>/*, Parcelable*/ {
     /**
      * Список подцелей.
      */
@@ -575,4 +578,9 @@ public abstract class Aim implements Comparable<Aim> {
             return false;
         }
     }
+
+    /*@Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+    }*/
 }
