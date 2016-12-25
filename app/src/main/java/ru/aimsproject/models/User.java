@@ -96,6 +96,14 @@ public class User implements Comparable<User> {
     }
 
     /**
+     * Устанавливает имя пользователя.
+     * @param name Имя пользователя.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * Возвращает логин пользователя.
      * @return Логин пользователя.
      */
