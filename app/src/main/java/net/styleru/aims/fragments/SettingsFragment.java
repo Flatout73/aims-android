@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 
 import net.styleru.aims.R;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import ru.aimsproject.data.DataStorage;
+import ru.aimsproject.models.User;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SettingsFragment#newInstance} factory method to
@@ -23,6 +27,8 @@ public class SettingsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    User me;
 
 
     public SettingsFragment() {
@@ -54,13 +60,23 @@ public class SettingsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        me = DataStorage.getMe();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        RoundedImageView avatarSettings = (RoundedImageView) view.findViewById(R.id.settings_avatar);
+
+        if(me.getImage() != null) {
+            avatarSettings.setImageBitmap(me.getImage());
+        }
+
+        return view;
     }
 
 }

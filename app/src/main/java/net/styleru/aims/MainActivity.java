@@ -40,6 +40,7 @@ import net.styleru.aims.fragments.AimsFragment;
 import net.styleru.aims.fragments.Alert;
 import net.styleru.aims.fragments.FriendsFragment;
 import net.styleru.aims.fragments.NestedScrollingListView;
+import net.styleru.aims.fragments.RoundedImageView;
 import net.styleru.aims.fragments.SettingsFragment;
 
 import java.io.IOException;
@@ -384,7 +385,7 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         Bitmap bitmap = null;
-        ImageView image = (ImageView) findViewById(R.id.settings_avatar);
+        RoundedImageView image = (RoundedImageView) findViewById(R.id.settings_avatar);
 
         switch (requestCode) {
             case GALLERY_REQUEST:
@@ -396,9 +397,23 @@ public class MainActivity extends AppCompatActivity
                         e.printStackTrace();
                     }
                     image.setImageBitmap(bitmap);
-                    changeImage(image);
+
+                    ChangeImage changeImage = new ChangeImage();
+                    try {
+                        if(changeImage.execute(bitmap).get()) {
+                            Toast.makeText(getApplicationContext(), "Картинка успешно изменена", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "Не удалось изменить картинку", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void change_name(View view) {
@@ -559,6 +574,19 @@ public class MainActivity extends AppCompatActivity
         //TODO: do change name
         @Override
         protected Boolean doInBackground(String... params) {
+            return true;
+        }
+    }
+
+    class ChangeImage extends AsyncTask<Bitmap, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Bitmap... params) {
+            try {
+                RequestMethods.changeImage(params[0]);
+            } catch (Exception e) {
+                return false;
+            }
             return true;
         }
     }
