@@ -23,7 +23,7 @@ class Request {
      * @param urlString URL-адрес для запроса.
      * @return Возвращает строку, полученную от сервера. Если запрос некорректен, то null.
      */
-    static String doRequest(String urlString, String imageBase64String) throws Exception {
+    static String doRequest(String urlString, String imageBase64String, String token) throws Exception {
         urlString = domain + urlString;
         String response = null;
         try {
@@ -31,6 +31,7 @@ class Request {
             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
             if(imageBase64String != null) {
                 httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setRequestProperty("token", token);
                 httpURLConnection.setRequestProperty("image", imageBase64String);
             }
             else {
