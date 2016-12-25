@@ -102,6 +102,7 @@ public class RegisteredActivity extends AppCompatActivity {
                 edit.apply();
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                Snackbar.make(mContentView, "Вы зарегистрированы", Snackbar.LENGTH_LONG);
             } else {
                 Snackbar.make(mContentView, "Что-то пошло не так", Snackbar.LENGTH_LONG);
             }

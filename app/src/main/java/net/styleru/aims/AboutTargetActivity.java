@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,7 +63,13 @@ public class AboutTargetActivity extends AppCompatActivity {
         setTitle(aim.getHeader());
 
 
-        NestedScrollingListView comments = (NestedScrollingListView) findViewById(R.id.comments);
+        ListView comments = (ListView) findViewById(R.id.comments);
+
+        CardView descriptionCard = (CardView) findViewById(R.id.card_target);
+        CardView proofsCars = (CardView) findViewById(R.id.target_proofs);
+
+     //   comments.addHeaderView(descriptionCard);
+       // comments.addHeaderView(proofsCars);
 
         commentList = aim.getComments();
 
@@ -79,16 +86,16 @@ public class AboutTargetActivity extends AppCompatActivity {
             commentList.add(new Comment("kek", "leonid", "Leo", null, null));
             commentList.add(new Comment("kek", "leonid", "Le", null, null));
         }
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+        tvProgressHorizontal.setText("20%");
 
         comments.setAdapter(new CommentsAdapter(this, R.layout.comment_item, commentList));
-        comments.setNestedScrollingEnabled(true);
+    //    comments.setNestedScrollingEnabled(true);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-        tvProgressHorizontal.setText("20%");
     }
 
     @Override
