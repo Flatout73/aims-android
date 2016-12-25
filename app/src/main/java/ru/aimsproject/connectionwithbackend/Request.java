@@ -23,13 +23,16 @@ class Request {
      * @param urlString URL-адрес для запроса.
      * @return Возвращает строку, полученную от сервера. Если запрос некорректен, то null.
      */
-    static String doRequest(String urlString) throws Exception {
+    static String doRequest(String urlString, String imageBase64String) throws Exception {
         urlString = domain + urlString;
         String response = null;
         try {
             URL url = new URL(urlString);
             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setRequestMethod("GET");
+            if(imageBase64String != null) {
+                httpURLConnection.setRequestProperty("image", imageBase64String);
+            }
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             response = "";
             String nextLine;
