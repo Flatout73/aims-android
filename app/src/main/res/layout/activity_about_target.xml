@@ -17,26 +17,24 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
         android:padding="8dp">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_target"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways"
         android:layout_weight="1">
 
         <RelativeLayout
@@ -140,14 +138,13 @@
 
     </android.support.v7.widget.CardView>
 
-        <net.styleru.aims.NestedScrollingChildViews
+        <net.styleru.aims.fragments.NestedScrollingListView
             android:id="@+id/comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-        </net.styleru.aims.NestedScrollingChildViews>
+        </net.styleru.aims.fragments.NestedScrollingListView>
 
     </LinearLayout>
-    </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
