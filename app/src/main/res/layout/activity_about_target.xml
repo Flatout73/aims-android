@@ -10,15 +10,14 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:layout_scrollFlags="scroll|enterAlways">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:layout_collapseMode="pin"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -141,13 +140,13 @@
 
     </android.support.v7.widget.CardView>
 
-        <net.styleru.aims.fragments.NestedScrollingListView
+        <net.styleru.aims.NestedScrollingChildViews
             android:id="@+id/comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-        </net.styleru.aims.fragments.NestedScrollingListView>
+        </net.styleru.aims.NestedScrollingChildViews>
 
     </LinearLayout>
     </ScrollView>
