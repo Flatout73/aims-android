@@ -9,13 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.styleru.aims.R;
+import net.styleru.aims.fragments.NestedScrollingListView;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
+import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.*;
 
@@ -29,6 +34,8 @@ public class AboutTargetActivity extends AppCompatActivity {
     ProgressBar progressBar;
     TextView tvProgressHorizontal;
 
+    List<Comment> commentList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +48,7 @@ public class AboutTargetActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.target_progressBar);
         tvProgressHorizontal = (TextView) findViewById(R.id.progress_horizontal);
 
+//        aim = (Aim) getIntent().getExtras().get("aim");
         id = getIntent().getExtras().getInt(ID);
         int type = getIntent().getExtras().getInt("type");
 
@@ -52,6 +60,28 @@ public class AboutTargetActivity extends AppCompatActivity {
         }
 
         setTitle(aim.getHeader());
+
+
+        NestedScrollingListView comments = (NestedScrollingListView) findViewById(R.id.comments);
+
+        commentList = aim.getComments();
+
+        if(commentList.isEmpty()) {
+            commentList.add(new Comment("kekes", "leonid", "Leonid", null, null));
+            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+            commentList.add(new Comment("kek", "leonid", "Le", null, null));
+            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+            commentList.add(new Comment("kek", "leonid", "Le", null, null));
+            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+            commentList.add(new Comment("kek", "leonid", "Le", null, null));
+            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+            commentList.add(new Comment("kek", "leonid", "Le", null, null));
+        }
+
+        comments.setAdapter(new CommentsAdapter(this, R.layout.comment_item, commentList));
+        comments.setNestedScrollingEnabled(true);
     }
 
     @Override

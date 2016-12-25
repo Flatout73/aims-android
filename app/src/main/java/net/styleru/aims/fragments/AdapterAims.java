@@ -49,7 +49,7 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
 
     int resource;
 
-    AdapterAims(Context context, int resource, List<HashMap<String, String>> data){
+    public AdapterAims(Context context, int resource, List<HashMap<String, String>> data){
         super(context, resource, data);
 
         this.context = context;

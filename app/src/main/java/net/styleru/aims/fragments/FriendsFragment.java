@@ -105,6 +105,13 @@ public class FriendsFragment extends Fragment {
             empty.setVisibility(View.VISIBLE);
         }
 
+        hm = new HashMap<>();
+        hm.put(TITLE, "Header");
+        hm.put(DATE, "12.12.16");
+        hm.put(DESCRIPTION, "kek");
+        mTargetList.add(hm);
+
+
         AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item_2, mTargetList);
         listView.setAdapter(adapterAims);
         listView.setOnItemClickListener(itemClickListener);
@@ -118,6 +125,7 @@ public class FriendsFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             Intent intent = new Intent(getActivity(), AboutTargetActivity.class);
+//            intent.putExtra("aim", mTargetList.get(i));
             intent.putExtra(ID, i);
             intent.putExtra("type", 1);
             startActivity(intent);

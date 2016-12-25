@@ -8,11 +8,11 @@
             <!--android:title="@string/my_page" />-->
         <item
             android:id="@+id/target_control"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_home_black"
             android:title="@string/my_page" />
         <item
             android:id="@+id/friends"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_list_black"
             android:title="@string/friends" />
         <item
             android:id="@+id/nav_manage"
