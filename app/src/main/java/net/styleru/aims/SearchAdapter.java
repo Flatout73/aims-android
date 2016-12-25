@@ -26,6 +26,10 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
     private List<User> mResult;
     private Context context;
 
+    public User getUser(int i) {
+        return mResult.get(i);
+    }
+
     public SearchAdapter(Context context){
         super();
         mResult = new ArrayList<>();

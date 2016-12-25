@@ -32,4 +32,6 @@
     <string name="title_activity_about_target">AboutTargetActivity</string>
     <string name="title_activity_registered">Регистрация</string>
     <string name="title_activity_add_target">AddTarget</string>
+    <string name="title_activity_friend_profile">FriendProfileActivity</string>
+    <string name="title_activity_friend">FriendActivity</string>
 </resources>

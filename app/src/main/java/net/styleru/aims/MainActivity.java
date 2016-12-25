@@ -2,6 +2,7 @@ package net.styleru.aims;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.app.FragmentTransaction;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -27,12 +29,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import net.styleru.aims.fragments.AimsFragment;
+import net.styleru.aims.fragments.Alert;
 import net.styleru.aims.fragments.FriendsFragment;
 import net.styleru.aims.fragments.NestedScrollingListView;
 import net.styleru.aims.fragments.SettingsFragment;
@@ -76,6 +81,8 @@ public class MainActivity extends AppCompatActivity
 
         MenuItem searchMenuItem;
         SearchView mSearchView;
+
+        String oldPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -294,6 +301,15 @@ public class MainActivity extends AppCompatActivity
         searchView.setVisibility(View.VISIBLE);
         findViewById(R.id.container).setVisibility(View.GONE);
         searchView.setAdapter(searchAdapter);
+        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, FriendActivity.class);
+               // intent.putExtra("User", searchAdapter.getUser(position));
+                startActivity(intent);
+            }
+
+        });
         return true;
     }
 
@@ -352,7 +368,7 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        DataStorage.setToken(null);
+        DataStorage.clear();
         finish();
     }
 
@@ -391,9 +407,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void changeEmailPassword(View view) {
+    public void changeEmailPassword(final View view) {
         EditText email = (EditText) findViewById(R.id.set_email);
-        EditText password = (EditText) findViewById(R.id.set_password);
+        final EditText password = (EditText) findViewById(R.id.set_password);
 
         if(email.getText() != null) {
 
@@ -401,13 +417,48 @@ public class MainActivity extends AppCompatActivity
 
         if(password.getText() != null) {
             try {
-                ChangePassword changePsw = new ChangePassword();
-                if(changePsw.execute(password.getText().toString()).get()) {
-                    Snackbar.make(view, "Пароль успешно изменен", Snackbar.LENGTH_LONG).show();
-                }
-                else {
-                    Snackbar.make(view, "Не удалось изменить пароль", Snackbar.LENGTH_LONG).show();
-                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Пароль");
+                builder.setMessage("Введить старый пароль");
+                final EditText input = new EditText(MainActivity.this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        oldPassword = input.getText().toString();
+                        ChangePassword changePsw = new ChangePassword();
+                        try {
+                            if(changePsw.execute(password.getText().toString(), oldPassword).get()) {
+                                Toast.makeText(MainActivity.this.getApplicationContext(), "Пароль успешно изменен", Toast.LENGTH_LONG).show();
+                                password.setText("");
+                            }
+                            else {
+                                Snackbar.make(view, "Не удалось изменить пароль", Snackbar.LENGTH_LONG).show();
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+
+                builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
             } catch (Exception e) {
                 Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
             }
@@ -439,7 +490,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected Boolean doInBackground(String... params) {
             try {
-                RequestMethods.changePsd(params[0]);
+                RequestMethods.changePsd(params[1], params[0]);
             } catch (Exception e) {
                 return false;
             }

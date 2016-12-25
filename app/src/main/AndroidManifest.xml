@@ -11,14 +11,14 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:largeHeap="true"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode= "singleInstance">
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,6 +58,14 @@
             android:name=".AddTarget"
             android:label="@string/title_activity_add_target"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.styleru.aims.MainActivity" />
+        </activity>
+        <activity
+            android:name=".FriendActivity"
+            android:label="@string/title_activity_friend"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
