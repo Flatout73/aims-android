@@ -29,9 +29,12 @@ class Request {
         try {
             URL url = new URL(urlString);
             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-            httpURLConnection.setRequestMethod("GET");
             if(imageBase64String != null) {
+                httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setRequestProperty("image", imageBase64String);
+            }
+            else {
+                httpURLConnection.setRequestMethod("GET");
             }
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             response = "";
