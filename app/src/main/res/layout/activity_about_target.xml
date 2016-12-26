@@ -49,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="8dp"
+                android:textSize="16sp"
                 android:text="Выучить 1005000 бесполезных билетов по истории чтобы ее не завалить и не вылетить кек" />
 
             <ProgressBar
@@ -99,6 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:text="Нет подтверждений"/>
 
             <!--<LinearLayout-->
@@ -141,6 +143,62 @@
                 android:layout_below="@+id/proofs"
                 android:layout_marginTop="8dp"
                 android:text="Подтвердить" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/target_submit"
+                android:padding="8dp">
+                <TextView
+                    android:id="@+id/date_about"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:text="Выполнить до: "/>
+
+
+                <TextView
+                    android:id="@+id/dislike_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_centerVertical="true"
+                    android:text="1"/>
+
+                <ImageButton
+                    android:id="@+id/dislike_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_dislike"
+                    android:layout_marginEnd="8dp"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:onClick="disliked"
+                    android:layout_toStartOf="@id/dislike_text"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@id/dislike_image"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/like_text" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_like"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:layout_toStartOf="@id/like_text"
+                    android:layout_centerVertical="true"
+                    android:onClick="liked"
+                    android:id="@+id/like_image"/>
+            </RelativeLayout>
 
 
         </RelativeLayout>

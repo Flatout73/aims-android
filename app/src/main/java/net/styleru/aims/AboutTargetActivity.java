@@ -1,6 +1,7 @@
 package net.styleru.aims;
 
 import android.graphics.Shader;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,14 +18,18 @@ import android.widget.TextView;
 import net.styleru.aims.R;
 import net.styleru.aims.fragments.NestedScrollingListView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.*;
 
+import static net.styleru.aims.fragments.AimsFragment.DATE;
 import static net.styleru.aims.fragments.AimsFragment.ID;
 
 public class AboutTargetActivity extends AppCompatActivity {
@@ -39,6 +44,8 @@ public class AboutTargetActivity extends AppCompatActivity {
     List<Comment> commentList;
 
     TextView textProgress;
+
+    TextView date, likes, dislikes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +82,11 @@ public class AboutTargetActivity extends AppCompatActivity {
 
         targetDescription = (TextView) findViewById(R.id.target_description);
 
+        date = (TextView) findViewById(R.id.date_about);
+        likes = (TextView) findViewById(R.id.like_text);
+        dislikes = (TextView) findViewById(R.id.dislike_text);
+
+
      //   comments.addHeaderView(descriptionCard);
        // comments.addHeaderView(proofsCars);
 
@@ -109,6 +121,21 @@ public class AboutTargetActivity extends AppCompatActivity {
         textProgress.setText(progress/100000000 + "/" + allTime/100000000);
 
         targetDescription.setText(aim.getText());
+
+
+        SimpleDateFormat format = new SimpleDateFormat();
+        format.applyPattern("EEE MMM dd HH:mm:ss z yyyy");
+        Date aimDate = null;
+        try {
+            aimDate = format.parse(aim.getEndDate().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat printDate = new SimpleDateFormat("dd.MM.yyyy");
+        date.setText("Выполнить до: " + printDate.format(aimDate));
+
+        likes.setText("" + aim.getLikes());
+        dislikes.setText("" + aim.getDislikes());
     }
 
     @Override
@@ -118,5 +145,66 @@ public class AboutTargetActivity extends AppCompatActivity {
             finish();
         }
         return true;
+    }
+
+    public void liked(View view) {
+        AsyncLike like = new AsyncLike();
+
+        try {
+            String res = like.execute(aim).get();
+            if(res.equals("")) {
+                likes.setText(aim.getLikes());
+            }
+            else {
+                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void disliked(View view) {
+        AsyncDisLike disLike = new AsyncDisLike();
+        try {
+            String res = disLike.execute(aim).get();
+            if(res.equals("")) {
+                dislikes.setText(aim.getDislikes());
+            }
+            else {
+                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class AsyncLike extends AsyncTask<Aim, Void, String> {
+
+        @Override
+        protected String doInBackground(Aim... params) {
+            try {
+                RequestMethods.likeAim(params[0]);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            return "";
+        }
+    }
+
+    class AsyncDisLike extends AsyncTask<Aim, Void, String> {
+
+        @Override
+        protected String doInBackground(Aim... params) {
+            try {
+                RequestMethods.dislikeAim(params[0]);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            return "";
+        }
     }
 }
