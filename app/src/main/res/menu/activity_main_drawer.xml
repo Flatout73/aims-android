@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <!--<item-->
-            <!--android:id="@+id/my_page"-->
-            <!--android:icon="@drawable/ic_menu_camera"-->
-            <!--android:title="@string/my_page" />-->
         <item
             android:id="@+id/target_control"
             android:icon="@drawable/ic_home_black"
+            android:title="@string/my_page" />
+        <item
+            android:id="@+id/my_page"
+            android:icon="@drawable/ic_menu_friend"
             android:title="@string/my_page" />
         <item
             android:id="@+id/friends"

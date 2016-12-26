@@ -4,39 +4,27 @@
     android:layout_height="match_parent"
     tools:context="net.styleru.aims.fragments.PageFragment">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/user">
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/avatar"
-        android:src="@android:drawable/sym_def_app_icon"/>
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/avatar"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/avatar"
-        android:text="Антон Ригин"
-        android:layout_marginLeft="30dp"
-        android:id="@+id/name_user"
-        android:textSize="15pt"/>
-
-    </RelativeLayout>
+        android:text="У вас нет друзей"
+        android:layout_centerInParent="true"
+        android:id="@+id/empty_friends"
+        android:visibility="gone"
+        android:textSize="14pt"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/user"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/alerts_list"

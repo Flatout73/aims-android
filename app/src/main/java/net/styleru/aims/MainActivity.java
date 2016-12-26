@@ -1,6 +1,5 @@
 package net.styleru.aims;
 
-import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,8 +18,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -43,9 +40,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.styleru.aims.fragments.AimsFragment;
-import net.styleru.aims.fragments.Alert;
 import net.styleru.aims.fragments.FriendsFragment;
-import net.styleru.aims.fragments.NestedScrollingListView;
+import net.styleru.aims.fragments.PageFragment;
 import net.styleru.aims.fragments.RoundedImageView;
 import net.styleru.aims.fragments.SettingsFragment;
 
@@ -66,7 +62,7 @@ public class MainActivity extends AppCompatActivity
 
 
         static final int GALLERY_REQUEST = 1;
-        //PageFragment pageFr;
+        PageFragment pageFr;
         AimsFragment aimsFr;
         FriendsFragment friendFr;
         SettingsFragment settingFr;
@@ -144,7 +140,7 @@ public class MainActivity extends AppCompatActivity
 
         //fragmentStack = new Stack<Fragment>();
 
-        //pageFr = PageFragment.newInstance("kek", "lol");
+        pageFr = PageFragment.newInstance("kek", "lol");
         aimsFr = AimsFragment.newInstance("kek", "lol");
         friendFr = FriendsFragment.newInstance("kek", "lol");
         settingFr = SettingsFragment.newInstance("kek", "lol");
@@ -259,11 +255,12 @@ public class MainActivity extends AppCompatActivity
 
         FragmentTransaction ftransp = fragmentManager.beginTransaction();
 
-       /* if (id == R.id.my_page) {
-
+        if (id == R.id.my_page) {
+            appBarLayoutMain.setExpanded(false, false);
             ftransp.replace(R.id.container, pageFr);
+            collapsingToolbar.setTitle("Мои друзья");
 
-        } else */if (id == R.id.target_control) {
+        } else if (id == R.id.target_control) {
             appBarLayoutMain.setExpanded(true, false);
 //            AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
 //            p.setScrollFlags(scrollFlags);
@@ -624,6 +621,7 @@ public class MainActivity extends AppCompatActivity
             synchronized (DataStorage.class) {
             try {
                 RequestMethods.getProfile();
+                RequestMethods.getFriends(DataStorage.getMe());
             } catch (Exception e) {
                     //Toast.makeText(MainActivity.this.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     return false;

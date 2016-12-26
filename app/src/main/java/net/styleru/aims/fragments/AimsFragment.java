@@ -139,7 +139,7 @@ public class AimsFragment extends Fragment {
 //        mTargetList.add(hm);
 
        // SimpleAdapter adapter = new SimpleAdapter(getActivity(), mTargetList, R.layout.aims_item, new String[]{TITLE, DATE}, new int[] {R.id.target_aims, R.id.date_aims});
-        AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item, mTargetList);
+        AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item, mTargetList, myAims);
        // listView.setAdapter(adapter);
         listView.setAdapter(adapterAims);
         listView.setOnItemClickListener(itemClickListener);

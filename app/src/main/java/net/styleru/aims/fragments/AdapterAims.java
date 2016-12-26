@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
+import ru.aimsproject.models.Aim;
+
 import static android.support.v4.content.ContextCompat.getColor;
 import static net.styleru.aims.fragments.AimsFragment.DATE;
 import static net.styleru.aims.fragments.AimsFragment.DESCRIPTION;
@@ -49,6 +51,7 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
 
     int resource;
 
+    List<Aim> aims;
     public AdapterAims(Context context, int resource, List<HashMap<String, String>> data){
         super(context, resource, data);
 
@@ -56,6 +59,17 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
         targets = data;
 
         this.resource = resource;
+    }
+
+    public AdapterAims(Context context, int resource, List<HashMap<String, String>> data, List<Aim> aims) {
+        super(context, resource, data);
+
+        this.context = context;
+        targets = data;
+
+        this.resource = resource;
+
+        this.aims = aims;
     }
 
     @Override
@@ -85,6 +99,17 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
         } catch (ParseException e) {
             date.setText("Выполнить до: " + aimMap.get(DATE));
             e.printStackTrace();
+        }
+
+        if(aims != null) {
+            Aim aim = aims.get(position);
+            if(aim.getFlag() == 1) {
+                rowView.setBackgroundColor(Color.YELLOW);
+            } else if (aim.getFlag() == 2) {
+                rowView.setBackgroundColor(Color.GREEN);
+            } else if (aim.getFlag() == 3) {
+                rowView.setBackgroundColor(Color.RED);
+            }
         }
 
 //                textView1.setText((CharSequence) targets.get(position));

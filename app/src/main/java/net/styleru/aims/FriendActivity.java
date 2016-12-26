@@ -1,11 +1,13 @@
 package net.styleru.aims;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -105,6 +107,19 @@ public class FriendActivity extends AppCompatActivity {
             setTitle(user.getName());
             rating.setText("Рейтинг: " + user.getRating());
 
+            switch (user.getInFriends()) {
+                case 1:
+                    buttonAdd.setText("Удалить из друзей");
+                    break;
+                case -1:
+                    buttonAdd.setText("Подписан на вас");
+                    break;
+                case -2:
+                    buttonAdd.setText("Вы подписаны");
+                    break;
+
+            }
+
 //        hm = new HashMap<>();
 //        hm.put(TITLE, "Cinema");
 //        hm.put(DATE, "Tomorrow");
@@ -132,14 +147,56 @@ public class FriendActivity extends AppCompatActivity {
 
     public void addToFriend(View view) {
         AddFriendAsync addFriendAsync = new AddFriendAsync();
+        DeleteAsync deleteAsync = new DeleteAsync();
+        AcceptAsync acceptAsync = new AcceptAsync();
         try {
-            if(addFriendAsync.execute(user).get()) {
-                Snackbar.make(view, "Пользователь добавлен в друзья!", Snackbar.LENGTH_LONG);
-                buttonAdd.setText("Вы подписаны");
+            switch (user.getInFriends()) {
+                case 0:
+                    if(addFriendAsync.execute(user).get()) {
+                        Snackbar.make(view, "Пользователь добавлен в друзья!", Snackbar.LENGTH_LONG);
+                        buttonAdd.setText("Вы подписаны");
+                        buttonAdd.setBackgroundColor(0);
+                        user.setInFriends(-2);
+                    }
+                    else {
+                        Snackbar.make(view, "Произошла ошибка! Пользователь не добавлен в друзья!", Snackbar.LENGTH_LONG);
+                    }
+                    break;
+                case 1:
+                    String res = deleteAsync.execute(user).get();
+                    if(res.equals("")) {
+                        buttonAdd.setText("Подписан на вас");
+                        buttonAdd.setBackgroundColor(0);
+                        user.setInFriends(-1);
+                    }
+                    else {
+                        Snackbar.make(view, res, Snackbar.LENGTH_LONG);
+                    }
+                    break;
+                case -1:
+                    res = acceptAsync.execute(user).get();
+                    if(res.equals("")) {
+                        buttonAdd.setText("Удалить из друзей");
+                        buttonAdd.setBackgroundColor(0);
+                        user.setInFriends(1);
+                    }
+                    else {
+                        Snackbar.make(view, res, Snackbar.LENGTH_LONG);
+                    }
+                    break;
+                case -2:
+                    res = deleteAsync.execute(user).get();
+                    if(res.equals("")) {
+                        buttonAdd.setText("Добавить в друзья");
+                        buttonAdd.setBackgroundColor(getResources().getColor(R.color.blue_button));
+                        user.setInFriends(0);
+                    }
+                    else  {
+                        Snackbar.make(view, res, Snackbar.LENGTH_LONG);
+                    }
+                    break;
             }
-            else {
-                Snackbar.make(view, "Произошла ошибка! Пользователь не добавлен в друзья!", Snackbar.LENGTH_LONG);
-            }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -171,6 +228,32 @@ public class FriendActivity extends AppCompatActivity {
                 return false;
             }
             return true;
+        }
+    }
+
+    class DeleteAsync extends AsyncTask<User, Void, String> {
+
+        @Override
+        protected String doInBackground(User... params) {
+            try {
+                RequestMethods.deleteFriend(params[0]);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            return "";
+        }
+    }
+
+    class AcceptAsync extends AsyncTask<User, Void, String> {
+
+        @Override
+        protected String doInBackground(User... params) {
+            try {
+                RequestMethods.acceptFriendship(params[0]);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            return "";
         }
     }
 

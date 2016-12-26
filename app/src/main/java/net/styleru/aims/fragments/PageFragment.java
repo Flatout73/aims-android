@@ -2,18 +2,26 @@ package net.styleru.aims.fragments;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import net.styleru.aims.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import ru.aimsproject.connectionwithbackend.RequestMethods;
+import ru.aimsproject.data.DataStorage;
+import ru.aimsproject.models.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +42,10 @@ public class PageFragment extends Fragment {
     private String mParam2;
 
     RecyclerView recyclerView;
+
+    TextView empty;
+
+    View view;
 
     private OnFragmentInteractionListener mListener;
 
@@ -72,9 +84,11 @@ public class PageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getActivity().setTitle("Моя страница");
-        View view = inflater.inflate(R.layout.fragment_page, container, false);
+        getActivity().setTitle("Мои друзья");
+        view = inflater.inflate(R.layout.fragment_page, container, false);
         initRecyclerView(view);
+
+        empty = (TextView) view.findViewById(R.id.empty_friends);
         return view;
     }
 
@@ -94,10 +108,28 @@ public class PageFragment extends Fragment {
     }
 
 
-    private List<Alert> getExpenses() {
-        List<Alert> expenses = new ArrayList<>();
-        expenses.add(new Alert("Cinema", "10.10"));
-        expenses.add(new Alert("HSE", "Tomorrow"));
+    private List<User> getExpenses() {
+        List<User> expenses = new ArrayList<>();
+        GetFriendsAsync friendsAsync = new GetFriendsAsync();
+//        try {
+//            String res = friendsAsync.execute(DataStorage.getMe()).execute().get();
+//            if(res.equals("")) {
+                expenses = DataStorage.getMe().getFriends();
+//            }
+//            else {
+//                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//        expenses.add(new Friend("Cinema", "10.10"));
+//        expenses.add(new Friend("HSE", "Tomorrow"));
+
+//        if(!expenses.isEmpty())  {
+//            empty.setVisibility(View.GONE);
+//        }
         return expenses;
     }
 
@@ -131,5 +163,18 @@ public class PageFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    class GetFriendsAsync extends AsyncTask<User, Void, String> {
+
+        @Override
+        protected String doInBackground(User... params) {
+            try {
+              //  RequestMethods.getFriends(params[0]);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            return "";
+        }
     }
 }
