@@ -1126,7 +1126,7 @@ public class RequestMethods {
             dislikeAim(aim);
         }
         String urlString = likesURL;
-        urlString += "likes/";
+        urlString += "likeaim/";
         String currentToken = DataStorage.getToken();
         if(currentToken == null) {
             throw new Exception("Ошибка подключения к серверу: пустой token");
@@ -1169,7 +1169,7 @@ public class RequestMethods {
             likeAim(aim);
         }
         String urlString = likesURL;
-        urlString += "dislikes/";
+        urlString += "dislikeaim/";
         String currentToken = DataStorage.getToken();
         if(currentToken == null) {
             throw new Exception("Ошибка подключения к серверу: пустой token");
