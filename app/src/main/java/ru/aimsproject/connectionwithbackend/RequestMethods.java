@@ -732,6 +732,7 @@ public class RequestMethods {
             throw new Exception("Ошибка подключения к серверу: пустой token");
         }
         urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "userlogin", userLogin, false);
         String response = Request.doRequest(urlString, null, null);
         JSONObject jsonObject;
         try {
