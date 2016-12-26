@@ -98,6 +98,30 @@
                 android:textStyle="bold" />
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="8dp">
+            <TextView
+                android:id="@+id/text_forgot_psw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Забыли пароль? Введите E-mail и нажмите"
+                />
+
+                <TextView
+                    android:layout_toRightOf="@id/text_forgot_psw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:layout_marginStart="3dp"
+                    android:text="здесь!"
+                    android:textColor="@color/blue_button"
+                    android:onClick="forgotPassword"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

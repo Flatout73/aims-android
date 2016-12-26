@@ -77,7 +77,7 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
         description.setText(aimMap.get(DESCRIPTION));
 
         SimpleDateFormat format = new SimpleDateFormat();
-        format.applyPattern("EEE MMM dd HH:mm:ss");
+        format.applyPattern("EEE MMM dd HH:mm:ss z yyyy");
         try {
             Date aimDate = format.parse(aimMap.get(DATE));
             SimpleDateFormat printDate = new SimpleDateFormat("dd.MM.yyyy");

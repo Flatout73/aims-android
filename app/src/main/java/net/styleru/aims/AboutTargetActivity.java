@@ -37,6 +37,8 @@ public class AboutTargetActivity extends AppCompatActivity {
 
     List<Comment> commentList;
 
+    TextView textProgress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +70,8 @@ public class AboutTargetActivity extends AppCompatActivity {
         CardView descriptionCard = (CardView) findViewById(R.id.card_target);
         CardView proofsCars = (CardView) findViewById(R.id.target_proofs);
 
+        textProgress = (TextView) findViewById(R.id.progress_description);
+
      //   comments.addHeaderView(descriptionCard);
        // comments.addHeaderView(proofsCars);
 
@@ -86,8 +90,6 @@ public class AboutTargetActivity extends AppCompatActivity {
             commentList.add(new Comment("kek", "leonid", "Leo", null, null));
             commentList.add(new Comment("kek", "leonid", "Le", null, null));
         }
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-        tvProgressHorizontal.setText("20%");
 
         comments.setAdapter(new CommentsAdapter(this, R.layout.comment_item, commentList));
     //    comments.setNestedScrollingEnabled(true);
@@ -96,6 +98,13 @@ public class AboutTargetActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+        int progress = (int)(aim.getEndDate().getTime() - (new Date()).getTime());
+        int allTime = (int)(aim.getEndDate().getTime() - aim.getStartDate().getTime());
+        progressBar.setProgress(progress/allTime);
+
+        tvProgressHorizontal.setText(progress/allTime + "%");
+        textProgress.setText(progress/100000000 + "/" + allTime/100000000);
     }
 
     @Override

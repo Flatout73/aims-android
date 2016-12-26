@@ -39,6 +39,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 
@@ -320,6 +321,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         startActivity(intent);
     }
 
+    public void forgotPassword(View view) {
+        ResetPassword resetPassword = new ResetPassword();
+        try {
+            if(resetPassword.execute(mEmailView.getText().toString()).get()) {
+                Snackbar.make(mLoginFormView, "Письмо для сброса отправлено!", Snackbar.LENGTH_LONG).show();
+            }
+            else {
+                Snackbar.make(mLoginFormView, "Введите Email", Snackbar.LENGTH_LONG).show();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -391,6 +408,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+    }
+
+    class ResetPassword extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            try {
+                RequestMethods.resetPsd(params[0]);
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
         }
     }
 }
