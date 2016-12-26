@@ -164,7 +164,7 @@ public class RequestMethods {
         Date startDate = parseCSharpDate(jsonObjectAim.getString("StartDate"));
         Date endDate = parseCSharpDate(jsonObjectAim.getString("EndDate"));
         if(author == null) {
-            JSONObject userObject = jsonObjectAim.getJSONObject("User");
+            JSONObject userObject = jsonObjectAim.getJSONObject("Us");
             author = parseUser(userObject, false, false, 0);
         }
         int likes = 0;
@@ -199,7 +199,7 @@ public class RequestMethods {
         Date endDate = parseCSharpDate(jsonObjectAim.getString("EndDate"));
         int dateSection = jsonObjectAim.getInt("DateSection");
         if(author == null) {
-            JSONObject userObject = jsonObjectAim.getJSONObject("User");
+            JSONObject userObject = jsonObjectAim.getJSONObject("Us");
             author = parseUser(userObject, false, false, 0);
         }
         int likes = 0;
@@ -235,7 +235,7 @@ public class RequestMethods {
         int allTasks = jsonObjectAim.getInt("AllTasks");
         int currentTasks = jsonObjectAim.getInt("CurrentTasks");
         if(author == null) {
-            JSONObject userObject = jsonObjectAim.getJSONObject("User");
+            JSONObject userObject = jsonObjectAim.getJSONObject("Us");
             author = parseUser(userObject, false, false, 0);
         }
         int likes = 0;
@@ -781,7 +781,7 @@ public class RequestMethods {
      */
     public static void getNews(Date date) throws Exception {
         String urlString = newsURL;
-        urlString += "getuserprofile/";
+        urlString += "getnews/";
         String currentToken = DataStorage.getToken();
         if(currentToken == null) {
             throw new Exception("Ошибка подключения к серверу: пустой token");

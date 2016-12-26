@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import ru.aimsproject.models.Aim;
 
 import static android.support.v4.content.ContextCompat.getColor;
@@ -85,6 +86,8 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
         TextView header = (TextView)rowView.findViewById(R.id.target_aims);
         TextView description = (TextView) rowView.findViewById(R.id.date_description);
         TextView date = (TextView) rowView.findViewById(R.id.date_aims);
+        CircleImageView avatar = (CircleImageView) rowView.findViewById(R.id.friend_avatar);
+        TextView nameAuthor = (TextView) rowView.findViewById(R.id.author_name);
 
         HashMap<String, String> aimMap = targets.get(position);
         header.setText(aimMap.get(TITLE));
@@ -103,6 +106,8 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
 
         if(aims != null) {
             Aim aim = aims.get(position);
+//            avatar.setImageBitmap(aim.getAuthor().getImageMin());
+//            nameAuthor.setText(aim.getAuthor().getName());
             if(aim.getFlag() == 1) {
                 rowView.setBackgroundColor(Color.YELLOW);
             } else if (aim.getFlag() == 2) {

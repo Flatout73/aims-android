@@ -111,25 +111,25 @@ public class PageFragment extends Fragment {
     private List<User> getExpenses() {
         List<User> expenses = new ArrayList<>();
         GetFriendsAsync friendsAsync = new GetFriendsAsync();
-//        try {
-//            String res = friendsAsync.execute(DataStorage.getMe()).execute().get();
-//            if(res.equals("")) {
+        try {
+            String res = friendsAsync.execute(DataStorage.getMe()).get();
+            if(res.equals("")) {
                 expenses = DataStorage.getMe().getFriends();
-//            }
-//            else {
-//                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
+            }
+            else {
+                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 //        expenses.add(new Friend("Cinema", "10.10"));
 //        expenses.add(new Friend("HSE", "Tomorrow"));
 
-//        if(!expenses.isEmpty())  {
-//            empty.setVisibility(View.GONE);
-//        }
+        if(!expenses.isEmpty())  {
+           // empty.setVisibility(View.GONE);
+        }
         return expenses;
     }
 
@@ -170,7 +170,7 @@ public class PageFragment extends Fragment {
         @Override
         protected String doInBackground(User... params) {
             try {
-              //  RequestMethods.getFriends(params[0]);
+                RequestMethods.getFriends(params[0]);
             } catch (Exception e) {
                 return e.getMessage();
             }

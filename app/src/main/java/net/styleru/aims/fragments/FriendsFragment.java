@@ -89,7 +89,7 @@ public class FriendsFragment extends Fragment {
 
         AsyncNews asyncNews = new AsyncNews();
         try {
-            String res2 = asyncNews.execute(new Date(2016, 12, 20)).get();
+            String res2 = asyncNews.execute(new Date(115, 12, 20)).get();
 //            if(!res2.equals("")){
 //                Snackbar.make(view, res2, Snackbar.LENGTH_LONG).show();
 //            }
@@ -130,7 +130,7 @@ public class FriendsFragment extends Fragment {
 //        mTargetList.add(hm);
 
 
-        AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item_2, mTargetList);
+        AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item_2, mTargetList, friendAims);
         listView.setAdapter(adapterAims);
         listView.setOnItemClickListener(itemClickListener);
         listView.setNestedScrollingEnabled(false);

@@ -135,15 +135,15 @@ public class FriendActivity extends AppCompatActivity {
             listView.setNestedScrollingEnabled(true);
         }
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == android.R.id.home) {
-            finish();
-        }
-        return true;
-    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if(id == android.R.id.home) {
+//            finish();
+//        }
+//        return true;
+//    }
 
     public void addToFriend(View view) {
         AddFriendAsync addFriendAsync = new AddFriendAsync();

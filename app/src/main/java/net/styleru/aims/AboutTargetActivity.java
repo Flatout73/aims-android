@@ -167,7 +167,7 @@ public class AboutTargetActivity extends AppCompatActivity {
         try {
             String res = like.execute(aim).get();
             if(res.equals("")) {
-                likes.setText(aim.getLikes());
+                likes.setText("" + aim.getLikes());
             }
             else {
                 Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
@@ -184,7 +184,7 @@ public class AboutTargetActivity extends AppCompatActivity {
         try {
             String res = disLike.execute(aim).get();
             if(res.equals("")) {
-                dislikes.setText(aim.getDislikes());
+                dislikes.setText("" + aim.getDislikes());
             }
             else {
                 Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();

@@ -17,12 +17,13 @@
         android:id="@+id/friend_avatar"
         />
     <TextView
+        android:id="@+id/author_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Антон Ригин"
         android:layout_toRightOf="@id/friend_avatar"
         android:layout_marginStart="8dp"
-       android:layout_centerVertical="true"
+        android:layout_centerVertical="true"
         android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItem"/>
 

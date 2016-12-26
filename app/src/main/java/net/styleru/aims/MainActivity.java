@@ -36,6 +36,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -94,15 +95,21 @@ public class MainActivity extends AppCompatActivity
         TextView emailHeader, nameHeader;
         CircleImageView imageHeader;
 
+        ProgressBar loading;
+        View container;
+
         final int MY_PERMISSION_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        loading = (ProgressBar)findViewById(R.id.get_progress);
+        container = findViewById(R.id.container);
+
         mToken = getSharedPreferences(APP_REFERENCES, Context.MODE_PRIVATE);
 
-        TaskProfile taskProfile = new TaskProfile();
+        TaskProfile taskProfile = new TaskProfile(loading, container);
 
         try {
             if(!taskProfile.execute().get()) {
@@ -519,7 +526,7 @@ public class MainActivity extends AppCompatActivity
         EditText email = (EditText) findViewById(R.id.set_email);
         final EditText password = (EditText) findViewById(R.id.set_password);
 
-        if(email.getText() != null) {
+        if(!email.getText().equals("")) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("E-mail");
             builder.setMessage("Введить старый адрес электронной почты");
@@ -563,18 +570,18 @@ public class MainActivity extends AppCompatActivity
             builder.show();
         }
 
-        if(password.getText() != null) {
+        if(!password.getText().equals("")) {
             try {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Пароль");
-                builder.setMessage("Введить старый пароль");
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(MainActivity.this);
+                builder2.setTitle("Пароль");
+                builder2.setMessage("Введить старый пароль");
                 final EditText input = new EditText(MainActivity.this);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT);
                 input.setLayoutParams(lp);
-                builder.setView(input);
+                builder2.setView(input);
 
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                builder2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -597,7 +604,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-                builder.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                builder2.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -605,7 +612,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-                builder.show();
+                builder2.show();
 
             } catch (Exception e) {
                 Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
@@ -615,14 +622,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     class TaskProfile extends AsyncTask<Void, Void, Boolean> {
+        ProgressBar load;
+        View cont;
+        TaskProfile(ProgressBar l, View c) {
+            load = l;
+            cont = c;
+        }
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+           // load.setVisibility(View.VISIBLE);
+           // cont.setVisibility(View.GONE);
+
+        }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             synchronized (DataStorage.class) {
             try {
                 RequestMethods.getProfile();
-                RequestMethods.getFriends(DataStorage.getMe());
+                //RequestMethods.getFriends(DataStorage.getMe());
             } catch (Exception e) {
                     //Toast.makeText(MainActivity.this.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     return false;
@@ -632,6 +652,12 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
 
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+           // load.setVisibility(View.GONE);
+           // cont.setVisibility(View.VISIBLE);
+        }
     }
 
     class ChangePassword extends AsyncTask<String, Void, Boolean> {
