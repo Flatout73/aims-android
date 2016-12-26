@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ public class RegisteredActivity extends AppCompatActivity {
     SharedPreferences.Editor edit;
 
     View mContentView;
+
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,7 @@ public class RegisteredActivity extends AppCompatActivity {
         RadioButton female = (RadioButton) findViewById(R.id.female);
         female.setOnClickListener(radioButtonListener);
 
+        progressBar = (ProgressBar) findViewById(R.id.register_progress);
     }
 
     View.OnClickListener radioButtonListener = new View.OnClickListener() {
@@ -96,15 +100,16 @@ public class RegisteredActivity extends AppCompatActivity {
             email = ((EditText) findViewById(R.id.email_register)).getText().toString();
 
             MyTask myTask = new MyTask(login, password, email, name, sex);
-            if(myTask.execute().get()) {
+            String res = myTask.execute().get();
+            if(res.equals("")) {
                 edit = mToken.edit();
                 edit.putString(APP_REFERENCE_Token, DataStorage.getToken());
                 edit.apply();
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
-                Snackbar.make(mContentView, "Вы зарегистрированы", Snackbar.LENGTH_LONG);
+                Snackbar.make(mContentView, "Вы зарегистрированы", Snackbar.LENGTH_LONG).show();
             } else {
-                Snackbar.make(mContentView, "Что-то пошло не так", Snackbar.LENGTH_LONG);
+                Snackbar.make(mContentView, res, Snackbar.LENGTH_LONG).show();
             }
         } catch (NullPointerException e) {
             Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
@@ -113,7 +118,7 @@ public class RegisteredActivity extends AppCompatActivity {
         }
     }
 
-    class MyTask extends AsyncTask<Void, Void, Boolean> {
+    class MyTask extends AsyncTask<Void, Void, String> {
 
         String sex;
         String login;
@@ -130,13 +135,27 @@ public class RegisteredActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            mContentView.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
             try {
                 RequestMethods.register(login, password, email, name, sex);
             } catch (Exception e) {
-                return false;
+                return e.getMessage();
             }
-            return true;
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressBar.setVisibility(View.GONE);
+            mContentView.setVisibility(View.VISIBLE);
         }
     }
 }
