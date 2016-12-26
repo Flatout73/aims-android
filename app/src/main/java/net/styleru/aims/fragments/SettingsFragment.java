@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import net.styleru.aims.R;
 
@@ -71,11 +72,18 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         RoundedImageView avatarSettings = (RoundedImageView) view.findViewById(R.id.settings_avatar);
+        EditText name = (EditText) view.findViewById(R.id.set_name);
+        EditText surname = (EditText) view.findViewById(R.id.set_surname);
 
         if(me.getImage() != null) {
             avatarSettings.setImageBitmap(me.getImage());
         }
 
+        String[] names = me.getName().split(" ");
+        if(names[0] != null)
+            name.setText(names[0]);
+        if(names[1] != null)
+            surname.setText(names[1]);
         return view;
     }
 

@@ -129,49 +129,14 @@ public class AimsFragment extends Fragment {
             }
         }
 
-        hm = new HashMap<>();
-        hm.put(TITLE, "Cinema");
-        hm.put(DATE, "Tomorrow");
-        mTargetList.add(hm);
+        TextView rating = (TextView) view.findViewById(R.id.rating);
 
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
+        rating.setText("Ваш рейтинг: " + DataStorage.getMe().getRating());
 
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
+//        hm = new HashMap<>();
+//        hm.put(TITLE, "Cinema");
+//        hm.put(DATE, "Tomorrow");
+//        mTargetList.add(hm);
 
        // SimpleAdapter adapter = new SimpleAdapter(getActivity(), mTargetList, R.layout.aims_item, new String[]{TITLE, DATE}, new int[] {R.id.target_aims, R.id.date_aims});
         AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item, mTargetList);

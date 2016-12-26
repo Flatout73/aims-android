@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,9 @@ public class FriendActivity extends AppCompatActivity {
 
     Button buttonAdd;
 
+    ImageView avatar;
+    TextView rating;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +73,9 @@ public class FriendActivity extends AppCompatActivity {
         }
 
         buttonAdd = (Button) findViewById(R.id.add_to_friend);
+        avatar = (ImageView) findViewById(R.id.friend_avatar_act);
 
+        rating = (TextView) findViewById(R.id.rating_friend);
     }
 
     @Override
@@ -77,36 +83,42 @@ public class FriendActivity extends AppCompatActivity {
         super.onStart();
         NestedScrollingListView listView = (NestedScrollingListView) findViewById(R.id.friends_ListView);
         HashMap<String, String> hm;
-        friendAims = user.getAims();
 
-        if(!friendAims.isEmpty()) {
-            for(int i = 0; i < friendAims.size(); i++) {
-                Aim currentAim = friendAims.get(i);
-                hm = new HashMap<>();
-                hm.put(TITLE, currentAim.getHeader());
-                hm.put(DATE, currentAim.getDate().toString());
-                hm.put(DESCRIPTION, currentAim.getText());
-                mTargetList.add(hm);
+        if(user != null) {
+            friendAims = user.getAims();
+
+            if (!friendAims.isEmpty()) {
+                for (int i = 0; i < friendAims.size(); i++) {
+                    Aim currentAim = friendAims.get(i);
+                    hm = new HashMap<>();
+                    hm.put(TITLE, currentAim.getHeader());
+                    hm.put(DATE, currentAim.getDate().toString());
+                    hm.put(DESCRIPTION, currentAim.getText());
+                    mTargetList.add(hm);
+                }
+            } else {
+                TextView empty = (TextView) findViewById(R.id.empty);
+                empty.setVisibility(View.VISIBLE);
             }
+
+            avatar.setImageBitmap(user.getImage());
+            setTitle(user.getName());
+            rating.setText("Рейтинг: " + user.getRating());
+
+//        hm = new HashMap<>();
+//        hm.put(TITLE, "Cinema");
+//        hm.put(DATE, "Tomorrow");
+//        mTargetList.add(hm);
+//
+//        hm = new HashMap<>();
+//        hm.put(TITLE, "HSE");
+//        hm.put(DATE, "10.10");
+//        mTargetList.add(hm);
+
+            AdapterAims adapterAims = new AdapterAims(this, R.layout.aims_item, mTargetList);
+            listView.setAdapter(adapterAims);
+            listView.setNestedScrollingEnabled(true);
         }
-        else {
-            TextView empty = (TextView) findViewById(R.id.empty);
-            empty.setVisibility(View.VISIBLE);
-        }
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "Cinema");
-        hm.put(DATE, "Tomorrow");
-        mTargetList.add(hm);
-
-        hm = new HashMap<>();
-        hm.put(TITLE, "HSE");
-        hm.put(DATE, "10.10");
-        mTargetList.add(hm);
-
-        AdapterAims adapterAims = new AdapterAims(this, R.layout.aims_item, mTargetList);
-        listView.setAdapter(adapterAims);
-        listView.setNestedScrollingEnabled(true);
     }
 
     @Override

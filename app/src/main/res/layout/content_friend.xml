@@ -24,19 +24,35 @@
         android:text="Нет новостей">
     </TextView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:id="@+id/texts">
+
+        <TextView
+            android:id="@+id/rating_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="Рейтинг: 30"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/add_to_friend"
         android:onClick="addToFriend"
-        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
         android:text="Добавить в друзья"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/add_to_friend"
+        android:layout_below="@id/texts"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true">
 

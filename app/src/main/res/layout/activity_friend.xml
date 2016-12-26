@@ -19,17 +19,16 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             android:id="@+id/collapsing_toolbar"
-            app:expandedTitleMarginEnd="72dp"
             app:expandedTitleMarginStart="16dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
         <ImageView
+            android:id="@+id/friend_avatar_act"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/riginandnag"
             android:fitsSystemWindows="true"
             app:layout_collapseMode="parallax"
-            android:scaleType="fitCenter"/>
+            android:scaleType="centerCrop"/>
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"

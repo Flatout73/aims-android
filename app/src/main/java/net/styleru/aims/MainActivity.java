@@ -39,6 +39,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.styleru.aims.fragments.AimsFragment;
@@ -52,8 +53,10 @@ import java.io.IOException;
 import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
+import ru.aimsproject.models.User;
 
 import static net.styleru.aims.LoginActivity.APP_REFERENCES;
 import static net.styleru.aims.LoginActivity.APP_REFERENCE_Token;
@@ -90,6 +93,9 @@ public class MainActivity extends AppCompatActivity
         SearchView mSearchView;
 
         String oldPassword;
+
+        TextView emailHeader, nameHeader;
+        CircleImageView imageHeader;
 
         final int MY_PERMISSION_REQUEST = 1;
 
@@ -132,6 +138,10 @@ public class MainActivity extends AppCompatActivity
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Антон Ригин");
 
+        if(DataStorage.getMe().getName() != null) {
+            collapsingToolbar.setTitle(DataStorage.getMe().getName());
+        }
+
         //fragmentStack = new Stack<Fragment>();
 
         //pageFr = PageFragment.newInstance("kek", "lol");
@@ -166,21 +176,34 @@ public class MainActivity extends AppCompatActivity
         searchAdapter = new SearchAdapter(this);
 
         avatar = (ImageView) findViewById(R.id.avatar_main);
+
+        View headerLayout = navigationView.getHeaderView(0);
+        nameHeader = (TextView) headerLayout.findViewById(R.id.name_header);
+        emailHeader = (TextView) headerLayout.findViewById(R.id.my_email);
+        imageHeader = (CircleImageView) headerLayout.findViewById(R.id.imageView);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(DataStorage.getMe().getImage() != null) {
-            avatar.setImageBitmap(DataStorage.getMe().getImage());
+        User me = DataStorage.getMe();
+
+
+        if(me.getImage() != null) {
+            avatar.setImageBitmap(me.getImage());
+            imageHeader.setImageBitmap(me.getImage());
         }
+
+        emailHeader.setText(me.getEmail());
+        nameHeader.setText(me.getName());
     }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
     }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

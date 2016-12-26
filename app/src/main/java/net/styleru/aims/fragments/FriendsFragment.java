@@ -107,11 +107,11 @@ public class FriendsFragment extends Fragment {
             empty.setVisibility(View.VISIBLE);
         }
 
-        hm = new HashMap<>();
-        hm.put(TITLE, "Header");
-        hm.put(DATE, "12.12.16");
-        hm.put(DESCRIPTION, "kek");
-        mTargetList.add(hm);
+//        hm = new HashMap<>();
+//        hm.put(TITLE, "Header");
+//        hm.put(DATE, "12.12.16");
+//        hm.put(DESCRIPTION, "kek");
+//        mTargetList.add(hm);
 
 
         AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item_2, mTargetList);

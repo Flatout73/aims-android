@@ -34,6 +34,7 @@ public class AboutTargetActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
     TextView tvProgressHorizontal;
+    TextView targetDescription;
 
     List<Comment> commentList;
 
@@ -72,27 +73,28 @@ public class AboutTargetActivity extends AppCompatActivity {
 
         textProgress = (TextView) findViewById(R.id.progress_description);
 
+        targetDescription = (TextView) findViewById(R.id.target_description);
+
      //   comments.addHeaderView(descriptionCard);
        // comments.addHeaderView(proofsCars);
 
         commentList = aim.getComments();
 
-        if(commentList.isEmpty()) {
-            commentList.add(new Comment("kekes", "leonid", "Leonid", null, null));
-            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
-            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
-            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
-            commentList.add(new Comment("kek", "leonid", "Le", null, null));
-            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
-            commentList.add(new Comment("kek", "leonid", "Le", null, null));
-            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
-            commentList.add(new Comment("kek", "leonid", "Le", null, null));
-            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
-            commentList.add(new Comment("kek", "leonid", "Le", null, null));
-        }
+//        if(commentList.isEmpty()) {
+//            commentList.add(new Comment("kekes", "leonid", "Leonid", null, null));
+//            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+//            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+//            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+//            commentList.add(new Comment("kek", "leonid", "Le", null, null));
+//            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+//            commentList.add(new Comment("kek", "leonid", "Le", null, null));
+//            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+//            commentList.add(new Comment("kek", "leonid", "Le", null, null));
+//            commentList.add(new Comment("kek", "leonid", "Leo", null, null));
+//            commentList.add(new Comment("kek", "leonid", "Le", null, null));
+//        }
 
         comments.setAdapter(new CommentsAdapter(this, R.layout.comment_item, commentList));
-    //    comments.setNestedScrollingEnabled(true);
     }
 
     @Override
@@ -105,6 +107,8 @@ public class AboutTargetActivity extends AppCompatActivity {
 
         tvProgressHorizontal.setText(progress/allTime + "%");
         textProgress.setText(progress/100000000 + "/" + allTime/100000000);
+
+        targetDescription.setText(aim.getText());
     }
 
     @Override
