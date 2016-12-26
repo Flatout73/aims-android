@@ -165,13 +165,15 @@ public class MainActivity extends AppCompatActivity
 
         searchAdapter = new SearchAdapter(this);
 
-//        avatar = findViewById(R.id.avatar_main);
-//        collapsingToolbar.findViewById(R.id.avatar_main);
+        avatar = (ImageView) findViewById(R.id.avatar_main);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        if(DataStorage.getMe().getImage() != null) {
+            avatar.setImageBitmap(DataStorage.getMe().getImage());
+        }
     }
 
     @Override
@@ -249,6 +251,9 @@ public class MainActivity extends AppCompatActivity
 //            ftransp.hide(fragmentStack.lastElement());
 //            fragmentStack.push(aimsFr);
             collapsingToolbar.setTitle("Антон Ригин");
+            if(DataStorage.getMe().getName() != null) {
+                collapsingToolbar.setTitle(DataStorage.getMe().getName());
+            }
 
         } else if (id == R.id.friends) {
             appBarLayoutMain.setExpanded(false, false);

@@ -74,6 +74,7 @@ public class FriendActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        super.onStart();
         NestedScrollingListView listView = (NestedScrollingListView) findViewById(R.id.friends_ListView);
         HashMap<String, String> hm;
         friendAims = user.getAims();
