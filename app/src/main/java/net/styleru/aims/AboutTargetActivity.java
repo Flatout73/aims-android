@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.styleru.aims.R;
 import net.styleru.aims.fragments.NestedScrollingListView;
@@ -56,6 +57,8 @@ public class AboutTargetActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        AsyncInfo info = new AsyncInfo();
+
         progressBar = (ProgressBar) findViewById(R.id.target_progressBar);
         tvProgressHorizontal = (TextView) findViewById(R.id.progress_horizontal);
 
@@ -68,6 +71,17 @@ public class AboutTargetActivity extends AppCompatActivity {
         }
         else {
             aim = DataStorage.getMe().getAims().get(id);
+        }
+
+        try {
+            Aim res2 = info.execute(aim).get();
+            if(res2 != null) {
+                aim = res2;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
 
         setTitle(aim.getHeader());
@@ -205,6 +219,18 @@ public class AboutTargetActivity extends AppCompatActivity {
                 return e.getMessage();
             }
             return "";
+        }
+    }
+
+    class AsyncInfo extends AsyncTask<Aim, Void, Aim> {
+
+        @Override
+        protected Aim doInBackground(Aim... params) {
+            try {
+                return RequestMethods.getAimInfo(params[0]);
+            } catch (Exception e) {
+                return null;
+            }
         }
     }
 }

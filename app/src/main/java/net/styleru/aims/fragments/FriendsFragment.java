@@ -2,6 +2,7 @@ package net.styleru.aims.fragments;
 
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.Snackbar;
@@ -16,9 +17,12 @@ import net.styleru.aims.AboutTargetActivity;
 import net.styleru.aims.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.Aim;
 
@@ -83,6 +87,18 @@ public class FriendsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
         NestedScrollingListView listView = (NestedScrollingListView) view.findViewById(R.id.friendsListView);
 
+        AsyncNews asyncNews = new AsyncNews();
+        try {
+            String res2 = asyncNews.execute(new Date(2016, 12, 20)).get();
+//            if(!res2.equals("")){
+//                Snackbar.make(view, res2, Snackbar.LENGTH_LONG).show();
+//            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         HashMap<String, String> hm;
         List<Aim> friendAims = DataStorage.getNewsFeed();
 
@@ -133,4 +149,17 @@ public class FriendsFragment extends Fragment {
             startActivity(intent);
         }
     };
+
+    class AsyncNews extends AsyncTask<Date, Void, String> {
+
+        @Override
+        protected String doInBackground(Date... params) {
+            try {
+                RequestMethods.getNews(params[0]);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            return "";
+        }
+    }
 }
