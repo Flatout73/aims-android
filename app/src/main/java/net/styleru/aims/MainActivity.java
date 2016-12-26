@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
         CollapsingToolbarLayout collapsingToolbar;
         Toolbar toolbar;
         Toolbar toolbarFriend;
+        ImageView avatar;
 
         AppBarLayout appBarLayoutMain;
 
@@ -163,6 +164,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         searchAdapter = new SearchAdapter(this);
+
+//        avatar = findViewById(R.id.avatar_main);
+//        collapsingToolbar.findViewById(R.id.avatar_main);
     }
 
     @Override
