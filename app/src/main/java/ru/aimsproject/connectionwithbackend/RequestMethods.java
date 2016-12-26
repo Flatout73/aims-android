@@ -1396,7 +1396,7 @@ public class RequestMethods {
                 throw new Exception("Неизвестная ошибка.");
             }
             DataStorage.setToken(token);
-            DataStorage.getMe().removeFriend(user);
+            DataStorage.getMe().removeFriend(user, true);
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");

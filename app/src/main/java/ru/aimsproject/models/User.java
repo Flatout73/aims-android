@@ -259,11 +259,14 @@ public class User implements Comparable<User> {
     /**
      * Удаляет пользователя из списка друзей пользователя, если он есть в этом списке.
      * @param user Удаляемый из списка друзей пользователь.
+     * @param me Показывает, вызван ли метод в объекте пользователя, которые вошёл в свой аккаунт на данном устройстве.
      * @return true, если удаление пользователя из списка друзей успешно состоялось (он был в этом списке), иначе false.
      * @throws NullPointerException Возникает, если переданный пользователь представляет собой null.
      */
-    public boolean removeFriend(User user) throws NullPointerException {
-        user.removeFriend(this);
+    public boolean removeFriend(User user, boolean me) throws NullPointerException {
+        if(me) {
+            user.removeFriend(this, false);
+        }
         return friends.remove(user);
     }
 
@@ -274,7 +277,7 @@ public class User implements Comparable<User> {
      */
     public boolean removeFriend(int index) {
         try {
-            friends.get(index).removeFriend(this);
+            friends.get(index).removeFriend(this, false);
             friends.remove(index);
             return true;
         }
