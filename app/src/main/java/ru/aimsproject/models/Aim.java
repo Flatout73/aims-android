@@ -124,12 +124,12 @@ public abstract class Aim implements Comparable<Aim>/*, Parcelable*/ {
      * @throws IncompatibleAimsDatesException Возникает, если дата начала выполнения цели раньше даты её публикации или дата окончания выполнения цели раньше даты её начала.
      */
     public Aim(List<Aim> subAims, String text, String header, int type, int flag, int modif, User author, Date date, Date startDate, Date endDate, int likes, int dislikes, int liked, List<Comment> comments, List<Proof> proofs) throws IncompatibleAimsDatesException {
-        if(date.compareTo(startDate) > 0) {
+        /*if(date.compareTo(startDate) > 0) {
             throw new IncompatibleAimsDatesException("Время начала выполнения цели должно быть не раньше времени её публикации.", this);
         }
         if(startDate.compareTo(endDate) > 0) {
             throw new IncompatibleAimsDatesException("Время окончания выполнения цели должно быть позже времени начала её выполнения.", this);
-        }
+        }*/
         this.subAims = subAims;
         this.text = text;
         this.header = header;
