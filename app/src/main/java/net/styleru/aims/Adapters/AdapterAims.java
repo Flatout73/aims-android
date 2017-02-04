@@ -1,7 +1,9 @@
 package net.styleru.aims.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import ru.aimsproject.models.Aim;
@@ -88,8 +91,7 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
         description.setText(aimMap.get(DESCRIPTION));
 
         // Приводим дату в нужный формат
-        SimpleDateFormat format = new SimpleDateFormat();
-        format.applyPattern("EEE MMM dd HH:mm:ss z yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
         try {
             Date aimDate = format.parse(aimMap.get(DATE));
             SimpleDateFormat printDate = new SimpleDateFormat("dd.MM.yyyy");
@@ -104,7 +106,11 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
             Aim aim = aims.get(position);
             //для отображения аваторк и имени в новостной ленте
             if(resource == R.layout.aims_item_feed) {
-                avatar.setImageBitmap(aim.getAuthor().getImageMin());
+                Bitmap avatMin = aim.getAuthor().getImageMin();
+                if(avatMin == null)
+                    avatar.setVisibility(View.GONE);
+                else
+                    avatar.setImageBitmap(avatMin);
                 nameAuthor.setText(aim.getAuthor().getName());
             }
 

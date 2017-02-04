@@ -32,7 +32,7 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.Expanseshold
 
     @Override
     public AlertAdapter.Expansesholder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_alert, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friend, parent, false);
 
         return new Expansesholder(itemView);
     }

@@ -78,7 +78,14 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
                 FilterResults filterResults = new FilterResults();
                 if(constraint != null) {
                     try {
+                        User me = DataStorage.getMe();
                         List<User> users = RequestMethods.search(constraint.toString());
+                        for(int i = 0; i < users.size(); i++) {
+                            if(users.get(i).getLogin().equals(me.getLogin())) {
+                                users.remove(i);
+                                break;
+                            }
+                        }
                         filterResults.values = users;
                         filterResults.count = users.size();
                     } catch (Exception e) {

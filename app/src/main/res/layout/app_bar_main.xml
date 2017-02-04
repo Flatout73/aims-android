@@ -21,7 +21,8 @@
             app:contentScrim="?attr/colorPrimary"
             android:id="@+id/collapsing_toolbar"
             app:expandedTitleMarginStart="16dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:isScrollContainer="false">
 
             <ImageView
                 android:id="@+id/avatar_main"

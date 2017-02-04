@@ -195,7 +195,7 @@ public class NewsFeedFragment extends Fragment {
                 mListView.setNestedScrollingEnabled(false);
                 ((AdapterAims) mListView.getAdapter()).notifyDataSetChanged();
             } catch (Exception ex) {
-                Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -98,6 +98,8 @@ public class MainActivity extends AppCompatActivity
         ProgressBar loading;
         View container;
 
+        SearchView searchView;
+
         final int MY_PERMISSION_REQUEST = 1;
 
     @Override
@@ -234,7 +236,6 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         searchMenuItem = menu.findItem(R.id.action_search);
-        SearchView searchView;
         searchView = (SearchView) searchMenuItem.getActionView();
         SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 
@@ -266,6 +267,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.my_page) {
             appBarLayoutMain.setExpanded(false, false);
             ftransp.replace(R.id.container, pageFr);
+            appBarLayoutMain.setExpanded(false, false);
             collapsingToolbar.setTitle("Мои друзья");
 
         } else if (id == R.id.target_control) {
@@ -286,7 +288,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.friends) {
             appBarLayoutMain.setExpanded(false, false);
 //            AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
-//            p.setScrollFlags(-1);
+//            p.setScrollFlags(0);
 //            collapsingToolbar.setLayoutParams(p);
             ftransp.replace(R.id.container, friendFr);
             appBarLayoutMain.setExpanded(false, false);
@@ -342,11 +344,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onMenuItemActionExpand(MenuItem item) {
         appBarLayoutMain.setExpanded(false, true);
-        ListView searchView = (ListView) findViewById(R.id.main_search);
-        searchView.setVisibility(View.VISIBLE);
+        ListView searchList = (ListView) findViewById(R.id.main_search);
+        searchList.setVisibility(View.VISIBLE);
         findViewById(R.id.container).setVisibility(View.GONE);
-        searchView.setAdapter(searchAdapter);
-        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        searchList.setAdapter(searchAdapter);
+        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, FriendActivity.class);
@@ -360,8 +362,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
-        ListView searchView = (ListView) findViewById(R.id.main_search);
-        searchView.setVisibility(View.GONE);
+        ListView searchList = (ListView) findViewById(R.id.main_search);
+        searchList.setVisibility(View.GONE);
         findViewById(R.id.container).setVisibility(View.VISIBLE);
         return true;
     }
