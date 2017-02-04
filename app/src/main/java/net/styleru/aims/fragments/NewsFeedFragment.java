@@ -12,9 +12,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.styleru.aims.AboutTargetActivity;
+import net.styleru.aims.adapters.AdapterAims;
 import net.styleru.aims.R;
+import net.styleru.aims.myviews.NestedScrollingListView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,15 +29,15 @@ import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.Aim;
 
-import static net.styleru.aims.fragments.AimsFragment.DESCRIPTION;
-import static net.styleru.aims.fragments.AimsFragment.ID;
+import static net.styleru.aims.fragments.MyPageFragment.DESCRIPTION;
+import static net.styleru.aims.fragments.MyPageFragment.ID;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FriendsFragment#newInstance} factory method to
+ * Use the {@link NewsFeedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FriendsFragment extends Fragment {
+public class NewsFeedFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -44,13 +47,14 @@ public class FriendsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private ListView mListView;
+    private NestedScrollingListView mListView;
     private ArrayList<HashMap<String, String>> mTargetList = new ArrayList<>();
     private static final String TITLE = "targetname";
     private static final String DATE = "date";
 
+    TextView empty;
 
-    public FriendsFragment() {
+    public NewsFeedFragment() {
         // Required empty public constructor
     }
 
@@ -60,11 +64,11 @@ public class FriendsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FriendsFragment.
+     * @return A new instance of fragment NewsFeedFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FriendsFragment newInstance(String param1, String param2) {
-        FriendsFragment fragment = new FriendsFragment();
+    public static NewsFeedFragment newInstance(String param1, String param2) {
+        NewsFeedFragment fragment = new NewsFeedFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -85,26 +89,29 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        NestedScrollingListView listView = (NestedScrollingListView) view.findViewById(R.id.friendsListView);
+        mListView = (NestedScrollingListView) view.findViewById(R.id.friendsListView);
 
         AsyncNews asyncNews = new AsyncNews();
-        try {
-            String res2 = asyncNews.execute(new Date(115, 12, 20)).get();
+//        try {
+//            String res2 = asyncNews.execute(new Date(115, 12, 20)).get();
+        asyncNews.execute(new Date(115, 12, 20));
 //            if(!res2.equals("")){
 //                Snackbar.make(view, res2, Snackbar.LENGTH_LONG).show();
 //            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
 
+        //получаем новости
         HashMap<String, String> hm;
         List<Aim> friendAims = DataStorage.getNewsFeed();
 
         mTargetList.clear();
 
-        if(friendAims.size() != 0) {
+        // и опять создаем лист мепов
+        if (friendAims.size() != 0) {
             try {
                 for (int i = 0; i < friendAims.size(); i++) {
                     Aim currentAim = friendAims.get(i);
@@ -117,9 +124,8 @@ public class FriendsFragment extends Fragment {
             } catch (Exception ex) {
                 Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG);
             }
-        }
-        else {
-            TextView empty = (TextView) view.findViewById(R.id.empty);
+        } else {
+            empty = (TextView) view.findViewById(R.id.empty);
             empty.setVisibility(View.VISIBLE);
         }
 
@@ -129,15 +135,17 @@ public class FriendsFragment extends Fragment {
 //        hm.put(DESCRIPTION, "kek");
 //        mTargetList.add(hm);
 
-
-        AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item_2, mTargetList, friendAims);
-        listView.setAdapter(adapterAims);
-        listView.setOnItemClickListener(itemClickListener);
-        listView.setNestedScrollingEnabled(false);
+        //и опять адаптер
+        AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item_feed, mTargetList, friendAims);
+        mListView.setAdapter(adapterAims);
+        mListView.setOnItemClickListener(itemClickListener);
+        mListView.setNestedScrollingEnabled(false);
 
         return view;
     }
 
+    //Кликлистенер на каждый элемент списка. Если бы кто-то реализовал парсабл, он бы работал нормально,
+    //а так все через жопу, впрочем ничего нового
     AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
 
         @Override
@@ -160,6 +168,35 @@ public class FriendsFragment extends Fragment {
                 return e.getMessage();
             }
             return "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+            List<Aim> friendAims = DataStorage.getNewsFeed();
+            HashMap<String, String> hm;
+
+                mTargetList.clear();
+            if (friendAims.size() != 0) {
+                empty.setVisibility(View.GONE);
+                    for (int i = 0; i < friendAims.size(); i++) {
+                        Aim currentAim = friendAims.get(i);
+                        hm = new HashMap<>();
+                        hm.put(TITLE, currentAim.getHeader());
+                        hm.put(DATE, currentAim.getDate().toString());
+                        hm.put(DESCRIPTION, currentAim.getText());
+                        mTargetList.add(hm);
+                    }
+            }
+                AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item_feed, mTargetList, friendAims);
+                mListView.setAdapter(adapterAims);
+                mListView.setOnItemClickListener(itemClickListener);
+                mListView.setNestedScrollingEnabled(false);
+                ((AdapterAims) mListView.getAdapter()).notifyDataSetChanged();
+            } catch (Exception ex) {
+                Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

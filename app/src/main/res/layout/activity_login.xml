@@ -34,10 +34,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AIMS"
                 android:layout_gravity="center"
-                android:textSize="20pt"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="16dp"
+                android:text="AIMS"
+                android:textSize="20pt" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -76,49 +76,67 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-            <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_weight="1"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/email_sign_up_button"
-                style="?android:textAppearanceSmall"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:layout_weight="1"
-                android:layout_marginTop="16dp"
-                android:text="Регистрация"
-                android:onClick="register"
-                android:textStyle="bold" />
+                <Button
+                    android:id="@+id/email_sign_in_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:text="@string/action_sign_in"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/email_sign_up_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:onClick="register"
+                    android:text="Регистрация"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="8dp">
-            <TextView
-                android:id="@+id/text_forgot_psw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Забыли пароль? Введите E-mail и нажмите"
-                />
+                android:layout_marginTop="8dp"
+                android:gravity="center_horizontal">
+
 
                 <TextView
-                    android:layout_toRightOf="@id/text_forgot_psw"
+                    android:id="@+id/text_forgot_psw_quest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Забыли пароль?"
+                    android:textAlignment="center" />
+
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:layout_marginStart="3dp"
-                    android:text="здесь!"
-                    android:textColor="@color/blue_button"
-                    android:onClick="forgotPassword"/>
+                    android:layout_below="@id/text_forgot_psw_quest"
+                    android:layout_centerHorizontal="true">
+
+                    <TextView
+                        android:id="@+id/text_forgot_psw"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Введите E-mail и нажмите" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@id/text_forgot_psw"
+                        android:layout_marginStart="3dp"
+                        android:layout_toRightOf="@id/text_forgot_psw"
+                        android:clickable="true"
+                        android:onClick="forgotPassword"
+                        android:text="здесь!"
+                        android:textColor="@color/blue_button" />
+                </RelativeLayout>
 
             </RelativeLayout>
 

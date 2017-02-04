@@ -94,7 +94,7 @@ public class AddTarget1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_new_add_target_1, container, false);;
+        View view = inflater.inflate(R.layout.fragment_new_add_target_1, container, false);
 
         forDate = (Button) view.findViewById(R.id.addTarget1_start_date);
         forEnd = (Button) view.findViewById(R.id.addTarget1_end_date);

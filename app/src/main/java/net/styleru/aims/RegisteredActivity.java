@@ -24,6 +24,13 @@ import java.util.List;
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
 
+/**
+ *
+ * Активити из стандартных шаблонов гугла.
+ *
+ */
+
+
 public class RegisteredActivity extends AppCompatActivity {
 
     String sex;

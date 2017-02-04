@@ -1,23 +1,18 @@
 package net.styleru.aims;
 
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.styleru.aims.fragments.AdapterAims;
-import net.styleru.aims.fragments.NestedScrollingListView;
+import net.styleru.aims.adapters.AdapterAims;
+import net.styleru.aims.myviews.NestedScrollingListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,13 +20,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import ru.aimsproject.connectionwithbackend.RequestMethods;
-import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.Aim;
 import ru.aimsproject.models.User;
 
-import static net.styleru.aims.fragments.AimsFragment.DATE;
-import static net.styleru.aims.fragments.AimsFragment.DESCRIPTION;
-import static net.styleru.aims.fragments.AimsFragment.TITLE;
+import static net.styleru.aims.fragments.MyPageFragment.DATE;
+import static net.styleru.aims.fragments.MyPageFragment.DESCRIPTION;
+import static net.styleru.aims.fragments.MyPageFragment.TITLE;
 
 public class FriendActivity extends AppCompatActivity {
 

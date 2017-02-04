@@ -40,14 +40,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.styleru.aims.fragments.AimsFragment;
-import net.styleru.aims.fragments.FriendsFragment;
-import net.styleru.aims.fragments.PageFragment;
-import net.styleru.aims.fragments.RoundedImageView;
+import net.styleru.aims.adapters.SearchAdapter;
+import net.styleru.aims.fragments.MyFriendsFragment;
+import net.styleru.aims.fragments.MyPageFragment;
+import net.styleru.aims.fragments.NewsFeedFragment;
+import net.styleru.aims.myviews.RoundedImageView;
 import net.styleru.aims.fragments.SettingsFragment;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 
@@ -64,9 +64,9 @@ public class MainActivity extends AppCompatActivity
 
 
         static final int GALLERY_REQUEST = 1;
-        PageFragment pageFr;
-        AimsFragment aimsFr;
-        FriendsFragment friendFr;
+        MyFriendsFragment pageFr;
+        MyPageFragment aimsFr;
+        NewsFeedFragment friendFr;
         SettingsFragment settingFr;
 
         SharedPreferences mToken;
@@ -148,9 +148,9 @@ public class MainActivity extends AppCompatActivity
 
         //fragmentStack = new Stack<Fragment>();
 
-        pageFr = PageFragment.newInstance("kek", "lol");
-        aimsFr = AimsFragment.newInstance("kek", "lol");
-        friendFr = FriendsFragment.newInstance("kek", "lol");
+        pageFr = MyFriendsFragment.newInstance("kek", "lol");
+        aimsFr = MyPageFragment.newInstance("kek", "lol");
+        friendFr = NewsFeedFragment.newInstance("kek", "lol");
         settingFr = SettingsFragment.newInstance("kek", "lol");
 
         fragmentManager = getFragmentManager();
@@ -526,6 +526,7 @@ public class MainActivity extends AppCompatActivity
         EditText email = (EditText) findViewById(R.id.set_email);
         final EditText password = (EditText) findViewById(R.id.set_password);
 
+        //Здесь просто рабоота с AlertDialog, если не понятно, можно погуглить
         if(!email.getText().equals("")) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("E-mail");

@@ -57,10 +57,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true">
 
-        <net.styleru.aims.fragments.NestedScrollingListView
+        <net.styleru.aims.myviews.NestedScrollingListView
             android:id="@+id/friends_ListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></net.styleru.aims.fragments.NestedScrollingListView>
+            android:layout_height="wrap_content"></net.styleru.aims.myviews.NestedScrollingListView>
 
         <TextView
             android:id="@id/android:empty"

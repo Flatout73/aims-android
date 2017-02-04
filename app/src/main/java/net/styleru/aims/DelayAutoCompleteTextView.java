@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 
 /**
  * Created by LeonidL on 24.12.16.
+ * я опять хотел сделать что-то крутое, но как-то не удалось, а удалять жалко, можете сюда не смотреть.
  */
 
 public class DelayAutoCompleteTextView extends AutoCompleteTextView {

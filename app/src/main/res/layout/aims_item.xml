@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground" >
 
-    <!--<net.styleru.aims.fragments.RoundedImageView-->
+    <!--<net.styleru.aims.myviews.RoundedImageView-->
         <!--android:layout_width="48dp"-->
         <!--android:layout_height="48dp"-->
         <!--android:layout_centerVertical="true"-->

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.styleru.aims.fragments.AimsFragment">
+    tools:context="net.styleru.aims.fragments.MyPageFragment">
 
     <TextView
         android:layout_width="match_parent"
@@ -31,10 +31,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true">
 
-        <net.styleru.aims.fragments.NestedScrollingListView
+        <net.styleru.aims.myviews.NestedScrollingListView
             android:id="@+id/aimsListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></net.styleru.aims.fragments.NestedScrollingListView>
+            android:layout_height="wrap_content"></net.styleru.aims.myviews.NestedScrollingListView>
 
         <TextView
             android:id="@id/android:empty"

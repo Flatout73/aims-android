@@ -1,4 +1,4 @@
-package net.styleru.aims.fragments;
+package net.styleru.aims.myviews;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,6 +17,7 @@ import android.widget.ImageView;
 
 /**
  * Created by LeonidL on 24.11.16.
+ * Один из способов реализации круглый картинок (нативный)
  */
 
 public class RoundedImageView extends ImageView {

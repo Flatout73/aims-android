@@ -30,6 +30,7 @@ public class AddTarget extends AppCompatActivity {
         setContentView(R.layout.activity_add_target);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_target);
         setSupportActionBar(toolbar);
+        setTitle("Добавить цель");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -42,6 +43,8 @@ public class AddTarget extends AppCompatActivity {
 
 
     private void setupViewPager(ViewPager viewPager) {
+
+        //2 и 3 цели перепутаны, будь аккуратен!
         PagesAdapter pagesAdapter = new PagesAdapter(getSupportFragmentManager());
         pagesAdapter.addFragment(new AddTarget1(), "Цель");
         pagesAdapter.addFragment(new AddTarget3(), "Цель с интервалом");

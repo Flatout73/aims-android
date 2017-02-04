@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp">
 
-                <net.styleru.aims.fragments.RoundedImageView
+                <net.styleru.aims.myviews.RoundedImageView
                     android:layout_width="88dp"
                     android:layout_height="88dp"
                     android:id="@+id/settings_avatar"

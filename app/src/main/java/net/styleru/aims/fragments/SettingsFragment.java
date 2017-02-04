@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import net.styleru.aims.R;
+import net.styleru.aims.myviews.RoundedImageView;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.User;
 
@@ -18,6 +18,9 @@ import ru.aimsproject.models.User;
  * A simple {@link Fragment} subclass.
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ *
+ * Ну тут все просто. И никаких адаптеров! Наконец-то!
  */
 public class SettingsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

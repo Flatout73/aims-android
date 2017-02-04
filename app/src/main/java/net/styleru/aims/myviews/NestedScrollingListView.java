@@ -1,4 +1,4 @@
-package net.styleru.aims.fragments;
+package net.styleru.aims.myviews;
 
 import android.content.Context;
 import android.support.v4.view.NestedScrollingChild;
@@ -8,6 +8,8 @@ import android.widget.ListView;
 
 /**
  * Created by LeonidL on 13.11.16.
+ * эта штука нужна, чтобы колапсинг тулбар корректно крутился вместе с листвью, я хз че делаеют эти методы
+ * решение взято со стаковерфлоу
  */
 
 public class NestedScrollingListView extends ListView implements NestedScrollingChild {

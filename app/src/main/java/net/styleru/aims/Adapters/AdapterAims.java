@@ -1,19 +1,11 @@
-package net.styleru.aims.fragments;
+package net.styleru.aims.adapters;
 
-import android.app.LauncherActivity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.Shape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import net.styleru.aims.R;
@@ -23,17 +15,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.StringTokenizer;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import ru.aimsproject.models.Aim;
 
-import static android.support.v4.content.ContextCompat.getColor;
-import static net.styleru.aims.fragments.AimsFragment.DATE;
-import static net.styleru.aims.fragments.AimsFragment.DESCRIPTION;
-import static net.styleru.aims.fragments.AimsFragment.TITLE;
+import static net.styleru.aims.fragments.MyPageFragment.DATE;
+import static net.styleru.aims.fragments.MyPageFragment.DESCRIPTION;
+import static net.styleru.aims.fragments.MyPageFragment.TITLE;
 
 
 // Убрать хешмеп и сделать 2 листа. Наследовать от эррей адаптера, как в статье на хабре
@@ -42,7 +30,7 @@ import static net.styleru.aims.fragments.AimsFragment.TITLE;
 
 
 /**
- * Created by LeonidL on 16.10.16.
+ *  Этот адаптер нужен чтобы отображать цели на Моей странице и в новостной ленте
  */
 public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
 
@@ -52,6 +40,9 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
 
     int resource;
 
+    /**
+     *  Дефолтный конструктор
+     */
     List<Aim> aims;
     public AdapterAims(Context context, int resource, List<HashMap<String, String>> data){
         super(context, resource, data);
@@ -62,6 +53,9 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
         this.resource = resource;
     }
 
+    /**
+     * Конструктор для ленты новостей и моей страницы с Листом целлей
+     */
     public AdapterAims(Context context, int resource, List<HashMap<String, String>> data, List<Aim> aims) {
         super(context, resource, data);
 
@@ -77,7 +71,7 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
       //  View rowView1 = inflater.inflate(R.layout.aims_item, parent, false);
-        //View rowView2 = inflater.inflate(R.layout.aims_item_2, parent, false);
+        //View rowView2 = inflater.inflate(R.layout.aims_item_feed, parent, false);
 
       //  TextView textView1 = (TextView)rowView1.findViewById(R.id.target_aims);
       //  TextView textView2 = (TextView)rowView2.findViewById(R.id.target_aims2);
@@ -93,6 +87,7 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
         header.setText(aimMap.get(TITLE));
         description.setText(aimMap.get(DESCRIPTION));
 
+        // Приводим дату в нужный формат
         SimpleDateFormat format = new SimpleDateFormat();
         format.applyPattern("EEE MMM dd HH:mm:ss z yyyy");
         try {
@@ -104,10 +99,16 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
             e.printStackTrace();
         }
 
+        //если есть цели
         if(aims != null) {
             Aim aim = aims.get(position);
-//            avatar.setImageBitmap(aim.getAuthor().getImageMin());
-//            nameAuthor.setText(aim.getAuthor().getName());
+            //для отображения аваторк и имени в новостной ленте
+            if(resource == R.layout.aims_item_feed) {
+                avatar.setImageBitmap(aim.getAuthor().getImageMin());
+                nameAuthor.setText(aim.getAuthor().getName());
+            }
+
+            //В зависимости от прогресса цели меняется цвет заднего фона
             if(aim.getFlag() == 1) {
                 rowView.setBackgroundColor(Color.YELLOW);
             } else if (aim.getFlag() == 2) {
@@ -121,7 +122,7 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
 //            return rowView1;
 //        }
 //        else {
-//            rowView = inflater.inflate(R.layout.aims_item_2, parent, false);
+//            rowView = inflater.inflate(R.layout.aims_item_feed, parent, false);
 //            TextView textView = (TextView)rowView.findViewById(R.id.target_aims2);
 //            textView.setText(targets.get(position).get("targetname"));
 ////            textView2.setText((CharSequence) targets.get(position));

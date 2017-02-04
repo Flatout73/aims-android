@@ -1,4 +1,4 @@
-package net.styleru.aims;
+package net.styleru.aims.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import net.styleru.aims.R;
 
 import java.util.List;
 
