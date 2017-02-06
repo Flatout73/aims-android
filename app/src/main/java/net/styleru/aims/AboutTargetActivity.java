@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import ru.aimsproject.connectionwithbackend.RequestMethods;
@@ -130,8 +131,7 @@ public class AboutTargetActivity extends AppCompatActivity {
         targetDescription.setText(aim.getText());
 
 
-        SimpleDateFormat format = new SimpleDateFormat();
-        format.applyPattern("EEE MMM dd HH:mm:ss z yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
         Date aimDate = null;
         try {
             aimDate = format.parse(aim.getEndDate().toString());

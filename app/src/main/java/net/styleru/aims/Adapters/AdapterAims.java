@@ -107,8 +107,9 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
             //для отображения аваторк и имени в новостной ленте
             if(resource == R.layout.aims_item_feed) {
                 Bitmap avatMin = aim.getAuthor().getImageMin();
-                if(avatMin == null)
-                    avatar.setVisibility(View.GONE);
+                if(avatMin == null) {
+                    //avatar.setVisibility(View.GONE);
+                }
                 else
                     avatar.setImageBitmap(avatMin);
                 nameAuthor.setText(aim.getAuthor().getName());
