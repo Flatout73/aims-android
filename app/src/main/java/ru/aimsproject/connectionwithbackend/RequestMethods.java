@@ -75,7 +75,8 @@ public class RequestMethods {
      */
     private static String addAttribute(String urlString, String attributeName, String attributeValue, boolean isFirstAttribute) {
         String value = attributeValue.substring(0);
-        value.replaceAll("&", "%26");
+        value = value.replaceAll("&", "%26");
+        value = value.replaceAll(" ", "%20");
         return urlString + (isFirstAttribute ? "?" : "&") + attributeName + "=" + value;
     }
 
