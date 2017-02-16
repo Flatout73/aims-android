@@ -105,7 +105,7 @@ public class MyPageFragment extends Fragment {
                         Aim currentAim = myAims.get(i);
                         hm = new HashMap<>();
                         hm.put(TITLE, currentAim.getHeader());
-                        hm.put(DATE, currentAim.getDate().toString());
+                        hm.put(DATE, currentAim.getEndDate().toString());
                         hm.put(DESCRIPTION, currentAim.getText());
                         mTargetList.add(hm);
                     }
