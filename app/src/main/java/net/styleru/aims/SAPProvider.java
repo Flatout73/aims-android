@@ -88,7 +88,10 @@ public class SAPProvider extends SAAgent{
 
     @Override
     protected void onServiceConnectionRequested(SAPeerAgent peerAgent) {
-        acceptServiceConnectionRequest(peerAgent);
+        if (peerAgent != null) {
+            Toast.makeText(getBaseContext(), "Connection", Toast.LENGTH_SHORT).show();
+            acceptServiceConnectionRequest(peerAgent);
+        }
     }
 
     public  String getDeviceInfo() {

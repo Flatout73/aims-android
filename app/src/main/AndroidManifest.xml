@@ -12,7 +12,9 @@
     <user-permission android:name="android.permission.BLUETOOTH" />
     <user-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <user-permission android:name="com.samsung.accessory.permission.ACCESSORY_FRAMEWORK" />
+    <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
     <user-permission android:name="com.samsung.wmanager.APP" />
+    <uses-permission android:name="com.samsung.WATCH_APP_TYPE.Companion" />
     <user-permission android:name="com.samsung.wmanager.ENABLE_NOTIFICATION" />
 
 
