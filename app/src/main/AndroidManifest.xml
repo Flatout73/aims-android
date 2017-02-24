@@ -13,9 +13,10 @@
     <user-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <user-permission android:name="com.samsung.accessory.permission.ACCESSORY_FRAMEWORK" />
     <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
-    <user-permission android:name="com.samsung.wmanager.APP" />
+    <!--<user-permission android:name="com.samsung.wmanager.APP" />-->
     <uses-permission android:name="com.samsung.WATCH_APP_TYPE.Companion" />
-    <user-permission android:name="com.samsung.wmanager.ENABLE_NOTIFICATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--<user-permission android:name="com.samsung.wmanager.ENABLE_NOTIFICATION" />-->
 
 
     <application
@@ -25,27 +26,27 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name="net.styleru.aims.SAPProvider">
-        </service>
-        <receiver android:name="com.samsung.android.sdk.accessory.ServiceConnectionIndicationBroadcastReceiver" >
+        <service android:name="net.styleru.aims.SAPProvider"/>
+        <!--<receiver android:name="com.samsung.android.sdk.accessory.ServiceConnectionIndicationBroadcastReceiver" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.accessory.service.action.ACCESSORY_SERVICECONNECTION_INO" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--<receiver android:name="com.samsung.android.sdk.accessory.RegisterUponInstallReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.accessory.device.action.REGISTER_AFTER_INSTALL" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
+        <receiver android:name="com.samsung.android.sdk.accessory.ServiceConnectionIndicationBroadcastReceiver">
             <intent-filter>
-                <action android:name="android.accessory.service.action.ACCESSORY_SERVICECONNECTION_INO" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.samsung.android.sdk.accessory.RegisterUponInstallReceiver">
-            <intent-filter>
-                <action android:name="android.accessory.device.action.REGISTER_AFTER_INSTALL" />
+                <action android:name="com.samsung.accessory.action.SERVICE_CONNECTION_REQUESTED" />
             </intent-filter>
         </receiver>
 
         <receiver android:name="com.samsung.android.sdk.accessory.RegisterUponInstallReceiver">
             <intent-filter>
                 <action android:name="com.samsung.accessory.action.REGISTER_AGENT" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.samsung.android.sdk.accessory.ServiceConnectionIndicationBroadcastReceiver">
-            <intent-filter>
-                <action android:name="com.samsung.accessory.action.SERVICE_CONNECTION_REQUESTED" />
             </intent-filter>
         </receiver>
 

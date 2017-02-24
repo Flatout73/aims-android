@@ -184,12 +184,14 @@ public class SAPProvider extends SAAgent{
     @Override
     public void onCreate() {
         super.onCreate();
+        Toast.makeText(getBaseContext(), "Connect to App", Toast.LENGTH_SHORT).show();
         SA mAccessory = new SA();
         try {
             mAccessory.initialize(this);
+            //findPeerAgents();
         } catch (SsdkUnsupportedException e) {
             // try to handle SsdkUnsupportedException
-            if (processUnsupportedException(e) == true) {
+            if (processUnsupportedException(e)) {
                 return;
             }
         } catch (Exception e1) {
@@ -229,6 +231,8 @@ public class SAPProvider extends SAAgent{
             }
         } else if (result == SAAgent.CONNECTION_ALREADY_EXIST) {
             Log.e(TAG, "onServiceConnectionResponse, CONNECTION_ALREADY_EXIST");
+        } else {
+            Log.e(TAG, "onServiceConnectionResponse: HZ");
         }
     }
 

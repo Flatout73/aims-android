@@ -2,11 +2,11 @@
     <application name="aims">
         <serviceProfile
             id="/system/sapsample"
-            name="sapsamle"
+            name="SAPaims"
             role="provider"
             serviceImpl="net.styleru.aims.SAPProvider"
-            version="1.1"
-            serviceLimit="ANY"
+            version="1.0"
+            serviceLimit="any"
             serviceTimeout="10">
             <supportedTransports>
                 <transport type="TRANSPORT_BT"/>
@@ -14,7 +14,7 @@
             <serviceChannel
                 id="124"
                 dataRate="low"
-                priority="low"
+                priority="medium"
                 reliability="enable">
             </serviceChannel>
         </serviceProfile>
