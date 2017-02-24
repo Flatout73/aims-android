@@ -28,6 +28,8 @@ import android.os.Handler;
 
 import com.samsung.android.sdk.accessory.*;
 
+import org.json.JSONObject;
+
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
 
@@ -310,7 +312,9 @@ public class SAPProvider extends SAAgent{
                     public void run() {
                         try {
                             String json = RequestMethods.getProfile();
-                            sendJSONInfo(json);
+                            JSONObject js = new JSONObject(json);
+                            js.put("TypeOfRequest", "request_profile");
+                            sendJSONInfo(js.toString());
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (Exception e) {
@@ -325,7 +329,9 @@ public class SAPProvider extends SAAgent{
                     public void run() {
                         try {
                             String json = RequestMethods.getFriends(DataStorage.getMe());
-                            sendJSONInfo(json);
+                            JSONObject js = new JSONObject(json);
+                            js.put("TypeOfRequest", "request_friends");
+                            sendJSONInfo(js.toString());
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (Exception e) {
@@ -340,7 +346,9 @@ public class SAPProvider extends SAAgent{
                     public void run() {
                         try {
                             String json = RequestMethods.getNews(new Date(115, 12, 20));
-                            sendJSONInfo(json);
+                            JSONObject js = new JSONObject(json);
+                            js.put("TypeOfRequest", "request_news");
+                            sendJSONInfo(js.toString());
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (Exception e) {
