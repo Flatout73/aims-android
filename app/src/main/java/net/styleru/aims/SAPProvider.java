@@ -16,6 +16,7 @@ import com.samsung.android.sdk.accessory.SAPeerAgent;
 import com.samsung.android.sdk.accessory.SASocket;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -26,6 +27,11 @@ import java.util.GregorianCalendar;
 import android.os.Handler;
 
 import com.samsung.android.sdk.accessory.*;
+
+import ru.aimsproject.connectionwithbackend.RequestMethods;
+import ru.aimsproject.data.DataStorage;
+
+import static android.R.id.message;
 
 /**
  * Created by LeonidL on 19.02.17.
@@ -289,22 +295,65 @@ public class SAPProvider extends SAAgent{
         @Override
         public void onReceive(int channelId, byte[] data) {
             if (mConnectionHandler == null) {
+                Log.e(TAG, "Lost connection !!");
                 return;
             }
-            Calendar calendar = new GregorianCalendar();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd aa hh:mm:ss.SSS");
-            String timeStr = " " + dateFormat.format(calendar.getTime());
-            String strToUpdateUI = new String(data);
-            final String message = strToUpdateUI.concat(timeStr);
-            new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        mConnectionHandler.send(getServiceChannelId(0), message.getBytes());
-                    } catch (IOException e) {
-                        e.printStackTrace();
+//            Calendar calendar = new GregorianCalendar();
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd aa hh:mm:ss.SSS");
+//            String timeStr = " " + dateFormat.format(calendar.getTime());
+//            String strToUpdateUI = new String(data);
+//            final String message = strToUpdateUI.concat(timeStr);
+
+            String reqMessage = new String(data);
+            if (reqMessage.equals("request_profile")) {
+                new Thread(new Runnable() {
+                    public void run() {
+                        try {
+                            String json = RequestMethods.getProfile();
+                            sendJSONInfo(json);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            }).start();
+                }).start();
+            }
+
+            if (reqMessage.equals("request_friends")) {
+                new Thread(new Runnable() {
+                    public void run() {
+                        try {
+                            String json = RequestMethods.getFriends(DataStorage.getMe());
+                            sendJSONInfo(json);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
+
+            if (reqMessage.equals("request_news")) {
+                new Thread(new Runnable() {
+                    public void run() {
+                        try {
+                            String json = RequestMethods.getNews(new Date(115, 12, 20));
+                            sendJSONInfo(json);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+            }
+        }
+
+        private void sendJSONInfo(final String json) throws IOException {
+            mConnectionHandler.send(getServiceChannelId(0), json.getBytes());
         }
 
         @Override

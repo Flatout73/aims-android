@@ -673,8 +673,9 @@ public class RequestMethods {
     /**
      * Метод для получения своего профиля.
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     * @return Возвращает полученный от сервера JSON в виде строки (для отправки на часы)
      */
-    public static void getProfile() throws Exception {
+    public static String getProfile() throws Exception {
         String urlString = newsURL;
         urlString += "getprofile/";
         String currentToken = DataStorage.getToken();
@@ -717,6 +718,7 @@ public class RequestMethods {
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
         }
+        return response;
     }
 
     /**
@@ -779,8 +781,9 @@ public class RequestMethods {
      * Получает цели друзей, начиная с определённого времени.
      * @param date Время, начиная с которого получаются цели.
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось или если у пользователя нет друзей.
+     * @return Возвращает полученный от сервера JSON в виде строки (для отправки на часы)
      */
-    public static void getNews(Date date) throws Exception {
+    public static String getNews(Date date) throws Exception {
         String urlString = newsURL;
         urlString += "getnews/";
         String currentToken = DataStorage.getToken();
@@ -825,6 +828,7 @@ public class RequestMethods {
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
         }
+        return response;
     }
 
     /**
@@ -1408,8 +1412,9 @@ public class RequestMethods {
      * Получает список друзей пользователя.
      * @param user Пользователь, список друзей которого получаем.
      * @throws Exception Бросает исключение с текстом ошибки, если успешно выполнить метод не удалось.
+     * @return Возвращает полученный от сервера JSON в виде строки (для отправки на часы)
      */
-    public static void getFriends(User user) throws Exception {
+    public static String getFriends(User user) throws Exception {
         String urlString = friendshipsURL;
         urlString += "get/";
         String currentToken = DataStorage.getToken();
@@ -1445,6 +1450,8 @@ public class RequestMethods {
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
         }
+
+        return response;
     }
 
     /**

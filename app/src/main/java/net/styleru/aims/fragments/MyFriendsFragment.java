@@ -78,7 +78,6 @@ public class MyFriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_page, container, false);
-        initRecyclerView(view); //иницилизируем адаптер
 
         //Эта штука нужна была для показа текстового поля, если у пользователя нет друзей,
         //но что-то как-то не зашло
@@ -86,42 +85,55 @@ public class MyFriendsFragment extends Fragment {
         return view;
     }
 
-    private void initRecyclerView(View rootView) {
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        List<User> friends = DataStorage.getMe().getFriends();
+        if(friends.isEmpty()) {
+            GetFriendsAsync friendsAsync = new GetFriendsAsync();
+            friendsAsync.execute(DataStorage.getMe());
+        } else {
+            initRecyclerView(view, friends);
+        }
+    }
+
+    private void initRecyclerView(View rootView, List<User> expanses) {
         recyclerView = (RecyclerView)rootView.findViewById(R.id.alerts_list);
         Context context = rootView.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        AdapterFriends expensesAdapter = new AdapterFriends(getExpenses());
+        AdapterFriends expensesAdapter = new AdapterFriends(expanses);
         recyclerView.setAdapter(expensesAdapter);
         recyclerView.setNestedScrollingEnabled(false);
     }
 
-    /**
-     * хз почему expanses, по-моему так было в каком-то гайде
-     *
-     * @return возвращает список друзей
-     */
-    private List<User> getExpenses() {
-        List<User> expenses = new ArrayList<>();
-        GetFriendsAsync friendsAsync = new GetFriendsAsync();
-        try {
-            String res = friendsAsync.execute(DataStorage.getMe()).get();
-            if(res.equals("")) {
-                expenses = DataStorage.getMe().getFriends();
-            }
-            else {
-                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        if(!expenses.isEmpty())  {
-           // empty.setVisibility(View.GONE);
-        }
-        return expenses;
-    }
+//    /**
+//     * хз почему expanses, по-моему так было в каком-то гайде
+//     *
+//     * @return возвращает список друзей
+//     */
+//    private List<User> getExpenses() {
+//        List<User> expenses = new ArrayList<>();
+//        GetFriendsAsync friendsAsync = new GetFriendsAsync();
+//        try {
+//            String res = friendsAsync.execute(DataStorage.getMe()).get();
+//            if(res.equals("")) {
+//                expenses = DataStorage.getMe().getFriends();
+//            }
+//            else {
+//                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if(!expenses.isEmpty())  {
+//           // empty.setVisibility(View.GONE);
+//        }
+//        return expenses;
+//    }
 
     class GetFriendsAsync extends AsyncTask<User, Void, String> {
 
@@ -133,6 +145,15 @@ public class MyFriendsFragment extends Fragment {
                 return e.getMessage();
             }
             return "";
+        }
+
+        @Override
+        protected void onPostExecute(String res) {
+            if(res.equals(""))
+                initRecyclerView(view, DataStorage.getMe().getFriends()); //иницилизируем адаптер
+            else {
+                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 }
