@@ -89,13 +89,13 @@ public class MyFriendsFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        List<User> friends = DataStorage.getMe().getFriends();
-        if(friends.isEmpty()) {
+        //List<User> friends = DataStorage.getMe().getFriends();
+        //if(friends.isEmpty()) {
             GetFriendsAsync friendsAsync = new GetFriendsAsync();
             friendsAsync.execute(DataStorage.getMe());
-        } else {
-            initRecyclerView(view, friends);
-        }
+        //} else {
+        //    initRecyclerView(view, friends);
+        //}
     }
 
     private void initRecyclerView(View rootView, List<User> expanses) {
