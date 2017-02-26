@@ -36,7 +36,7 @@ public class DataStorage {
     /**
      * Текущий токен.
      */
-    private static String token;
+    private volatile static String token;
 
     /**
      * Возвращает ленту ("новостную ленту") целей.
