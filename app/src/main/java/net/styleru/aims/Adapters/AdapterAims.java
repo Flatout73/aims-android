@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.common.data.DataBufferObserver;
+
 import net.styleru.aims.R;
 
 import java.text.ParseException;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import ru.aimsproject.exceptions.UnallowedAimFlagChangeException;
 import ru.aimsproject.models.Aim;
 
 import static net.styleru.aims.fragments.MyPageFragment.DATE;
@@ -115,6 +118,17 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
                 nameAuthor.setText(aim.getAuthor().getName());
             }
 
+            long curDate = (new Date()).getTime();
+            try {
+            if(curDate > aim.getEndDate().getTime()) {
+
+                    aim.setFlag(3);
+            } else if(curDate > aim.getStartDate().getTime()) {
+                    aim.setFlag(1);
+            }
+            } catch (UnallowedAimFlagChangeException e) {
+                e.printStackTrace();
+            }
             //В зависимости от прогресса цели меняется цвет заднего фона
             if(aim.getFlag() == 1) {
                 rowView.setBackgroundColor(Color.YELLOW);

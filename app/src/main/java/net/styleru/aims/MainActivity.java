@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity
 
         mToken = getSharedPreferences(APP_REFERENCES, Context.MODE_PRIVATE);
 
+        loading.setVisibility(View.VISIBLE);
+        loading.setActivated(true);
         TaskProfile taskProfile = new TaskProfile(loading, container);
 
         try {

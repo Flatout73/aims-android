@@ -2,12 +2,16 @@ package net.styleru.aims;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,93 +45,47 @@ public class FriendActivity extends AppCompatActivity {
 
     ImageView avatar;
     TextView rating;
+    CollapsingToolbarLayout collapsingToolbar;
+    ProgressBar progressBar;
+
+    AppBarLayout appBarLayout;
+    View container;
+
+    LinearLayout cont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         login = getIntent().getExtras().getString("User");
 
         NestedScrollingListView listView = (NestedScrollingListView) findViewById(R.id.friends_ListView);
 
-        AimsAsync aimsAsync = new AimsAsync();
-        try {
-            user = aimsAsync.execute(login).get();
-            if(user == null) {
-                Toast.makeText(getApplicationContext(), "Не удалось найти пользователя", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        } catch (InterruptedException e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        } catch (ExecutionException e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
         buttonAdd = (Button) findViewById(R.id.add_to_friend);
         avatar = (ImageView) findViewById(R.id.friend_avatar_act);
 
         rating = (TextView) findViewById(R.id.rating_friend);
+
+        progressBar = (ProgressBar) findViewById(R.id.myfriend_progress);
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_friend);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbarlayout_friend);
+        cont = (LinearLayout) findViewById(R.id.texts);
+        cont.setVisibility(View.GONE);
+       // container = findViewById(R.id.content_friend);
+       // container.setVisibility(View.INVISIBLE);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        NestedScrollingListView listView = (NestedScrollingListView) findViewById(R.id.friends_ListView);
-        HashMap<String, String> hm;
 
-        if(user != null) {
-            friendAims = user.getAims();
-
-            if (!friendAims.isEmpty()) {
-                for (int i = 0; i < friendAims.size(); i++) {
-                    Aim currentAim = friendAims.get(i);
-                    hm = new HashMap<>();
-                    hm.put(TITLE, currentAim.getHeader());
-                    hm.put(DATE, currentAim.getDate().toString());
-                    hm.put(DESCRIPTION, currentAim.getText());
-                    mTargetList.add(hm);
-                }
-            } else {
-                TextView empty = (TextView) findViewById(R.id.empty);
-                empty.setVisibility(View.VISIBLE);
-            }
-
-            avatar.setImageBitmap(user.getImage());
-            setTitle(user.getName());
-            rating.setText("Рейтинг: " + user.getRating());
-
-            switch (user.getInFriends()) {
-                case 1:
-                    buttonAdd.setText("Удалить из друзей");
-                    break;
-                case -1:
-                    buttonAdd.setText("Подписан на вас");
-                    break;
-                case -2:
-                    buttonAdd.setText("Вы подписаны");
-                    break;
-
-            }
-
-//        hm = new HashMap<>();
-//        hm.put(TITLE, "Cinema");
-//        hm.put(DATE, "Tomorrow");
-//        mTargetList.add(hm);
-//
-//        hm = new HashMap<>();
-//        hm.put(TITLE, "HSE");
-//        hm.put(DATE, "10.10");
-//        mTargetList.add(hm);
-
-            AdapterAims adapterAims = new AdapterAims(this, R.layout.aims_item, mTargetList);
-            listView.setAdapter(adapterAims);
-            listView.setNestedScrollingEnabled(true);
-        }
+        setTitle(login);
+        appBarLayout.setExpanded(false, false);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setActivated(true);
+        AimsAsync aimsAsync = new AimsAsync();
+        aimsAsync.execute(login);
     }
 //
 //    @Override
@@ -209,6 +167,77 @@ public class FriendActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            super.onPostExecute(user);
+
+            NestedScrollingListView listView = (NestedScrollingListView) findViewById(R.id.friends_ListView);
+            HashMap<String, String> hm;
+
+            if(user == null) {
+                Toast.makeText(getApplicationContext(), "Не удалось найти пользователя", Toast.LENGTH_LONG).show();
+                finish();
+            } else {
+                friendAims = user.getAims();
+
+                if (!friendAims.isEmpty()) {
+                    for (int i = 0; i < friendAims.size(); i++) {
+                        Aim currentAim = friendAims.get(i);
+                        hm = new HashMap<>();
+                        hm.put(TITLE, currentAim.getHeader());
+                        hm.put(DATE, currentAim.getDate().toString());
+                        hm.put(DESCRIPTION, currentAim.getText());
+                        mTargetList.add(hm);
+                    }
+                } else {
+                    TextView empty = (TextView) findViewById(R.id.empty);
+                    empty.setVisibility(View.VISIBLE);
+                }
+
+                avatar.setImageBitmap(user.getImage());
+
+                Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+                setSupportActionBar(toolbar);
+
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                setTitle(user.getName());
+                appBarLayout.setExpanded(true, true);
+
+                rating.setText("Рейтинг: " + user.getRating());
+
+                switch (user.getInFriends()) {
+                    case 1:
+                        buttonAdd.setText("Удалить из друзей");
+                        break;
+                    case -1:
+                        buttonAdd.setText("Подписан на вас");
+                        break;
+                    case -2:
+                        buttonAdd.setText("Вы подписаны");
+                        break;
+
+                }
+
+//        hm = new HashMap<>();
+//        hm.put(TITLE, "Cinema");
+//        hm.put(DATE, "Tomorrow");
+//        mTargetList.add(hm);
+//
+//        hm = new HashMap<>();
+//        hm.put(TITLE, "HSE");
+//        hm.put(DATE, "10.10");
+//        mTargetList.add(hm);
+
+                AdapterAims adapterAims = new AdapterAims(getBaseContext(), R.layout.aims_item, mTargetList);
+                listView.setAdapter(adapterAims);
+                listView.setNestedScrollingEnabled(true);
+            }
+
+            progressBar.setVisibility(View.GONE);
+            cont.setVisibility(View.VISIBLE);
+            //container.setVisibility(View.VISIBLE);
         }
     }
 

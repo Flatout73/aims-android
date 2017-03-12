@@ -13,6 +13,13 @@
     tools:context="net.styleru.aims.FriendActivity"
     tools:showIn="@layout/activity_friend">
 
+    <ProgressBar
+        android:id="@+id/myfriend_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 
     <TextView
@@ -37,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:text="Рейтинг: 30"/>
+            android:text=""/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

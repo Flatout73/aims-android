@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.styleru.aims.adapters.CommentsAdapter;
 
@@ -155,38 +156,18 @@ public class AboutTargetActivity extends AppCompatActivity {
     }
 
     public void liked(View view) {
-        AsyncLike like = new AsyncLike();
+        int l = (Integer.parseInt(likes.getText().toString()) + 1);
+        likes.setText((Integer.parseInt(likes.getText().toString()) + 1) + "");
 
-        try {
-            String res = like.execute(aim).get();
-            if(res.equals("")) {
-                likes.setText("" + aim.getLikes());
-            }
-            else {
-                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        AsyncLike like = new AsyncLike();
+            like.execute(aim);
     }
 
     public void disliked(View view) {
+
+        dislikes.setText((Integer.parseInt(dislikes.getText().toString()) + 1) + "");
         AsyncDisLike disLike = new AsyncDisLike();
-        try {
-            String res = disLike.execute(aim).get();
-            if(res.equals("")) {
-                dislikes.setText("" + aim.getDislikes());
-            }
-            else {
-                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+            disLike.execute(aim);
     }
 
     class AsyncLike extends AsyncTask<Aim, Void, String> {
@@ -200,6 +181,19 @@ public class AboutTargetActivity extends AppCompatActivity {
             }
             return "";
         }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(s.equals("")) {
+                likes.setText("" + aim.getLikes());
+            }
+            else {
+                likes.setText("" + aim.getLikes());
+                Toast.makeText(getBaseContext(), s, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     class AsyncDisLike extends AsyncTask<Aim, Void, String> {
@@ -212,6 +206,19 @@ public class AboutTargetActivity extends AppCompatActivity {
                 return e.getMessage();
             }
             return "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(s.equals("")) {
+                dislikes.setText("" + aim.getDislikes());
+            }
+            else {
+                dislikes.setText("" + aim.getDislikes());
+                Toast.makeText(getBaseContext(), s, Toast.LENGTH_LONG).show();
+            }
         }
     }
 
