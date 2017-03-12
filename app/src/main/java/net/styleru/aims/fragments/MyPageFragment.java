@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.styleru.aims.AboutTargetActivity;
 import net.styleru.aims.adapters.AdapterAims;
@@ -95,29 +96,27 @@ public class MyPageFragment extends Fragment {
         HashMap<String, String> hm;
         mTargetList.clear();
 
-        synchronized (DataStorage.class) {
-            try {
-                //получаем цели
-                myAims = DataStorage.getMe().getAims();
-                if(myAims.size() != 0) {
-                    //создаем лист мепов
-                    for (int i = 0; i < myAims.size(); i++) {
-                        Aim currentAim = myAims.get(i);
-                        hm = new HashMap<>();
-                        hm.put(TITLE, currentAim.getHeader());
-                        hm.put(DATE, currentAim.getEndDate().toString());
-                        hm.put(DESCRIPTION, currentAim.getText());
-                        mTargetList.add(hm);
-                    }
+        try {
+            //получаем цели
+            myAims = DataStorage.getMe().getAims();
+            if (myAims.size() != 0) {
+                //создаем лист мепов
+                for (int i = 0; i < myAims.size(); i++) {
+                    Aim currentAim = myAims.get(i);
+                    hm = new HashMap<>();
+                    hm.put(TITLE, currentAim.getHeader());
+                    hm.put(DATE, currentAim.getEndDate().toString());
+                    hm.put(DESCRIPTION, currentAim.getText());
+                    mTargetList.add(hm);
                 }
-                else {
-                    TextView empty = (TextView) view.findViewById(R.id.empty);
-                    empty.setVisibility(View.VISIBLE);
-                }
-            } catch (Exception ex) {
-                Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG).show();
+            } else {
+                TextView empty = (TextView) view.findViewById(R.id.empty);
+                empty.setVisibility(View.VISIBLE);
             }
+        } catch (Exception ex) {
+            Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
         }
+
 
         TextView rating = (TextView) view.findViewById(R.id.rating);
 

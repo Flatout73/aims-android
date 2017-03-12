@@ -1,23 +1,21 @@
 package net.styleru.aims.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import net.styleru.aims.adapters.AdapterFriends;
 import net.styleru.aims.R;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
@@ -77,7 +75,7 @@ public class MyFriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_page, container, false);
+        view = inflater.inflate(R.layout.fragment_friend, container, false);
 
         //Эта штука нужна была для показа текстового поля, если у пользователя нет друзей,
         //но что-то как-то не зашло
@@ -136,23 +134,37 @@ public class MyFriendsFragment extends Fragment {
 //    }
 
     class GetFriendsAsync extends AsyncTask<User, Void, String> {
+        ProgressBar progressBar;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar = (ProgressBar) view.findViewById(R.id.friends_progress);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setActivated(true);
+        }
 
         @Override
         protected String doInBackground(User... params) {
+            DataStorage.lock.lock();
             try {
-                RequestMethods.getFriends(params[0]);
+                    RequestMethods.getFriends(params[0]);
             } catch (Exception e) {
                 return e.getMessage();
+            } finally {
+                DataStorage.lock.unlock();
             }
             return "";
         }
 
         @Override
         protected void onPostExecute(String res) {
-            if(res.equals(""))
+            progressBar.setVisibility(View.GONE);
+            if(res.equals("")) {
                 initRecyclerView(view, DataStorage.getMe().getFriends()); //иницилизируем адаптер
+            }
             else {
-                Snackbar.make(view, res, Snackbar.LENGTH_LONG).show();
+                Toast.makeText(getContext(), res, Toast.LENGTH_LONG).show();
             }
         }
     }

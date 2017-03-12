@@ -2,6 +2,7 @@ package ru.aimsproject.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 import ru.aimsproject.models.*;
 
@@ -11,6 +12,7 @@ import ru.aimsproject.models.*;
  * Но это не точно.
  * Поэтому надо тут подумать ещё.
  * Created by Антон on 06.11.2016.
+ * Edited by Leonid
  */
 public class DataStorage {
     /**
@@ -37,6 +39,11 @@ public class DataStorage {
      * Текущий токен.
      */
     private volatile static String token;
+
+    /**
+     * Синхронизируем потоки через Lock (нужно больше для SAP)
+     */
+    public static Lock lock;
 
     /**
      * Возвращает ленту ("новостную ленту") целей.

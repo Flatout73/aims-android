@@ -56,6 +56,8 @@ import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
 import ru.aimsproject.models.User;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 import static net.styleru.aims.LoginActivity.APP_REFERENCES;
 import static net.styleru.aims.LoginActivity.APP_REFERENCE_Token;
 
@@ -106,6 +108,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        DataStorage.lock = new ReentrantLock();
+
+        setContentView(R.layout.activity_main);
+
         loading = (ProgressBar)findViewById(R.id.get_progress);
         container = findViewById(R.id.container);
 
@@ -132,7 +138,6 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        setContentView(R.layout.activity_main);
         appBarLayoutMain = (AppBarLayout) findViewById(R.id.layout_main);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -618,7 +623,7 @@ public class MainActivity extends AppCompatActivity
                 builder2.show();
 
             } catch (Exception e) {
-                Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
 
@@ -635,30 +640,31 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-           // load.setVisibility(View.VISIBLE);
+            load.setVisibility(View.VISIBLE);
+            load.setActivated(true);
            // cont.setVisibility(View.GONE);
 
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            synchronized (DataStorage.class) {
+            DataStorage.lock.lock();
             try {
                 RequestMethods.getProfile();
                 //RequestMethods.getFriends(DataStorage.getMe());
             } catch (Exception e) {
                     //Toast.makeText(MainActivity.this.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     return false;
-                }
+            } finally {
+                DataStorage.lock.unlock();
             }
-
             return true;
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-           // load.setVisibility(View.GONE);
+            load.setVisibility(View.GONE);
            // cont.setVisibility(View.VISIBLE);
         }
     }

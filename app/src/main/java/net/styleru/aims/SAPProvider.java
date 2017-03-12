@@ -5,6 +5,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.text.format.Time;
 import android.util.Log;
 import android.widget.Toast;
@@ -174,12 +175,10 @@ public class SAPProvider extends SAAgent{
                 new Thread(new Runnable() {
                     public void run() {
                         if (reqMessage.equals("request_profile")) {
-
+                            DataStorage.lock.lock();
                             try {
                                 String json;
-                                synchronized (DataStorage.getToken()) {
                                     json = RequestMethods.getProfile();
-                                }
                                 JSONObject js = new JSONObject(json);
                                 js.put("TypeOfRequest", "request_profile");
                                 sendJSONInfo(js.toString());
@@ -187,13 +186,14 @@ public class SAPProvider extends SAAgent{
                                 e.printStackTrace();
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                DataStorage.lock.unlock();
                             }
                         } else if (reqMessage.equals("request_friends")) {
+                            DataStorage.lock.lock();
                             try {
                                 String json;
-                                synchronized (DataStorage.getToken()) {
                                     json = RequestMethods.getFriends(DataStorage.getMe());
-                                }
                                 JSONObject js = new JSONObject(json);
                                 js.put("TypeOfRequest", "request_friends");
                                 sendJSONInfo(js.toString());
@@ -201,13 +201,14 @@ public class SAPProvider extends SAAgent{
                                 e.printStackTrace();
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                DataStorage.lock.unlock();
                             }
                         } else if (reqMessage.equals("request_news")) {
+                            DataStorage.lock.lock();
                             try {
                                 String json;
-                                synchronized (DataStorage.getToken()) {
                                     json = RequestMethods.getNews(new Date(115, 12, 20));
-                                }
                                 JSONObject js = new JSONObject(json);
                                 js.put("TypeOfRequest", "request_news");
                                 sendJSONInfo(js.toString());
@@ -215,11 +216,12 @@ public class SAPProvider extends SAAgent{
                                 e.printStackTrace();
                             } catch (Exception e) {
                                 e.printStackTrace();
+                            } finally {
+                                DataStorage.lock.unlock();
                             }
                         }
                     }
                 }).start();
-                Toast.makeText(getBaseContext(), "Данные отправлены", Toast.LENGTH_SHORT).show();
             }
         }
 

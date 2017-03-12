@@ -10,9 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.styleru.aims.AboutTargetActivity;
 import net.styleru.aims.adapters.AdapterAims;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
@@ -53,6 +51,9 @@ public class NewsFeedFragment extends Fragment {
     private static final String DATE = "date";
 
     TextView empty;
+    ProgressBar progressBar;
+
+    View view;
 
     public NewsFeedFragment() {
         // Required empty public constructor
@@ -88,8 +89,9 @@ public class NewsFeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        view = inflater.inflate(R.layout.fragment_news, container, false);
         mListView = (NestedScrollingListView) view.findViewById(R.id.friendsListView);
+        empty = (TextView) view.findViewById(R.id.empty);
 
         AsyncNews asyncNews = new AsyncNews();
 //        try {
@@ -114,6 +116,7 @@ public class NewsFeedFragment extends Fragment {
         if (friendAims.size() != 0) {
             try {
                 for (int i = 0; i < friendAims.size(); i++) {
+                    progressBar.setVisibility(View.GONE);
                     Aim currentAim = friendAims.get(i);
                     hm = new HashMap<>();
                     hm.put(TITLE, currentAim.getHeader());
@@ -125,8 +128,7 @@ public class NewsFeedFragment extends Fragment {
                 Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG);
             }
         } else {
-            empty = (TextView) view.findViewById(R.id.empty);
-            empty.setVisibility(View.VISIBLE);
+            //empty.setVisibility(View.VISIBLE);
         }
 
 //        hm = new HashMap<>();
@@ -161,11 +163,23 @@ public class NewsFeedFragment extends Fragment {
     class AsyncNews extends AsyncTask<Date, Void, String> {
 
         @Override
+        protected void onPreExecute() {
+            progressBar = (ProgressBar) view.findViewById(R.id.news_progress);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setActivated(true);
+            empty.setVisibility(View.GONE);
+            super.onPreExecute();
+        }
+
+        @Override
         protected String doInBackground(Date... params) {
+            DataStorage.lock.lock();
             try {
-                RequestMethods.getNews(params[0]);
+                    RequestMethods.getNews(params[0]);
             } catch (Exception e) {
                 return e.getMessage();
+            } finally {
+                DataStorage.lock.unlock();
             }
             return "";
         }
@@ -179,7 +193,6 @@ public class NewsFeedFragment extends Fragment {
 
                 mTargetList.clear();
             if (friendAims.size() != 0) {
-                empty.setVisibility(View.GONE);
                     for (int i = 0; i < friendAims.size(); i++) {
                         Aim currentAim = friendAims.get(i);
                         hm = new HashMap<>();
@@ -188,14 +201,18 @@ public class NewsFeedFragment extends Fragment {
                         hm.put(DESCRIPTION, currentAim.getText());
                         mTargetList.add(hm);
                     }
+            } else {
+                empty.setVisibility(View.VISIBLE);
             }
                 AdapterAims adapterAims = new AdapterAims(getActivity(), R.layout.aims_item_feed, mTargetList, friendAims);
                 mListView.setAdapter(adapterAims);
                 mListView.setOnItemClickListener(itemClickListener);
                 mListView.setNestedScrollingEnabled(false);
+
+                progressBar.setVisibility(View.GONE);
  //               ((AdapterAims) mListView.getAdapter()).notifyDataSetChanged();
             } catch (Exception ex) {
-//                Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
     }

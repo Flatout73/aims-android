@@ -33,6 +33,9 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
 
     User me;
+    RoundedImageView avatarSettings;
+    EditText name;
+    EditText surname;
 
 
     public SettingsFragment() {
@@ -74,9 +77,16 @@ public class SettingsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        RoundedImageView avatarSettings = (RoundedImageView) view.findViewById(R.id.settings_avatar);
-        EditText name = (EditText) view.findViewById(R.id.set_name);
-        EditText surname = (EditText) view.findViewById(R.id.set_surname);
+        avatarSettings = (RoundedImageView) view.findViewById(R.id.settings_avatar);
+        name = (EditText) view.findViewById(R.id.set_name);
+        surname = (EditText) view.findViewById(R.id.set_surname);
+
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         if(me.getImage() != null) {
             avatarSettings.setImageBitmap(me.getImage());
@@ -87,7 +97,5 @@ public class SettingsFragment extends Fragment {
             name.setText(names[0]);
         if(names[1] != null)
             surname.setText(names[1]);
-        return view;
     }
-
 }

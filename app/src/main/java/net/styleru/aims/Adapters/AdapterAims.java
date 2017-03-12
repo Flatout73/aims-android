@@ -102,7 +102,7 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
         }
 
         //если есть цели
-        if(aims != null) {
+        if(aims != null && !aims.isEmpty()) {
             Aim aim = aims.get(position);
             //для отображения аваторк и имени в новостной ленте
             if(resource == R.layout.aims_item_feed) {
