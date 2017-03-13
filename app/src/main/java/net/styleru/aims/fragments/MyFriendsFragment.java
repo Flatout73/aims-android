@@ -37,6 +37,8 @@ public class MyFriendsFragment extends Fragment {
 
     RecyclerView recyclerView;
 
+    ProgressBar progressBar;
+
    // TextView empty;
 
     View view;
@@ -77,6 +79,7 @@ public class MyFriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_friend, container, false);
 
+        progressBar = (ProgressBar) view.findViewById(R.id.friends_progress);
         //Эта штука нужна была для показа текстового поля, если у пользователя нет друзей,
         //но что-то как-то не зашло
        // empty = (TextView) view.findViewById(R.id.empty_friends);
@@ -134,14 +137,14 @@ public class MyFriendsFragment extends Fragment {
 //    }
 
     class GetFriendsAsync extends AsyncTask<User, Void, String> {
-        ProgressBar progressBar;
+
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressBar = (ProgressBar) view.findViewById(R.id.friends_progress);
-            progressBar.setVisibility(View.VISIBLE);
-            progressBar.setActivated(true);
+                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setActivated(true);
+
         }
 
         @Override

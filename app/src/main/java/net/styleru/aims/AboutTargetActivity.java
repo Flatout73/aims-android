@@ -118,15 +118,29 @@ public class AboutTargetActivity extends AppCompatActivity {
         comments.setAdapter(new CommentsAdapter(this, R.layout.comment_item, commentList));
     }
 
+    int allTime, progress;
+
     @Override
     protected void onStart() {
         super.onStart();
         progressBar.setVisibility(ProgressBar.VISIBLE);
-        int progress = (int)(aim.getEndDate().getTime() - (new Date()).getTime());
-        int allTime = (int)(aim.getEndDate().getTime() - aim.getStartDate().getTime());
-        progressBar.setProgress(progress/allTime);
+        progress = (int)(((new Date()).getTime() - aim.getStartDate().getTime())/1000000);
+        if(progress < 0) {
+            progress = 0;
+        }
+        allTime = (int)((aim.getEndDate().getTime() - aim.getStartDate().getTime())/1000000);
 
-        tvProgressHorizontal.setText(progress/allTime + "%");
+        int p = (int)((double)progress/allTime * 100);
+
+        if(p > 100) {
+            p = 100;
+        } else if(p < 0) {
+            p = 0;
+        }
+
+        progressBar.setProgress(p);
+
+        tvProgressHorizontal.setText(p + "%");
         textProgress.setText(progress/100000000 + "/" + allTime/100000000);
 
         targetDescription.setText(aim.getText());
@@ -168,6 +182,16 @@ public class AboutTargetActivity extends AppCompatActivity {
         dislikes.setText((Integer.parseInt(dislikes.getText().toString()) + 1) + "");
         AsyncDisLike disLike = new AsyncDisLike();
             disLike.execute(aim);
+    }
+
+    public void addProof(View view) {
+        int newProgress = progressBar.getProgress();
+        if(newProgress < 100) {
+            newProgress += 10;
+            progressBar.setProgress(newProgress);
+            tvProgressHorizontal.setText(newProgress + "%");
+            textProgress.setText((progress/100000000 + 0.1*progress/1000000000) + "/" + allTime/100000000);
+        }
     }
 
     class AsyncLike extends AsyncTask<Aim, Void, String> {
