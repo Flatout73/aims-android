@@ -170,58 +170,73 @@ public class SAPProvider extends SAAgent{
 //            String strToUpdateUI = new String(data);
 //            final String message = strToUpdateUI.concat(timeStr);
 
-            final String reqMessage = new String(data);
-            if(reqMessage.equals("request_profile") || reqMessage.equals("request_friends") || reqMessage.equals("request_news")) {
-                new Thread(new Runnable() {
-                    public void run() {
-                        if (reqMessage.equals("request_profile")) {
-                            DataStorage.lock.lock();
-                            try {
-                                String json;
+            if(channelId == getServiceChannelId(1)) {
+                String res = new String(data);
+                if(res.equals("like")) {
+                    try {
+                        mConnectionHandler.send(getServiceChannelId(1), DataStorage.getToken().getBytes());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    DataStorage.setToken(res);
+                }
+
+            } else {
+
+                final String reqMessage = new String(data);
+                if (reqMessage.equals("request_profile") || reqMessage.equals("request_friends") || reqMessage.equals("request_news")) {
+                    new Thread(new Runnable() {
+                        public void run() {
+                            if (reqMessage.equals("request_profile")) {
+                                DataStorage.lock.lock();
+                                try {
+                                    String json;
                                     json = RequestMethods.getProfile();
-                                JSONObject js = new JSONObject(json);
-                                js.put("TypeOfRequest", "request_profile");
-                                sendJSONInfo(js.toString());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                DataStorage.lock.unlock();
-                            }
-                        } else if (reqMessage.equals("request_friends")) {
-                            DataStorage.lock.lock();
-                            try {
-                                String json;
+                                    JSONObject js = new JSONObject(json);
+                                    js.put("TypeOfRequest", "request_profile");
+                                    sendJSONInfo(js.toString());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    DataStorage.lock.unlock();
+                                }
+                            } else if (reqMessage.equals("request_friends")) {
+                                DataStorage.lock.lock();
+                                try {
+                                    String json;
                                     json = RequestMethods.getFriends(DataStorage.getMe());
-                                JSONObject js = new JSONObject(json);
-                                js.put("TypeOfRequest", "request_friends");
-                                sendJSONInfo(js.toString());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                DataStorage.lock.unlock();
-                            }
-                        } else if (reqMessage.equals("request_news")) {
-                            DataStorage.lock.lock();
-                            try {
-                                String json;
+                                    JSONObject js = new JSONObject(json);
+                                    js.put("TypeOfRequest", "request_friends");
+                                    sendJSONInfo(js.toString());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    DataStorage.lock.unlock();
+                                }
+                            } else if (reqMessage.equals("request_news")) {
+                                DataStorage.lock.lock();
+                                try {
+                                    String json;
                                     json = RequestMethods.getNews(new Date(115, 12, 20));
-                                JSONObject js = new JSONObject(json);
-                                js.put("TypeOfRequest", "request_news");
-                                sendJSONInfo(js.toString());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            } finally {
-                                DataStorage.lock.unlock();
+                                    JSONObject js = new JSONObject(json);
+                                    js.put("TypeOfRequest", "request_news");
+                                    sendJSONInfo(js.toString());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    DataStorage.lock.unlock();
+                                }
                             }
                         }
-                    }
-                }).start();
+                    }).start();
+                }
             }
         }
 

@@ -13,6 +13,12 @@
             </supportedTransports>
             <serviceChannel
                 id="124"
+                dataRate="high"
+                priority="medium"
+                reliability="enable">
+            </serviceChannel>
+            <serviceChannel
+                id="111"
                 dataRate="low"
                 priority="medium"
                 reliability="enable">
