@@ -94,7 +94,7 @@ public class SAPProvider extends SAAgent{
     @Override
     protected void onServiceConnectionRequested(SAPeerAgent peerAgent) {
         if (peerAgent != null) {
-            Toast.makeText(getBaseContext(), "Запрос на соединение принят", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Запрос на соединение принят", Toast.LENGTH_SHORT).show();
             acceptServiceConnectionRequest(peerAgent);
         }
     }
@@ -266,7 +266,7 @@ public class SAPProvider extends SAAgent{
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getBaseContext(), "Соединение потеряно", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Соединение потеряно", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -300,7 +300,7 @@ public class SAPProvider extends SAAgent{
                 super.onPostExecute(s);
 
                 if(s.equals("")) {
-                    Toast.makeText(getBaseContext(), "Лайк/дизлайк поставлен", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Лайк/дизлайк поставлен/убран", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
                 }
