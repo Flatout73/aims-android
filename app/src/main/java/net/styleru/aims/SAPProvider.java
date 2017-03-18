@@ -1,6 +1,7 @@
 package net.styleru.aims;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -29,10 +30,14 @@ import android.os.Handler;
 
 import com.samsung.android.sdk.accessory.*;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import ru.aimsproject.connectionwithbackend.RequestMethods;
 import ru.aimsproject.data.DataStorage;
+import ru.aimsproject.models.Aim;
+import ru.aimsproject.models.AimType1;
+import ru.aimsproject.models.AimType2;
 
 import static android.R.id.message;
 
@@ -170,16 +175,27 @@ public class SAPProvider extends SAAgent{
 //            String strToUpdateUI = new String(data);
 //            final String message = strToUpdateUI.concat(timeStr);
 
+            //Канал для лайков и дизлайков
             if(channelId == getServiceChannelId(1)) {
+                try {
                 String res = new String(data);
+                //запрашивается токен для ajax на часах
                 if(res.equals("like")) {
-                    try {
-                        mConnectionHandler.send(getServiceChannelId(1), DataStorage.getToken().getBytes());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    mConnectionHandler.send(getServiceChannelId(1), DataStorage.getToken().getBytes());
                 } else {
-                    DataStorage.setToken(res);
+                    try {
+                        //пробуем проверить пришла ли нам цель в виде джейсона или токен
+                        JSONObject js = new JSONObject(res);
+                        AsyncDLike asyncDLike = new AsyncDLike();
+                        asyncDLike.execute(js);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        //если не получилось получить json, значит пришел токен
+                        DataStorage.setToken(res);
+                    }
+                }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
             } else {
@@ -253,6 +269,42 @@ public class SAPProvider extends SAAgent{
                     Toast.makeText(getBaseContext(), "Соединение потеряно", Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+
+        class AsyncDLike extends AsyncTask<JSONObject, Void, String> {
+
+            @Override
+            protected String doInBackground(JSONObject... jsonObjects) {
+                try {
+                    JSONObject js = jsonObjects[0];
+                    int liked = js.getInt("liked");
+                    int disliked = js.getInt("disliked");
+                    if(liked == 1) {
+                        RequestMethods.likeAim(js);
+                        return "";
+                    } else if(disliked == 1) {
+                        RequestMethods.dislikeAim(js);
+                        return "";
+                    }
+                    else {
+                        return "Не удалось поставить лайк или дислайк";
+                    }
+                }  catch (Exception e) {
+                    e.printStackTrace();
+                    return "Что-то пошло не так: " + e.getMessage();
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+
+                if(s.equals("")) {
+                    Toast.makeText(getBaseContext(), "Лайк/дизлайк поставлен", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }

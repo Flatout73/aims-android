@@ -135,7 +135,7 @@ public class AdapterAims extends ArrayAdapter<HashMap<String, String>> {
             } else if (aim.getFlag() == 2) {
                 rowView.setBackgroundColor(Color.GREEN);
             } else if (aim.getFlag() == 3) {
-                rowView.setBackgroundColor(Color.RED);
+                rowView.setBackgroundColor(Color.CYAN);
             }
         }
 

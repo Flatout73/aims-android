@@ -7,6 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -87,15 +88,15 @@ public class FriendActivity extends AppCompatActivity {
         AimsAsync aimsAsync = new AimsAsync();
         aimsAsync.execute(login);
     }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if(id == android.R.id.home) {
-//            finish();
-//        }
-//        return true;
-//    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == android.R.id.home) {
+            finish();
+        }
+        return true;
+    }
 
     public void addToFriend(View view) {
         AddFriendAsync addFriendAsync = new AddFriendAsync();

@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity
         loading.setActivated(true);
         TaskProfile taskProfile = new TaskProfile(loading, container);
 
+        //Вот здесь надо тоже по-хорошему логику в таскпрофайл вынести, но мне не хочется все переделывать
         try {
             if(!taskProfile.execute().get()) {
                 SharedPreferences.Editor edit = mToken.edit();
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Антон Ригин");
+        collapsingToolbar.setTitle("Имя Пользователя");
 
         if(DataStorage.getMe().getName() != null) {
             collapsingToolbar.setTitle(DataStorage.getMe().getName());
@@ -171,9 +172,8 @@ public class MainActivity extends AppCompatActivity
 //        fragmentStack.push(aimsFr);
         ftransp.commit();
 
-        AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
-
-        scrollFlags = p.getScrollFlags();
+        //AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
+        //scrollFlags = p.getScrollFlags();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -199,8 +199,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        User me = DataStorage.getMe();
 
+        User me = DataStorage.getMe();
 
         if(me.getImage() != null) {
             avatar.setImageBitmap(me.getImage());

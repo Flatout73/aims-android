@@ -1164,6 +1164,44 @@ public class RequestMethods {
         }
     }
 
+    public static void likeAim(JSONObject aimJson) throws Exception {
+
+        if(aimJson.getInt("Liked") == -1) {
+            dislikeAim(aimJson);
+        }
+        String urlString = likesURL;
+        urlString += "likeaim/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "userlogin", aimJson.getJSONObject("Us").getString("Login"), false);
+        urlString = addAttribute(urlString, "date", getCSharpDateString(getUTCDate(parseCSharpDate(aimJson.getString("Date")))), false);
+        String response = Request.doRequest(urlString, null, null);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("User Error")) {
+                    throw new Exception("Такого пользователя не существует.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
     /**
      * Добавляет дислайк к цели.
      * @param aim Цель для дислайка.
@@ -1201,6 +1239,44 @@ public class RequestMethods {
             }
             DataStorage.setToken(token);
             aim.addDislike();
+        }
+        catch (JSONException ex) {
+            throw new Exception("Ошибка формата ответа сервера.");
+        }
+    }
+
+    public static void dislikeAim(JSONObject aimJson) throws Exception {
+        if(aimJson.getInt("Liked") == 1) {
+            likeAim(aimJson);
+        }
+        String urlString = likesURL;
+        urlString += "dislikeaim/";
+        String currentToken = DataStorage.getToken();
+        if(currentToken == null) {
+            throw new Exception("Ошибка подключения к серверу: пустой token");
+        }
+        urlString = addAttribute(urlString, "token", currentToken, true);
+        urlString = addAttribute(urlString, "userlogin", aimJson.getJSONObject("Us").getString("Login"), false);
+        urlString = addAttribute(urlString, "date", getCSharpDateString(getUTCDate(parseCSharpDate(aimJson.getString("Date")))), false);
+        String response = Request.doRequest(urlString, null, null);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(response);
+            String token = jsonObject.getString("Token");
+            if(!jsonObject.getBoolean("OperationOutput")) {
+                if(token.equals("DataBase Error")) {
+                    throw new Exception("Ошибка при подключении к базе данных.");
+                }
+                if(token.equals("Token Error")) {
+                    throw new Exception("Неправильный токен.");
+                }
+                if(token.equals("User Error")) {
+                    throw new Exception("Такого пользователя не существует.");
+                }
+                throw new Exception("Неизвестная ошибка.");
+            }
+            DataStorage.setToken(token);
+            //aim.addDislike();
         }
         catch (JSONException ex) {
             throw new Exception("Ошибка формата ответа сервера.");
